@@ -1,4 +1,4 @@
-package chilling.encore.service;
+package chilling.global.config.email;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class EmailService {
 
         String msgg="";
         msgg+= "<div style='margin:20px;'>";
-        msgg+= "<h1> TALER </h1>";
+        msgg+= "<h1> ENCORE </h1>";
         msgg+= "<br>";
         msgg+= "<p>아래 코드를 복사해 입력해주세요<p>";
         msgg+= "<br>";
@@ -38,7 +38,7 @@ public class EmailService {
         msgg+= E_KEY +"</strong><div><br/> ";
         msgg+= "</div>";
         message.setText(msgg, "utf-8", "html");//내용
-        message.setFrom(new InternetAddress("ywj9811@gmail.com","TALER"));
+        message.setFrom(new InternetAddress("ywj9811@gmail.com","ENCORE"));
         //보내는 사람 메일 주소, 보여질 이름
 
         return message;
@@ -75,7 +75,7 @@ public class EmailService {
             emailSender.send(message);
         }catch(MailException es){
             es.printStackTrace();
-            throw new IllegalArgumentException();
+            throw new RuntimeException();
         }
         return E_KEY;
     }
