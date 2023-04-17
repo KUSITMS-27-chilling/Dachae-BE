@@ -1,4 +1,4 @@
-package chilling.global.config.security;
+package chilling.encore.global.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

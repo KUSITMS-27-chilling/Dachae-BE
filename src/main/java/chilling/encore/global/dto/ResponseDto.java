@@ -1,4 +1,4 @@
-package chilling.global.dto;
+package chilling.encore.global.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

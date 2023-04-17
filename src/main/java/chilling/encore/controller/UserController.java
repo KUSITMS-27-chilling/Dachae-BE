@@ -3,9 +3,9 @@ package chilling.encore.controller;
 
 import chilling.encore.domain.User;
 import chilling.encore.dto.UserDto;
-import chilling.global.config.email.EmailService;
+import chilling.encore.global.config.email.EmailService;
 import chilling.encore.service.UserService;
-import chilling.global.dto.ResponseDto;
+import chilling.encore.global.dto.ResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
