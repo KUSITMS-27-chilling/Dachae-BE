@@ -1,4 +1,4 @@
-package chilling.global.dto;
+package chilling.encore.global.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
