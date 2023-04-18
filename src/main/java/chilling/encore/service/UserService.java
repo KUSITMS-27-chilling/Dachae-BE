@@ -5,6 +5,7 @@ import chilling.encore.dto.UserDto;
 import chilling.encore.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -47,5 +48,10 @@ public class UserService {
         if (byNickName.isPresent())
             return false;
         return true;
+    }
+
+    public User validateUserId(String id) {
+        User user = userRepository.findByUserId(id).orElseThrow();
+        return user;
     }
 }
