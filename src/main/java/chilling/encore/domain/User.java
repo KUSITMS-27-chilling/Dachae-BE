@@ -1,12 +1,10 @@
 package chilling.encore.domain;
 
+import chilling.encore.dto.responseMessage.UserConstants;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -32,6 +30,9 @@ public class User {
 
     private int status;
     // 회원 정상 / 휴면 / 탈퇴 상태
+
+    @Enumerated(EnumType.STRING)
+    private UserConstants.Role role;
 
     @CreationTimestamp
     private Date createdAt;

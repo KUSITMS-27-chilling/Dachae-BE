@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-public class UserResponseMessage {
+public class UserConstants {
 
     @Getter
     @RequiredArgsConstructor
@@ -27,5 +27,10 @@ public class UserResponseMessage {
         private final String errorCode;
         private final HttpStatus httpStatus;
         private final String message;
+    }
+
+    @Getter
+    public enum Role {
+        ROLE_USER, ROLE_ADMIN
     }
 }

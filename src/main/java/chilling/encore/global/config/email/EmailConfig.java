@@ -1,4 +1,4 @@
-package chilling.global.config.email;
+package chilling.encore.global.config.email;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Value;

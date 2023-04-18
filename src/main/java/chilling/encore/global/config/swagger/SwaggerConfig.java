@@ -1,4 +1,4 @@
-package chilling.global.config.swagger;
+package chilling.encore.global.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
