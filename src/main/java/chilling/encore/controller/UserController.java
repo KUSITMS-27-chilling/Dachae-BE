@@ -9,15 +9,15 @@ import chilling.encore.global.dto.ResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
-import static chilling.encore.dto.responseMessage.UserResponseMessage.SuccessMessage.*;
+import static chilling.encore.dto.responseMessage.UserConstants.SuccessMessage.*;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("/user")
 @Api(tags = "USER API")
 public class UserController {
@@ -35,7 +35,7 @@ public class UserController {
 
     @PostMapping("/checkIdDup")
     @ApiOperation(value = "아이디 중복체크", notes = "아이디 중복체크를 합니다.")
-    public ResponseEntity<ResponseDto<Boolean>> checkId(@ModelAttribute String id) {
+    public ResponseEntity<ResponseDto<Boolean>> checkId(String id) {
         return ResponseEntity.ok(
                 ResponseDto.create(
                         CHECK_DUP.getMessage(),
@@ -46,7 +46,7 @@ public class UserController {
 
     @PostMapping("/checkNickDup")
     @ApiOperation(value = "닉네임 중복체크", notes = "닉네임 중복체크를 합니다.")
-    public ResponseEntity<ResponseDto<Boolean>> checkNick(@ModelAttribute String nickName) {
+    public ResponseEntity<ResponseDto<Boolean>> checkNick(String nickName) {
         return ResponseEntity.ok(
                 ResponseDto.create(
                         CHECK_DUP.getMessage(),
@@ -57,8 +57,9 @@ public class UserController {
 
     @PostMapping("/sendMail")
     @ApiOperation(value = "이메일 인증 전송", notes = "이메일 인증을 전송합니다.")
-    public ResponseEntity<ResponseDto<String>> sendMail(@ModelAttribute String email) {
+    public ResponseEntity<ResponseDto<String>> sendMail(String email) {
         try {
+            log.info("email = {}", email);
             String s = emailService.sendSimpleMessage(email);
             return ResponseEntity.ok(ResponseDto.create(EMAIL_SEND_SUCCESS.getMessage(), s));
         } catch (Exception e) {
