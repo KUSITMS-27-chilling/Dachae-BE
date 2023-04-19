@@ -42,6 +42,10 @@ dependencies {
 	
 	//Redis 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	//oauth2
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {

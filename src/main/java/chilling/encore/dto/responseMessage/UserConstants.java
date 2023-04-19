@@ -20,7 +20,7 @@ public class UserConstants {
     @RequiredArgsConstructor
     public enum UserExceptionList {
         NOT_FOUND_ID("U0001", HttpStatus.NOT_FOUND, "해당 아이디를 가진 유저가 존재하지 않습니다"),
-        NOT_FOUND_PASSWORD("U0002", HttpStatus.NOT_FOUND, "비밀번호가 잘못되었습니다."),
+        NOT_FOUND_USER("U0002", HttpStatus.NOT_FOUND, "아이디 혹은 비밀번호가 잘못되었습니다."),
         OVERLAP_USER("U0003", HttpStatus.BAD_REQUEST, "이미 존재하는 회원입니다"),
         REFRESH_TOKEN_ERROR("U0004", HttpStatus.BAD_REQUEST, "RefreshToken이 잘못되었습니다.");
 

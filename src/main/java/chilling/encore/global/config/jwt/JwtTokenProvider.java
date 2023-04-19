@@ -66,7 +66,7 @@ public class JwtTokenProvider implements InitializingBean {
 
         updateRefreshToken(userIdx, refreshToken);
 
-        return TokenInfoResponse.from("Bearer", accessToken, refreshToken, accessTokenValidityTime, userIdx);
+        return TokenInfoResponse.from("Bearer", accessToken, refreshToken, accessTokenValidityTime);
     }
 
     private String createRefreshToken(String authorities, Date current, Long userIdx) {
