@@ -43,9 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
 //                .anyRequest().authenticated()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//                .and()
+//                .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         /**
          * 임시로 authorization 모두 허용함
          */
