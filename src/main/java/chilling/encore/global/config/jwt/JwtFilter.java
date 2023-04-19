@@ -60,6 +60,8 @@ public class JwtFilter extends OncePerRequestFilter {
             log.error("================================================");
             request.setAttribute("exception", UNKNOWN_ERROR.getErrorCode());
         }
+
+        filterChain.doFilter(request, response);
     }
 
     private String resolveToken(HttpServletRequest request) {

@@ -21,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Optional;
 
 import static chilling.encore.dto.responseMessage.UserConstants.Role.ROLE_USER;
@@ -56,6 +58,12 @@ public class UserService {
     public UserLoginResponse login(UserLoginRequest userLoginRequest) {
         try {
             TokenInfoResponse tokenInfoResponse = validateLogin(userLoginRequest);
+
+            String id = userLoginRequest.getId();
+            User user = userRepository.findByUserId(id).orElseThrow();
+            LocalDate now = LocalDate.now();
+            user.updateLoginAt(now);
+
             return UserLoginResponse.from(tokenInfoResponse);
         } catch (AuthenticationException e) {
             throw e;
