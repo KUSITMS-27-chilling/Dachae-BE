@@ -13,15 +13,12 @@ public class TokenInfoResponse {
     private String refreshToken;
     private Long accessTokenExpirationTime;
 
-    private Long userIdx;
-
-    public static TokenInfoResponse from(String grantType, String accessToken, String refreshToken, Long accessTokenExpirationTime, Long userIdx) {
+    public static TokenInfoResponse from(String grantType, String accessToken, String refreshToken, Long accessTokenExpirationTime) {
         return TokenInfoResponse.builder()
                 .grantType(grantType)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .accessTokenExpirationTime(accessTokenExpirationTime)
-                .userIdx(userIdx)
                 .build();
     }
 }
