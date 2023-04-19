@@ -3,6 +3,10 @@ package chilling.encore.controller;
 
 import chilling.encore.domain.User;
 import chilling.encore.dto.UserDto;
+import chilling.encore.dto.UserDto.UserLoginRequest;
+import chilling.encore.dto.UserDto.UserLoginResponse;
+import chilling.encore.dto.UserDto.UserSignUpRequest;
+import chilling.encore.dto.responseMessage.UserConstants;
 import chilling.encore.global.config.email.EmailService;
 import chilling.encore.service.UserService;
 import chilling.encore.global.dto.ResponseDto;
@@ -11,9 +15,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import static chilling.encore.dto.responseMessage.UserConstants.SuccessMessage.*;
+import static chilling.encore.dto.responseMessage.UserConstants.UserExceptionList.NOT_FOUND_USER;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,8 +34,8 @@ public class UserController {
     //회원가입 Controller
     @PostMapping("/signup")
     @ApiOperation(value = "회원가입", notes = "회원가입 완료합니다.")
-    public ResponseEntity<ResponseDto<User>> signUp(@RequestBody UserDto userDto) {
-        userService.signUp(userDto);
+    public ResponseEntity<ResponseDto<User>> signUp(@RequestBody UserSignUpRequest userSignUpRequest) {
+        userService.signUp(userSignUpRequest);
         return ResponseEntity.ok(ResponseDto.create(SIGNUP_SUCCESS.getMessage()));
     }
 
@@ -68,4 +74,14 @@ public class UserController {
         }
     }
 
+    @PostMapping("/login")
+    @ApiOperation(value = "로그인", notes = "로그인 진행")
+    public ResponseEntity<ResponseDto<UserLoginResponse>> login(@RequestBody UserLoginRequest userLoginRequest) {
+        try {
+            UserLoginResponse loginResponse = userService.login(userLoginRequest);
+            return ResponseEntity.ok(ResponseDto.create(LOGIN_SUCCESS.getMessage(), loginResponse));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.ok(ResponseDto.create(NOT_FOUND_USER.getMessage()));
+        }
+    }
 }
