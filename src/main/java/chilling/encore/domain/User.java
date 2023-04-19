@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -34,8 +35,16 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserConstants.Role role;
 
+    private String provider;
+    //google, facebook등등
+    private String providerId;
+    //해당에서 사용하는 id
+
     @CreationTimestamp
-    private Date createdAt;
-    private Date loginAt;
-    private Date quitAt;
+    private LocalDate createdAt;
+    private LocalDate loginAt;
+
+    public void updateLoginAt(LocalDate now) {
+        this.loginAt = now;
+    }
 }
