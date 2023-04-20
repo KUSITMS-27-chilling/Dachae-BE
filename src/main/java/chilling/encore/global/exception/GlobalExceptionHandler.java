@@ -40,6 +40,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
+        ex.printStackTrace();
         String errorCode = "500 INTERNAL_SERVER_ERROR";
         String message = "서버에서 요청을 처리하는 동안 오류가 발생했습니다.";
         log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), errorCode, ex.getMessage());
