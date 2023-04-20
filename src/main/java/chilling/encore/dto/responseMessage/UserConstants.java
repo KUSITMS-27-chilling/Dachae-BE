@@ -11,6 +11,7 @@ public class UserConstants {
     public enum SuccessMessage {
         SIGNUP_SUCCESS("회원가입에 성공했습니다."),
         LOGIN_SUCCESS("로그인에 성공했습니다."),
+        SIGNUP_CONTINUE("회원가입 추가진행 기존의 회원이 아닙니다."),
         EMAIL_SEND_SUCCESS("EMAIL 인증번호 전송에 성공했습니다."),
         CHECK_DUP("중복확인 조회에 성공했습니다.");
         private final String message;
