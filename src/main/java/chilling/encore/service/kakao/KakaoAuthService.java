@@ -25,27 +25,28 @@ public class KakaoAuthService implements Oauth2AuthService {
     private String authorizationGrantType;
 
     public String getAccessToken(String code) {
-        log.info("code = {}", code);
         RestTemplate restTemplate = new RestTemplate();
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
+        MultiValueMap<String, String> requestBody = getRequestBody(code);
+
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(requestBody, headers);
+
+        ResponseEntity<JsonNode> response = restTemplate.exchange("https://kauth.kakao.com/oauth/token", HttpMethod.POST, entity, JsonNode.class);
+
+        String accessToken = response.getBody().get("access_token").asText();
+        return accessToken;
+    }
+
+    private MultiValueMap<String, String> getRequestBody(String code) {
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("grant_type", authorizationGrantType);
         requestBody.add("client_id", clientId);
         requestBody.add("client_secret", clientSecret);
         requestBody.add("redirect_uri", redirectUri);
         requestBody.add("code", code);
-        log.info("requestBody = {}", requestBody);
-
-        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(requestBody, headers);
-
-        ResponseEntity<JsonNode> response = restTemplate.exchange("https://kauth.kakao.com/oauth/token", HttpMethod.POST, entity, JsonNode.class);
-        log.info("response = {}", response);
-
-        String accessToken = response.getBody().get("access_token").asText();
-
-        log.info("accessToken = {}", accessToken);
-        return accessToken;
+        return requestBody;
     }
 }

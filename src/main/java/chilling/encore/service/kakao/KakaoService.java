@@ -38,6 +38,57 @@ public class KakaoService implements Oauth2Service {
         String nickname = null;
         String gender = null;
 
+        ResponseEntity<KakaoResponseInfo> response = getKakaoResponseInfo(accessToken);
+        // KAKAO API 호출 결과에서 필요한 데이터 추출
+        KakaoResponseInfo profile = response.getBody();
+
+        Long kakaoId = profile.getId();
+
+        Optional<String> optionalEmail = profile.getKakaoAccount().getEmail();
+        if (optionalEmail.isPresent())
+            email = optionalEmail.get();
+        Optional<String> optionalGender = profile.getKakaoAccount().getGender();
+        if (optionalGender.isPresent())
+            gender = optionalGender.get();
+        Optional<String> optionalNickname = profile.getKakaoAccount().getProfile().getNickname();
+        if (optionalNickname.isPresent()) {
+            nickname = optionalNickname.get();
+        }
+
+        return getResponseDto(email, nickname, gender, kakaoId);
+    }
+
+    private ResponseDto<?> getResponseDto(String email, String nickname, String gender, Long kakaoId) {
+        // 회원 가입 여부 확인
+        Optional<User> optionalUser = userRepository.findByUserId(String.valueOf(kakaoId));
+        if (optionalUser.isEmpty()) {
+            // 회원이 아닌 경우 추가 정보를 받음
+            return ResponseDto.create(SIGNUP_CONTINUE.getMessage(), Oauth2SignUpResponse.builder()
+                    .id(String.valueOf(kakaoId))
+                    .nickname(nickname)
+                    .email(email)
+                    .gender(gender)
+                    .build()
+            );
+        }
+        return getExistingUser(optionalUser);
+    }
+
+    private ResponseDto<UserLoginResponse> getExistingUser(Optional<User> optionalUser) {
+        User user = optionalUser.get();
+        // 회원인 경우 jwt 토큰 발행
+
+        Oauth2PrincipalDetails principalDetails = new Oauth2PrincipalDetails(user);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
+        TokenInfoResponse token = tokenProvider.oauth2CreateToken(authentication);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserLoginResponse loginResponse = UserLoginResponse.from(token);
+        return ResponseDto.create(LOGIN_SUCCESS.getMessage(), loginResponse);
+    }
+
+    private ResponseEntity<KakaoResponseInfo> getKakaoResponseInfo(String accessToken) {
         // KAKAO API 호출을 위한 RestTemplate 생성
         RestTemplate restTemplate = new RestTemplate();
 
@@ -55,43 +106,6 @@ public class KakaoService implements Oauth2Service {
                 HttpMethod.GET,
                 entity,
                 KakaoResponseInfo.class);
-
-        // KAKAO API 호출 결과에서 필요한 데이터 추출
-        KakaoResponseInfo profile = response.getBody();
-        Long kakaoId = profile.getId();
-        Optional<String> optionalEmail = profile.getKakaoAccount().getEmail();
-        if (optionalEmail.isPresent())
-            email = optionalEmail.get();
-        Optional<String> optionalGender = profile.getKakaoAccount().getGender();
-        if (optionalGender.isPresent())
-            gender = optionalGender.get();
-        Optional<String> optionalNickname = profile.getKakaoAccount().getProfile().getNickname();
-        if (optionalNickname.isPresent()) {
-            nickname = optionalNickname.get();
-        }
-        // 회원 가입 여부 확인
-        Optional<User> optionalUser = userRepository.findByUserId(String.valueOf(kakaoId));
-        if (optionalUser.isEmpty()) {
-            // 회원이 아닌 경우 추가 정보를 받음
-            return ResponseDto.create(SIGNUP_CONTINUE.getMessage(), Oauth2SignUpResponse.builder()
-                    .id(String.valueOf(kakaoId))
-                    .nickname(nickname)
-                    .email(email)
-                    .gender(gender)
-                    .build()
-            );
-        } else {
-            User user = optionalUser.get();
-            // 회원인 경우 jwt 토큰 발행
-
-            Oauth2PrincipalDetails principalDetails = new Oauth2PrincipalDetails(user);
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
-            TokenInfoResponse token = tokenProvider.oauth2CreateToken(authentication);
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            UserLoginResponse loginResponse = UserLoginResponse.from(token);
-            return ResponseDto.create(LOGIN_SUCCESS.getMessage(), loginResponse);
-        }
+        return response;
     }
 }
