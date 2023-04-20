@@ -1,4 +1,4 @@
-package chilling.encore.global.oauth;
+package chilling.encore.dto.oauth;
 
 import lombok.Getter;
 
