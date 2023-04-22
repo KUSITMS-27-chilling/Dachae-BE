@@ -26,8 +26,7 @@ public class Oauth2Controller {
     }
 
     @GetMapping("/login/oauth2/{provider}")
-    public ResponseEntity<ResponseDto<?>> loginOAuth2Code(@PathVariable String provider,
-                                                          String token) {
+    public ResponseEntity<ResponseDto<?>> loginOAuth2Code(@PathVariable String provider, String token) {
         Oauth2Service oauth2Service = selectOauthService.selectService(provider);
         ResponseDto<?> authenticate = oauth2Service.authenticate(token);
         return ResponseEntity.ok(authenticate);
