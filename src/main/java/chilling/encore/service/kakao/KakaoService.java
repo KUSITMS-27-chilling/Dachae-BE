@@ -31,11 +31,10 @@ public class KakaoService implements Oauth2Service {
     private final JwtTokenProvider tokenProvider;
 
     @Override
-    public ResponseDto<?> authenticate(String accessToken) {
+    public ResponseDto<?> authenticate(String provider, String accessToken) {
         log.info("accessToken = {}", accessToken);
 
         String email = null;
-        String nickname = null;
         String gender = null;
 
         ResponseEntity<KakaoResponseInfo> response = getKakaoResponseInfo(accessToken);
@@ -50,24 +49,19 @@ public class KakaoService implements Oauth2Service {
         Optional<String> optionalGender = profile.getKakaoAccount().getGender();
         if (optionalGender.isPresent())
             gender = optionalGender.get();
-        Optional<String> optionalNickname = profile.getKakaoAccount().getProfile().getNickname();
-        if (optionalNickname.isPresent()) {
-            nickname = optionalNickname.get();
-        }
-
-        return getResponseDto(email, nickname, gender, kakaoId);
+        return getResponseDto(email, gender, kakaoId, provider);
     }
 
-    private ResponseDto<?> getResponseDto(String email, String nickname, String gender, Long kakaoId) {
+    private ResponseDto<?> getResponseDto(String email, String gender, Long kakaoId, String provider) {
         // 회원 가입 여부 확인
         Optional<User> optionalUser = userRepository.findByUserId(String.valueOf(kakaoId));
         if (optionalUser.isEmpty()) {
             // 회원이 아닌 경우 추가 정보를 받음
             return ResponseDto.create(SIGNUP_CONTINUE.getMessage(), Oauth2SignUpResponse.builder()
                     .id(String.valueOf(kakaoId))
-                    .nickname(nickname)
                     .email(email)
                     .gender(gender)
+                    .provider(provider)
                     .build()
             );
         }
