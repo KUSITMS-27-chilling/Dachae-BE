@@ -10,4 +10,5 @@ public class Oauth2SignUpResponse {
     private String id;
     private String email;
     private String gender;
+    private String provider;
 }
