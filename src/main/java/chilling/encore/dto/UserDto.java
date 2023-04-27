@@ -31,6 +31,21 @@ public abstract class UserDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    @ApiModel(description = "소셜 회원가입을 위한 요청객체")
+    public static class Oauth2SignUpRequest {
+        private String id;
+        private String name;
+        private String gender;
+        private int age;
+        private String email;
+        private String phoneNumber;
+        private String provider;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     @ApiModel(description = "로그인을 위한 요청객체")
     public static class UserLoginRequest {
         @ApiModelProperty(notes = "아이디를 입력해주세요")

@@ -3,6 +3,7 @@ package chilling.encore.controller;
 
 import chilling.encore.domain.User;
 import chilling.encore.dto.UserDto;
+import chilling.encore.dto.UserDto.Oauth2SignUpRequest;
 import chilling.encore.dto.UserDto.UserLoginRequest;
 import chilling.encore.dto.UserDto.UserLoginResponse;
 import chilling.encore.dto.UserDto.UserSignUpRequest;
@@ -36,6 +37,13 @@ public class UserController {
     @ApiOperation(value = "회원가입", notes = "회원가입 완료합니다.")
     public ResponseEntity<ResponseDto<User>> signUp(@RequestBody UserSignUpRequest userSignUpRequest) {
         userService.signUp(userSignUpRequest);
+        return ResponseEntity.ok(ResponseDto.create(SIGNUP_SUCCESS.getMessage()));
+    }
+
+    @PostMapping("/signup/oauth2")
+    @ApiOperation(value = "oauth2 회원 가입", notes = "oauth2 추가 정보 받은 이후 회원가입 진행")
+    public ResponseEntity<ResponseDto> signUp(@RequestBody Oauth2SignUpRequest oauth2SignUpRequest) {
+        User user = userService.oauth2signUp(oauth2SignUpRequest);
         return ResponseEntity.ok(ResponseDto.create(SIGNUP_SUCCESS.getMessage()));
     }
 
