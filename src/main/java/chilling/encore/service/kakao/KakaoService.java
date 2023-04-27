@@ -31,7 +31,7 @@ public class KakaoService implements Oauth2Service {
     private final JwtTokenProvider tokenProvider;
 
     @Override
-    public ResponseDto<?> authenticate(String accessToken) {
+    public ResponseDto<?> authenticate(String provider, String accessToken) {
         log.info("accessToken = {}", accessToken);
 
         String email = null;
@@ -49,10 +49,10 @@ public class KakaoService implements Oauth2Service {
         Optional<String> optionalGender = profile.getKakaoAccount().getGender();
         if (optionalGender.isPresent())
             gender = optionalGender.get();
-        return getResponseDto(email, gender, kakaoId);
+        return getResponseDto(email, gender, kakaoId, provider);
     }
 
-    private ResponseDto<?> getResponseDto(String email, String gender, Long kakaoId) {
+    private ResponseDto<?> getResponseDto(String email, String gender, Long kakaoId, String provider) {
         // 회원 가입 여부 확인
         Optional<User> optionalUser = userRepository.findByUserId(String.valueOf(kakaoId));
         if (optionalUser.isEmpty()) {
@@ -61,6 +61,7 @@ public class KakaoService implements Oauth2Service {
                     .id(String.valueOf(kakaoId))
                     .email(email)
                     .gender(gender)
+                    .provider(provider)
                     .build()
             );
         }

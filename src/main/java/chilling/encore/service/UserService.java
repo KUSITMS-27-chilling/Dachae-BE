@@ -62,10 +62,11 @@ public class UserService {
                 .age(oauth2SignUpRequest.getAge())
                 .email(oauth2SignUpRequest.getEmail())
                 .password(bCryptPasswordEncoder.encode("1234"))
-                .nickName(oauth2SignUpRequest.getName())
+                .nickName(oauth2SignUpRequest.getProvider() + "_" + oauth2SignUpRequest.getId())
                 .phoneNumber(oauth2SignUpRequest.getPhoneNumber())
                 .role(ROLE_USER)
                 .status(0)
+                .provider(oauth2SignUpRequest.getProvider())
                 .build();
         return userRepository.save(user);
     }

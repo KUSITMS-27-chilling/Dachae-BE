@@ -22,7 +22,7 @@ public class Oauth2Controller {
         Oauth2AuthService oauth2AuthService = selectOauthService.selectAuth(provider);
 
         String accessToken = oauth2AuthService.getAccessToken(code);
-        ResponseDto<?> authenticate = oauth2Service.authenticate(accessToken);
+        ResponseDto<?> authenticate = oauth2Service.authenticate(provider, accessToken);
 
         return ResponseEntity.ok(authenticate);
     }
