@@ -2,6 +2,7 @@ package chilling.encore.controller;
 
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.*;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class Oauth2Controller {
     private final SelectOauthService selectOauthService;
 
+    @ApiOperation(value = "이건 맵핑X", notes = "자동으로 처리되는 부분")
     @GetMapping("/login/oauth2/code/{provider}")
     public ResponseEntity<ResponseDto<?>> getUser(@PathVariable String provider, String code) {
         provider = provider.toUpperCase();
