@@ -1,15 +1,12 @@
 package chilling.encore.service;
 
 import chilling.encore.domain.User;
-import chilling.encore.dto.UserDto;
 import chilling.encore.dto.UserDto.UserLoginRequest;
 import chilling.encore.dto.UserDto.UserLoginResponse;
 import chilling.encore.dto.UserDto.UserSignUpRequest;
-import chilling.encore.dto.responseMessage.UserConstants;
 import chilling.encore.global.config.jwt.JwtTokenProvider;
 import chilling.encore.global.config.jwt.TokenInfoResponse;
 import chilling.encore.global.config.redis.RedisRepository;
-import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,9 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Optional;
 
+import static chilling.encore.dto.UserDto.*;
 import static chilling.encore.dto.responseMessage.UserConstants.Role.ROLE_USER;
 
 
@@ -49,6 +46,24 @@ public class UserService {
                 .password(bCryptPasswordEncoder.encode(userSignUpRequest.getPassword()))
                 .nickName(userSignUpRequest.getNickName())
                 .phoneNumber(userSignUpRequest.getPhoneNumber())
+                .role(ROLE_USER)
+                .status(0)
+                .build();
+        return userRepository.save(user);
+    }
+
+    //Oauth2 회원가입
+    public User oauth2signUp(Oauth2SignUpRequest oauth2SignUpRequest) {
+        String id = oauth2SignUpRequest.getProvider() + oauth2SignUpRequest.getId();
+        User user = User.builder()
+                .userId(id)
+                .name(oauth2SignUpRequest.getName())
+                .gender(oauth2SignUpRequest.getGender())
+                .age(oauth2SignUpRequest.getAge())
+                .email(oauth2SignUpRequest.getEmail())
+                .password(bCryptPasswordEncoder.encode("1234"))
+                .nickName(oauth2SignUpRequest.getName())
+                .phoneNumber(oauth2SignUpRequest.getPhoneNumber())
                 .role(ROLE_USER)
                 .status(0)
                 .build();
