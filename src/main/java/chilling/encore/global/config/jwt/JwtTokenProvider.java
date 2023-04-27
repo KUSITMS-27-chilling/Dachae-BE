@@ -69,6 +69,24 @@ public class JwtTokenProvider implements InitializingBean {
         return TokenInfoResponse.from("Bearer", accessToken, refreshToken, accessTokenValidityTime);
     }
 
+    public TokenInfoResponse oauth2CreateToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        Date current = new Date();
+
+        Oauth2PrincipalDetails principal = (Oauth2PrincipalDetails) authentication.getPrincipal();
+        Long userIdx = principal.getUser().getUserIdx();
+
+        String accessToken = createAccessToken(authorities, current, userIdx);
+        String refreshToken = createRefreshToken(authorities, current, userIdx);
+
+        updateRefreshToken(userIdx, refreshToken);
+
+        return TokenInfoResponse.from("Bearer", accessToken, refreshToken, accessTokenValidityTime);
+    }
+
     private String createRefreshToken(String authorities, Date current, Long userIdx) {
         Date refreshTokenValidity = new Date(current.getTime() + this.refreshTokenValidityTime);
 
