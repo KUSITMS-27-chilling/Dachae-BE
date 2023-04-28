@@ -37,8 +37,6 @@ public class User {
 
     private String provider;
     //google, facebook등등
-    private String providerId;
-    //해당에서 사용하는 id
 
     @CreationTimestamp
     private LocalDate createdAt;
