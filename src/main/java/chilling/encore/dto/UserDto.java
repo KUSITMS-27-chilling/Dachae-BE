@@ -25,6 +25,7 @@ public abstract class UserDto {
         private String password;
         private String nickName;
         private String phoneNumber;
+        private String region;
     }
 
     @Getter
@@ -40,6 +41,7 @@ public abstract class UserDto {
         private String email;
         private String phoneNumber;
         private String provider;
+        private String region;
     }
 
     @Getter
