@@ -48,6 +48,7 @@ public class UserService {
                 .phoneNumber(userSignUpRequest.getPhoneNumber())
                 .role(ROLE_USER)
                 .status(0)
+                .region(userSignUpRequest.getRegion())
                 .build();
         return userRepository.save(user);
     }
@@ -67,6 +68,7 @@ public class UserService {
                 .role(ROLE_USER)
                 .status(0)
                 .provider(oauth2SignUpRequest.getProvider())
+                .region(oauth2SignUpRequest.getRegion())
                 .build();
         return userRepository.save(user);
     }
