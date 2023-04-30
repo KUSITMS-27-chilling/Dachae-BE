@@ -17,6 +17,7 @@ public class Suggest {
     private Long suggestIdx;
 
     @ManyToOne
+    @JoinColumn(name = "userIdx")
     private User user;
 
     private String region;
@@ -24,6 +25,7 @@ public class Suggest {
     @Column(columnDefinition = "TEXT")
     private String content;
     private String teacherName;
+    private String category;
 
     private LocalDate createdAt;
     private LocalDate endDate;

@@ -16,8 +16,10 @@ public class ListenAlarm {
     private Long listenAlarmIdx;
 
     @ManyToOne
+    @JoinColumn(name = "userIdx")
     private User user;
     @ManyToOne
+    @JoinColumn(name = "listenCommentIdx")
     private ListenComments listenComments;
 
     private boolean isRead;

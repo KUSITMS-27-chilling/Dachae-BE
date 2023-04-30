@@ -1,5 +1,6 @@
 package chilling.encore.service;
 
+import chilling.encore.domain.Center;
 import chilling.encore.domain.User;
 import chilling.encore.dto.UserDto.UserLoginRequest;
 import chilling.encore.dto.UserDto.UserLoginResponse;
@@ -7,6 +8,7 @@ import chilling.encore.dto.UserDto.UserSignUpRequest;
 import chilling.encore.global.config.jwt.JwtTokenProvider;
 import chilling.encore.global.config.jwt.TokenInfoResponse;
 import chilling.encore.global.config.redis.RedisRepository;
+import chilling.encore.repository.CenterRepository;
 import chilling.encore.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,12 +33,16 @@ import static chilling.encore.dto.responseMessage.UserConstants.Role.ROLE_USER;
 public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final CenterRepository centerRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisRepository redisRepository;
 
     //회원가입
     public User signUp(UserSignUpRequest userSignUpRequest) {
+        Center center = centerRepository.findByRegion(userSignUpRequest.getRegion());
+        center.plusFavCount();
+
         User user = User.builder()
                 .userId(userSignUpRequest.getId())
                 .name(userSignUpRequest.getName())

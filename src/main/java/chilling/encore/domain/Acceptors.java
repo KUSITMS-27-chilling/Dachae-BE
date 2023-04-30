@@ -14,7 +14,9 @@ public class Acceptors {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long acceptorIdx;
     @ManyToOne
+    @JoinColumn(name = "userIdx")
     private User user;
     @ManyToOne
+    @JoinColumn(name = "suggestIdx")
     private Suggest suggest;
 }

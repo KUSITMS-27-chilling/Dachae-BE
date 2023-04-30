@@ -16,8 +16,10 @@ public class ReviewAlarm {
     private Long reviewAlarm;
 
     @ManyToOne
+    @JoinColumn(name = "userIdx")
     private User user;
     @ManyToOne
+    @JoinColumn(name = "reviewCommentIdx")
     private ReviewComments reviewComments;
 
     private boolean isRead;
