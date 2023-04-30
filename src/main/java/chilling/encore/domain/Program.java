@@ -16,10 +16,10 @@ public class Program {
     private Long programIdx;
 
     @ManyToOne
+    @JoinColumn(name = "learningCenterIdx")
     private LearningCenter learningCenter;
 
     private String programName;
-    private String programContent;
     private String category;
 
     private LocalDate startDate;
