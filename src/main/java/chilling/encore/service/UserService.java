@@ -61,6 +61,9 @@ public class UserService {
 
     //Oauth2 회원가입
     public User oauth2signUp(Oauth2SignUpRequest oauth2SignUpRequest) {
+        Center center = centerRepository.findByRegion(oauth2SignUpRequest.getRegion());
+        center.plusFavCount();
+
         String id = oauth2SignUpRequest.getProvider() + oauth2SignUpRequest.getId();
         User user = User.builder()
                 .userId(id)
