@@ -3,6 +3,7 @@ package chilling.encore.service;
 import chilling.encore.domain.Center;
 import chilling.encore.domain.Program;
 import chilling.encore.domain.User;
+import chilling.encore.dto.MainDto.MainResponse;
 import chilling.encore.dto.ProgramDto.ProgramMainResponse;
 import chilling.encore.dto.ProgramDto.getPrograms;
 import chilling.encore.global.config.security.util.SecurityUtils;
@@ -21,7 +22,7 @@ public class MainService {
     private final CenterRepository centerRepository;
     private final ProgramRepository programRepository;
 
-    public Map<String, Object> getFirstPage() {
+    public MainResponse getFirstPage() {
         try {
             Optional<User> optionalUser = SecurityUtils.getLoggedInUser();
             User user = optionalUser.get();
@@ -30,19 +31,24 @@ public class MainService {
             String[] favRegions = favRegion.split(",");
             return null;
         } catch (ClassCastException e) {
-            return notLogin();
+            return MainResponse.from(
+                    null,
+                    null,
+                    null,
+                    notLogin()
+            );
         }
     }
 
-    private Map<String, Object> notLogin() {
+    private Map<String, ProgramMainResponse> notLogin() {
         log.info("로그인 하지 않은 사용자 메인 페이지 조회");
         List<Center> favCenters = centerRepository.findTop4ByOrderByFavCountDesc();
-        Map<String, Object> programDatas = getProgramResponses(favCenters);
+        Map<String, ProgramMainResponse> programDatas = getProgramResponses(favCenters);
         return programDatas;
     }
 
-    private Map<String, Object> getProgramResponses(List<Center> favCenters) {
-        Map<String, Object> programDatas = new HashMap<>();
+    private Map<String, ProgramMainResponse> getProgramResponses(List<Center> favCenters) {
+        Map<String, ProgramMainResponse> programDatas = new HashMap<>();
         log.info("size = {}", favCenters.size());
 
         for (int i = 0; i < favCenters.size(); i++) {
