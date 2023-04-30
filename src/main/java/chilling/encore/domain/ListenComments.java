@@ -16,8 +16,10 @@ public class ListenComments {
     private Long listenCommentIdx;
 
     @ManyToOne
+    @JoinColumn(name = "userIdx")
     private User user;
     @ManyToOne
+    @JoinColumn(name = "listenIdx")
     private ListenTogether listenTogether;
 
     @Column(columnDefinition = "TEXT")
