@@ -20,4 +20,8 @@ public class Center {
     private String region;
     private int favCount;
     private String tell;
+
+    public void plusFavCount() {
+        favCount++;
+    }
 }
