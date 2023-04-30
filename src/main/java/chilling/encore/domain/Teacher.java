@@ -19,4 +19,6 @@ public class Teacher {
 
     private String region;
     private String name;
+    private String lectureName;
+    private String lectureField;
 }
