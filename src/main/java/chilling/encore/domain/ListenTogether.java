@@ -17,9 +17,10 @@ public class ListenTogether {
     private Long listenIdx;
 
     @ManyToOne
+    @JoinColumn(name = "userIdx")
     private User user;
-
     @ManyToOne
+    @JoinColumn(name = "programIdx")
     private Program program;
 
     private String title;

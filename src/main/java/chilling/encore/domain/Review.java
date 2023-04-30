@@ -17,9 +17,11 @@ public class Review {
     private Long reviewIdx;
 
     @ManyToOne
+    @JoinColumn(name = "userIdx")
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "programIdx")
     private Program program;
 
     private int week;

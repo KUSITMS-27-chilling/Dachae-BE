@@ -14,7 +14,9 @@ public class Participants {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long participantsIdx;
     @ManyToOne
+    @JoinColumn(name = "userIdx")
     private User user;
     @ManyToOne
+    @JoinColumn(name = "listenIdx")
     private ListenTogether listenTogether;
 }

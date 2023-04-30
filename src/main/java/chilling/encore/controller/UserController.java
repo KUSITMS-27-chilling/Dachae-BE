@@ -47,7 +47,7 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.create(SIGNUP_SUCCESS.getMessage()));
     }
 
-    @PostMapping("/checkIdDup")
+    @GetMapping("/checkIdDup")
     @ApiOperation(value = "아이디 중복체크", notes = "아이디 중복체크를 합니다.")
     public ResponseEntity<ResponseDto<Boolean>> checkId(String id) {
         return ResponseEntity.ok(
@@ -58,7 +58,7 @@ public class UserController {
         );
     }
 
-    @PostMapping("/checkNickDup")
+    @GetMapping("/checkNickDup")
     @ApiOperation(value = "닉네임 중복체크", notes = "닉네임 중복체크를 합니다.")
     public ResponseEntity<ResponseDto<Boolean>> checkNick(String nickName) {
         return ResponseEntity.ok(

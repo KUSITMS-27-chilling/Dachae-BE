@@ -12,13 +12,12 @@ import javax.persistence.Id;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
-public class Teacher {
+public class Center {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long teacherIdx;
+    private Long regionIdx;
 
     private String region;
-    private String name;
-    private String lectureName;
-    private String lectureField;
+    private int favCount;
+    private String tell;
 }

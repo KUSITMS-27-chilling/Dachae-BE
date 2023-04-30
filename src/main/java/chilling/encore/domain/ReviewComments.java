@@ -16,8 +16,10 @@ public class ReviewComments {
     private Long reviewCommentIdx;
 
     @ManyToOne
+    @JoinColumn(name = "userIdx")
     private User user;
     @ManyToOne
+    @JoinColumn(name = "reviewIdx")
     private Review review;
 
     @Column(columnDefinition = "TEXT")
