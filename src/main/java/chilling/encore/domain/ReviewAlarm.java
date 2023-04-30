@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class ReviewAlarm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewAlarm;
+    private Long reviewAlarmIdx;
 
     @ManyToOne
     @JoinColumn(name = "userIdx")

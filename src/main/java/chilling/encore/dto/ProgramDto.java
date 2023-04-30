@@ -42,4 +42,23 @@ public abstract class ProgramDto {
                     .build();
         }
     }
+
+    @Getter
+    @Builder
+    public static class NewProgram {
+        private Long programIdx;
+        private String programName;
+        private LocalDate startDate;
+        private LocalDate endDate;
+
+        public static NewProgram from(Program program) {
+            return NewProgram
+                    .builder()
+                    .programIdx(program.getProgramIdx())
+                    .programName(program.getProgramName())
+                    .startDate(program.getStartDate())
+                    .endDate(program.getEndDate())
+                    .build();
+        }
+    }
 }
