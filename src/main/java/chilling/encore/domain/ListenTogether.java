@@ -30,6 +30,8 @@ public class ListenTogether {
 
     private int hit;
 
+    private int goalNum;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
