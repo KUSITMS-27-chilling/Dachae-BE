@@ -2,12 +2,10 @@ package chilling.encore.controller;
 
 
 import chilling.encore.domain.User;
-import chilling.encore.dto.UserDto;
 import chilling.encore.dto.UserDto.Oauth2SignUpRequest;
 import chilling.encore.dto.UserDto.UserLoginRequest;
 import chilling.encore.dto.UserDto.UserLoginResponse;
 import chilling.encore.dto.UserDto.UserSignUpRequest;
-import chilling.encore.dto.responseMessage.UserConstants;
 import chilling.encore.global.config.email.EmailService;
 import chilling.encore.service.UserService;
 import chilling.encore.global.dto.ResponseDto;
@@ -19,8 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
+import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.CREATE_SUCCESS_CODE;
 import static chilling.encore.dto.responseMessage.UserConstants.SuccessMessage.*;
 import static chilling.encore.dto.responseMessage.UserConstants.UserExceptionList.NOT_FOUND_USER;
+import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
 
 @RequiredArgsConstructor
 @RestController
@@ -37,14 +37,14 @@ public class UserController {
     @ApiOperation(value = "회원가입", notes = "회원가입 완료합니다.")
     public ResponseEntity<ResponseDto<User>> signUp(@RequestBody UserSignUpRequest userSignUpRequest) {
         userService.signUp(userSignUpRequest);
-        return ResponseEntity.ok(ResponseDto.create(SIGNUP_SUCCESS.getMessage()));
+        return ResponseEntity.ok(ResponseDto.create(CREATE_SUCCESS_CODE.getCode(), SIGNUP_SUCCESS.getMessage()));
     }
 
     @PostMapping("/signup/oauth2")
     @ApiOperation(value = "oauth2 회원 가입", notes = "oauth2 추가 정보 받은 이후 회원가입 진행")
     public ResponseEntity<ResponseDto> signUp(@RequestBody Oauth2SignUpRequest oauth2SignUpRequest) {
         User user = userService.oauth2signUp(oauth2SignUpRequest);
-        return ResponseEntity.ok(ResponseDto.create(SIGNUP_SUCCESS.getMessage()));
+        return ResponseEntity.ok(ResponseDto.create(CREATE_SUCCESS_CODE.getCode(), SIGNUP_SUCCESS.getMessage()));
     }
 
     @GetMapping("/checkIdDup")
@@ -52,6 +52,7 @@ public class UserController {
     public ResponseEntity<ResponseDto<Boolean>> checkId(String id) {
         return ResponseEntity.ok(
                 ResponseDto.create(
+                        SELECT_SUCCESS_CODE.getCode(),
                         CHECK_DUP.getMessage(),
                         userService.checkIdDup(id)
                 )
@@ -63,6 +64,7 @@ public class UserController {
     public ResponseEntity<ResponseDto<Boolean>> checkNick(String nickName) {
         return ResponseEntity.ok(
                 ResponseDto.create(
+                        SELECT_SUCCESS_CODE.getCode(),
                         CHECK_DUP.getMessage(),
                         userService.checkNick(nickName)
                 )
@@ -75,7 +77,7 @@ public class UserController {
         try {
             log.info("email = {}", email);
             String s = emailService.sendSimpleMessage(email);
-            return ResponseEntity.ok(ResponseDto.create(EMAIL_SEND_SUCCESS.getMessage(), s));
+            return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EMAIL_SEND_SUCCESS.getMessage(), s));
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
@@ -87,9 +89,9 @@ public class UserController {
     public ResponseEntity<ResponseDto<UserLoginResponse>> login(@RequestBody UserLoginRequest userLoginRequest) {
         try {
             UserLoginResponse loginResponse = userService.login(userLoginRequest);
-            return ResponseEntity.ok(ResponseDto.create(LOGIN_SUCCESS.getMessage(), loginResponse));
+            return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), LOGIN_SUCCESS.getMessage(), loginResponse));
         } catch (AuthenticationException e) {
-            return ResponseEntity.ok(ResponseDto.create(NOT_FOUND_USER.getMessage()));
+            return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), NOT_FOUND_USER.getMessage()));
         }
     }
 }
