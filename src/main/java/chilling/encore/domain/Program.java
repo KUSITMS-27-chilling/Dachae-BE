@@ -21,6 +21,7 @@ public class Program {
 
     private String programName;
     private String category;
+    private String url;
 
     private LocalDate startDate;
     private LocalDate endDate;
