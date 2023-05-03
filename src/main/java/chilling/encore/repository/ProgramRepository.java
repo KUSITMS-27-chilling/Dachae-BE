@@ -7,5 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ProgramRepository extends JpaRepository<Program, Long> {
-    List<Program> findTop3ByStartDateBeforeAndEndDateAfterAndLearningCenter_RegionOrderByStartDateDesc(LocalDate now1, LocalDate now2, String region);
+    List<Program> findTop3ByStartDateLessThanEqualAndEndDateGreaterThanEqualAndLearningCenter_RegionOrderByStartDateDesc(LocalDate now1, LocalDate now2, String region);
+    List<Program> findAllByStartDateGreaterThanEqualAndLearningCenter_Region(LocalDate yesterday, String region);
 }
