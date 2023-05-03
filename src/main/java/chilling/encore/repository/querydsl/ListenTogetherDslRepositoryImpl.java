@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Slf4j
 @RequiredArgsConstructor
-public class ListenTogetherRepositoryImpl {
+public class ListenTogetherDslRepositoryImpl {
 }
