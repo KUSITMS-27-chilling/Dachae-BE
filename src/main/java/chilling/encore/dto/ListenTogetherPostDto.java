@@ -14,33 +14,33 @@ public abstract class ListenTogetherPostDto {
     @Builder
     @ApiModel(description = "인기 같이들어요 3개 보여주기 위한 응답 객체")
     public static class PopularListenPostsResponse {
-        private int favCount;
-        private List<ListenPosts> listenPosts;
+        private List<ListenTogetherPosts> listenTogetherPosts;
 
-        public PopularListenPostsResponse from(int favCount, List<ListenPosts> listenPosts) {
+        public static PopularListenPostsResponse from(List<ListenTogetherPosts> listenTogetherPosts) {
             return PopularListenPostsResponse.builder()
-                    .listenPosts(listenPosts)
-                    .favCount(favCount)
+                    .listenTogetherPosts(listenTogetherPosts)
                     .build();
         }
     }
 
     @Getter
     @Builder
-    public static class ListenPosts {
+    public static class ListenTogetherPosts {
         private Long listenInx;
         private String title;
         private int goalNum;
+        private int hit;
         private User user;
         private Program program;
 
-        public ListenPosts from(ListenTogether listenTogether) {
-            return ListenPosts.builder()
-                    .listenInx(listenInx)
-                    .title(title)
-                    .goalNum(goalNum)
-                    .user(user)
-                    .program(program)
+        public static ListenTogetherPosts from(ListenTogether listenTogether) {
+            return ListenTogetherPosts.builder()
+                    .listenInx(listenTogether.getListenIdx())
+                    .title(listenTogether.getTitle())
+                    .goalNum(listenTogether.getGoalNum())
+                    .hit(listenTogether.getHit())
+                    .user(listenTogether.getUser())
+                    .program(listenTogether.getProgram())
                     .build();
         }
     }
