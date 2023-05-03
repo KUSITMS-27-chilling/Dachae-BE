@@ -9,6 +9,18 @@ import java.time.LocalDate;
 import java.util.List;
 
 public abstract class ProgramDto {
+    @Getter
+    @Builder
+    @ApiModel(description = "프로그램 새소식 위한 응답 객체")
+    public static class NewProgramsResponse {
+        private List<NewProgram> newPrograms;
+
+        public static NewProgramsResponse from(List<NewProgram> newPrograms) {
+            return NewProgramsResponse.builder()
+                    .newPrograms(newPrograms)
+                    .build();
+        }
+    }
 
     @Getter
     @Builder
