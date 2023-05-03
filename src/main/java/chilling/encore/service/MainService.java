@@ -4,6 +4,7 @@ import chilling.encore.domain.*;
 import chilling.encore.dto.AlaramDto.NewAlarm;
 import chilling.encore.dto.MainDto.MainResponse;
 import chilling.encore.dto.ProgramDto.NewProgram;
+import chilling.encore.dto.ProgramDto.NewProgramsResponse;
 import chilling.encore.dto.ProgramDto.ProgramMainResponse;
 import chilling.encore.dto.ProgramDto.getPrograms;
 import chilling.encore.global.config.security.util.SecurityUtils;
@@ -23,6 +24,18 @@ public class MainService {
     private final ProgramRepository programRepository;
     private final ReviewAlarmRepository reviewAlarmRepository;
     private final ListenAlarmRepository listenAlarmRepository;
+
+    private LocalDate yesterDay = LocalDate.now().minusDays(1);
+
+
+    public NewProgramsResponse getNewPrograms(String region) {
+        List<Program> programs = programRepository.findAllByStartDateGreaterThanEqualAndLearningCenter_Region(yesterDay, region);
+        List<NewProgram> newPrograms = new ArrayList<>();
+        for (int i = 0; i < programs.size(); i++) {
+            newPrograms.add(NewProgram.from(programs.get(i)));
+        }
+        return NewProgramsResponse.from(newPrograms);
+    }
 
     public MainResponse getFirstPage() {
         try {
@@ -46,7 +59,6 @@ public class MainService {
 
     private MainResponse loginUser(User user) {
         String region = user.getRegion();
-        LocalDate yesterDay = LocalDate.now().minusDays(1);
 
         List<ReviewAlarm> reviewAlarms = reviewAlarmRepository.findAllByIsReadFalseAndUser_UserIdx(user.getUserIdx());
         List<ListenAlarm> listenAlarms = listenAlarmRepository.findAllByIsReadFalseAndUser_UserIdx(user.getUserIdx());
