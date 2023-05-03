@@ -1,4 +1,4 @@
-package chilling.encore.repository;
+package chilling.encore.repository.querydsl;
 
 import chilling.encore.domain.QUser;
 import com.querydsl.jpa.impl.JPAQueryFactory;

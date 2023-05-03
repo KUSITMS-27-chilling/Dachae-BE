@@ -1,4 +1,4 @@
-package chilling.encore.repository;
+package chilling.encore.repository.springDataJpa;
 
 import chilling.encore.domain.Program;
 import org.springframework.data.domain.Page;

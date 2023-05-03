@@ -2,7 +2,7 @@ package chilling.encore.global.config.jwt;
 
 import chilling.encore.domain.User;
 import chilling.encore.global.config.redis.RedisRepository;
-import chilling.encore.repository.UserRepository;
+import chilling.encore.repository.springDataJpa.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
