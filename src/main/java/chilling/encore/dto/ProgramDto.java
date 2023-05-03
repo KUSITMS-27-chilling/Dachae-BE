@@ -59,6 +59,25 @@ public abstract class ProgramDto {
 
     @Getter
     @Builder
+    public static class GetDetailPrograms {
+        private Long programIdx;
+        private String programName;
+        private String category;
+        private String url;
+
+        public static ProgramDto.GetDetailPrograms from(Program program) {
+            return GetDetailPrograms
+                    .builder()
+                    .programIdx(program.getProgramIdx())
+                    .programName(program.getProgramName())
+                    .category(program.getCategory())
+                    .url(program.getUrl())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
     public static class NewProgram {
         private Long programIdx;
         private String programName;
