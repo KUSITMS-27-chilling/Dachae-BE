@@ -3,14 +3,11 @@ package chilling.encore.dto;
 import chilling.encore.domain.ListenTogether;
 import chilling.encore.domain.Program;
 import chilling.encore.domain.User;
-import chilling.encore.dto.ListenTogetherPostDto.ListenTogetherPosts;
-import chilling.encore.dto.ListenTogetherPostDto.PopularListenPostsResponse;
-import io.jsonwebtoken.lang.Collections;
 import io.swagger.annotations.ApiModel;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public abstract class ListenTogetherDto {
@@ -76,19 +73,44 @@ public abstract class ListenTogetherDto {
     @ApiModel(description = "같이들어요 접근을 위한 응답객체")
     public static class ListenTogetherResponse {
 
-        private PopularListenPostsResponse popularListenPosts;
+
+        private List<PopularListenTogether> popularListenTogether;
         // 인기글
-        private List<ListenTogetherPosts> listenTogetherPosts;
+//        private List<ListenTogetherPosts> listenTogetherPosts;
         // 같이들어요 리스트
         // 내가 작성한 제안할래요 글 추가필요
 
         public static ListenTogetherResponse from(
-                PopularListenPostsResponse popularListenPosts,
-                List<ListenTogetherPosts> listenTogetherPosts
+                List<PopularListenTogether> popularListenTogether
         ) {
             return ListenTogetherResponse.builder()
-                    .popularListenPosts(popularListenPosts)
-                    .listenTogetherPosts(listenTogetherPosts)
+                    .popularListenTogether(popularListenTogether)
+                    .build();
+        }
+    }
+    @Getter
+    @Builder
+    @ApiModel(description = "인기 같이들어요 3개 보여주기 위한 응답 객체")
+    public static class PopularListenTogether {
+        /**
+         * 같이들어요 인기글에서 반환
+         * listenIdx
+         * title
+         * hit
+         * createdAt
+         */
+
+        private Long listenIdx;
+        private String title;
+        private int hit;
+        private LocalDateTime createdAt;
+
+        public static PopularListenTogether from(ListenTogether listenTogether) {
+            return PopularListenTogether.builder()
+                    .listenIdx(listenTogether.getListenIdx())
+                    .title(listenTogether.getTitle())
+                    .hit(listenTogether.getHit())
+                    .createdAt(listenTogether.getCreatedAt())
                     .build();
         }
     }
