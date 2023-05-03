@@ -3,9 +3,9 @@ package chilling.encore.service;
 
 import chilling.encore.domain.ListenTogether;
 import chilling.encore.domain.User;
+import chilling.encore.dto.ListenTogetherDto;
 import chilling.encore.dto.ListenTogetherDto.ListenTogetherResponse;
-import chilling.encore.dto.ListenTogetherPostDto.ListenTogetherPosts;
-import chilling.encore.dto.ListenTogetherPostDto.PopularListenPostsResponse;
+import chilling.encore.dto.ListenTogetherDto.PopularListenTogether;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.ListenTogetherRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,14 +30,26 @@ public class ListenTogetherService {
             String[] favRegions = favRegion.split(",");
 
 
+/*
             List<ListenTogetherPosts> listenTogetherPosts = new ArrayList<>();
             List<ListenTogether> topByOrderByHitsDesc = listenTogetherRepository.findTopByOrderByHitDesc();
             for (ListenTogether listenTogether : topByOrderByHitsDesc) {
                 listenTogetherPosts.add(ListenTogetherPosts.from(listenTogether));
             }
             PopularListenPostsResponse popularListenPostsResponse = PopularListenPostsResponse.from(listenTogetherPosts);
+*/
 
-            return ListenTogetherResponse.from(popularListenPostsResponse, listenTogetherPosts);
+            List<ListenTogether> mergeList = new ArrayList<>();
+            for (String fav : favRegions) {
+                mergeList.addAll(listenTogetherRepository.findTop3ByOrderByHitDesc(fav));
+            }
+
+            List<PopularListenTogether> popularListenTogethers = new ArrayList<>();
+            for (ListenTogether listenTogether : mergeList) {
+                popularListenTogethers.add(PopularListenTogether.from(listenTogether));
+            }
+            return ListenTogetherResponse.from(popularListenTogethers);
+//            return ListenTogetherResponse.from(popularListenPostsResponse, listenTogetherPosts);
 /*
             List<ListenTogether> top3ListenTogethers = new ArrayList<>();
             List<ListenTogether> listenTogethers = new ArrayList<>();
@@ -59,7 +71,6 @@ public class ListenTogetherService {
 */
         } catch (ClassCastException e) {
             return ListenTogetherResponse.from(
-                    null,
                     null
             );
         }
