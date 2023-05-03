@@ -9,6 +9,31 @@ import java.time.LocalDate;
 import java.util.List;
 
 public abstract class ProgramDto {
+    @Getter
+    @Builder
+    @ApiModel(description = "프로그램 새소식 위한 응답 객체")
+    public static class NewProgramsResponse {
+        private List<NewProgram> newPrograms;
+
+        public static NewProgramsResponse from(List<NewProgram> newPrograms) {
+            return NewProgramsResponse.builder()
+                    .newPrograms(newPrograms)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @ApiModel(description = "프로그램 페이징 위한 응답 객체")
+    public static class PagingPrograms {
+        private List<GetDetailPrograms> programs;
+
+        public static PagingPrograms from(List<GetDetailPrograms> programs) {
+            return PagingPrograms.builder()
+                    .programs(programs)
+                    .build();
+        }
+    }
 
     @Getter
     @Builder
@@ -30,15 +55,36 @@ public abstract class ProgramDto {
         private Long programIdx;
         private String programName;
         private String category;
+        private String url;
         private LocalDate endDate;
 
         public static ProgramDto.getPrograms from(Program program) {
-            return ProgramDto.getPrograms
+            return getPrograms
                     .builder()
                     .programIdx(program.getProgramIdx())
                     .programName(program.getProgramName())
                     .category(program.getCategory())
+                    .url(program.getUrl())
                     .endDate(program.getEndDate())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class GetDetailPrograms {
+        private Long programIdx;
+        private String programName;
+        private String category;
+        private String url;
+
+        public static ProgramDto.GetDetailPrograms from(Program program) {
+            return GetDetailPrograms
+                    .builder()
+                    .programIdx(program.getProgramIdx())
+                    .programName(program.getProgramName())
+                    .category(program.getCategory())
+                    .url(program.getUrl())
                     .build();
         }
     }
@@ -48,6 +94,7 @@ public abstract class ProgramDto {
     public static class NewProgram {
         private Long programIdx;
         private String programName;
+        private String url;
         private LocalDate startDate;
         private LocalDate endDate;
 
@@ -56,6 +103,7 @@ public abstract class ProgramDto {
                     .builder()
                     .programIdx(program.getProgramIdx())
                     .programName(program.getProgramName())
+                    .url(program.getUrl())
                     .startDate(program.getStartDate())
                     .endDate(program.getEndDate())
                     .build();

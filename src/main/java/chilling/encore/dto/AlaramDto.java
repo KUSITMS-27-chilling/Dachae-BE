@@ -11,7 +11,7 @@ public abstract class AlaramDto {
         private Long reviewCommentIdx;
         private String nickName;
 
-        public NewAlarm from(Long listenCommentsIdx, Long reviewCommentIdx, String nickName) {
+        public static NewAlarm from(Long listenCommentsIdx, Long reviewCommentIdx, String nickName) {
             return NewAlarm.builder()
                     .listenCommentsIdx(listenCommentsIdx)
                     .reviewCommentIdx(reviewCommentIdx)

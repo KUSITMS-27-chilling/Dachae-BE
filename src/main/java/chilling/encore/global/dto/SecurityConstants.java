@@ -8,7 +8,7 @@ public class SecurityConstants {
     @Getter
     @RequiredArgsConstructor
     public enum SecurityExceptionList {
-        REQUIRED_LOGGED_IN("SS0001", HttpStatus.UNAUTHORIZED, "해당 서비스는 로그인이 필요한 서비스입니다.");
+        REQUIRED_LOGGED_IN("403", HttpStatus.UNAUTHORIZED, "접근 권한이 없습니다.");
 
         private final String errorCode;
         private final HttpStatus httpStatus;
