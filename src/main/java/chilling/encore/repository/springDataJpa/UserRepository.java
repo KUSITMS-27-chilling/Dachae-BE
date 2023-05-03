@@ -1,7 +1,7 @@
-package chilling.encore.repository;
+package chilling.encore.repository.springDataJpa;
 
 import chilling.encore.domain.User;
-import chilling.encore.repository.UserDslRepository;
+import chilling.encore.repository.querydsl.UserDslRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
