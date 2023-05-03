@@ -24,18 +24,11 @@ public class ListenTogetherDslRepositoryImpl implements ListenTogetherDslReposit
     @Override
     public List<ListenTogether> findTop3ByOrderByHitDesc(String region) {
 
-        //조회수
-//        int hit = listenTogether.getHit();
-        //ListenTogether의 지역(region)
-//        Program program = listenTogether.getProgram();
-//        LearningCenter learningCenter = program.getLearningCenter();
-
         QListenTogether qListenTogether = QListenTogether.listenTogether;
         QLearningCenter qLearningCenter = QLearningCenter.learningCenter;
 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qLearningCenter.region.like("%" + region + "%"));
-//        Builder.and(qUser.favRegion.like("%" + favRegion + "%"));
 
         List<ListenTogether> results = query.selectFrom(QListenTogether.listenTogether)
                 .where(builder)
@@ -44,10 +37,5 @@ public class ListenTogetherDslRepositoryImpl implements ListenTogetherDslReposit
                 .fetch();
 
         return results;
-        // 1. User.favRegion 받아와서
-        // 2. split(",")하고
-        // 3. for 돌려서
-        // 4. 하나의 List<ListenTogether>에 담아?
-        // 5. List<ListenTogether>에서 top3 뽑기
     }
 }

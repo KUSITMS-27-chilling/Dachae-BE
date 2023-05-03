@@ -76,7 +76,6 @@ public abstract class ListenTogetherDto {
 
         private List<PopularListenTogether> popularListenTogether;
         // 인기글
-//        private List<ListenTogetherPosts> listenTogetherPosts;
         // 같이들어요 리스트
         // 내가 작성한 제안할래요 글 추가필요
 
