@@ -26,6 +26,7 @@ public class User {
     private String nickName;
     private String phoneNumber;
     private String isTeacher;
+    private String profile;
     private int status;
     // 회원 정상 / 휴면 / 탈퇴 상태
     @Enumerated(EnumType.STRING)

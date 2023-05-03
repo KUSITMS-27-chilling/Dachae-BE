@@ -24,6 +24,19 @@ public abstract class ProgramDto {
 
     @Getter
     @Builder
+    @ApiModel(description = "프로그램 페이징 위한 응답 객체")
+    public static class PagingPrograms {
+        private List<GetDetailPrograms> programs;
+
+        public static PagingPrograms from(List<GetDetailPrograms> programs) {
+            return PagingPrograms.builder()
+                    .programs(programs)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
     @ApiModel(description = "프로그램 3개 보여주기 위한 응답 객체")
     public static class ProgramMainResponse {
         private int favCount;
