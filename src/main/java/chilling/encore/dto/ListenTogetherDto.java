@@ -51,7 +51,7 @@ public abstract class ListenTogetherDto {
                 Program program
         ) {
             String[] split;
-            List<String> favField = new ArrayList<>();
+            List<String> favField = null;
             if (user.getFavField() != null) {
                 split = user.getFavField().split(",");
                 favField = List.of(split);
