@@ -30,14 +30,16 @@ public abstract class ProgramDto {
         private Long programIdx;
         private String programName;
         private String category;
+        private String url;
         private LocalDate endDate;
 
         public static ProgramDto.getPrograms from(Program program) {
-            return ProgramDto.getPrograms
+            return getPrograms
                     .builder()
                     .programIdx(program.getProgramIdx())
                     .programName(program.getProgramName())
                     .category(program.getCategory())
+                    .url(program.getUrl())
                     .endDate(program.getEndDate())
                     .build();
         }
@@ -48,6 +50,7 @@ public abstract class ProgramDto {
     public static class NewProgram {
         private Long programIdx;
         private String programName;
+        private String url;
         private LocalDate startDate;
         private LocalDate endDate;
 
@@ -56,6 +59,7 @@ public abstract class ProgramDto {
                     .builder()
                     .programIdx(program.getProgramIdx())
                     .programName(program.getProgramName())
+                    .url(program.getUrl())
                     .startDate(program.getStartDate())
                     .endDate(program.getEndDate())
                     .build();
