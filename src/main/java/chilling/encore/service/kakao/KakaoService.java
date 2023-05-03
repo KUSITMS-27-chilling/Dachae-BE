@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
+import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
 import static chilling.encore.dto.responseMessage.UserConstants.SuccessMessage.LOGIN_SUCCESS;
 import static chilling.encore.dto.responseMessage.UserConstants.SuccessMessage.SIGNUP_CONTINUE;
 
@@ -57,7 +58,7 @@ public class KakaoService implements Oauth2Service {
         Optional<User> optionalUser = userRepository.findByUserId(String.valueOf(kakaoId));
         if (optionalUser.isEmpty()) {
             // 회원이 아닌 경우 추가 정보를 받음
-            return ResponseDto.create(SIGNUP_CONTINUE.getMessage(), Oauth2SignUpResponse.builder()
+            return ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SIGNUP_CONTINUE.getMessage(), Oauth2SignUpResponse.builder()
                     .id(String.valueOf(kakaoId))
                     .email(email)
                     .gender(gender)
@@ -79,7 +80,7 @@ public class KakaoService implements Oauth2Service {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserLoginResponse loginResponse = UserLoginResponse.from(token);
-        return ResponseDto.create(LOGIN_SUCCESS.getMessage(), loginResponse);
+        return ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), LOGIN_SUCCESS.getMessage(), loginResponse);
     }
 
     private ResponseEntity<KakaoResponseInfo> getKakaoResponseInfo(String accessToken) {

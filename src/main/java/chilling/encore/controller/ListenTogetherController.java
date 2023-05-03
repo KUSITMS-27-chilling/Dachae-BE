@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static chilling.encore.dto.responseMessage.ListenTogetherConstants.ListenTogetherSuccessMessage.LISTEN_TOGETHER_SUCCESS_MESSAGE;
+import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +27,6 @@ public class ListenTogetherController {
     @ApiOperation(value = "같이할래요페이지 접근")
     public ResponseEntity<ResponseDto<ListenTogetherDto.ListenTogetherResponse>> getListenTogetherPage() {
         ListenTogetherDto.ListenTogetherResponse listenTogetherPage = listenTogetherService.getListenTogetherPage();
-        return ResponseEntity.ok(ResponseDto.create(LISTEN_TOGETHER_SUCCESS_MESSAGE.getMessage(), listenTogetherPage));
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), LISTEN_TOGETHER_SUCCESS_MESSAGE.getMessage(), listenTogetherPage));
     }
 }
