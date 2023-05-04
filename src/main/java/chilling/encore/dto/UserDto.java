@@ -1,5 +1,6 @@
 package chilling.encore.dto;
 
+import chilling.encore.domain.User;
 import chilling.encore.global.config.jwt.TokenInfoResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -8,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class UserDto {
     @Getter
@@ -68,6 +72,24 @@ public abstract class UserDto {
             return UserLoginResponse.builder()
                     .accessToken(tokenInfoResponse.getAccessToken())
                     .refreshToken(tokenInfoResponse.getRefreshToken())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @ApiModel(description = "회원 등급 조회를 위한 응답객체")
+    public static class UserGrade {
+        private int grade;
+        private List<String> favFiled;
+
+        public static UserGrade from(User user) {
+            List<String> favField = new ArrayList<>();
+            if (user.getFavField() != null)
+                favField = List.of(user.getFavField().split(","));
+            return UserGrade.builder()
+                    .grade(user.getGrade())
+                    .favFiled(favField)
                     .build();
         }
     }

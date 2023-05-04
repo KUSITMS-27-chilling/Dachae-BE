@@ -32,6 +32,15 @@ public class MainService {
 
 
     public NewProgramsResponse getNewPrograms(String region) {
+        if(region == null) {
+            User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+            region = user.getRegion();
+            return getNewProgramsResponse(region);
+        }
+        return getNewProgramsResponse(region);
+    }
+
+    private NewProgramsResponse getNewProgramsResponse(String region) {
         List<Program> programs = programRepository.findAllByStartDateGreaterThanEqualAndLearningCenter_Region(yesterDay, region);
         List<NewProgram> newPrograms = new ArrayList<>();
         for (int i = 0; i < programs.size(); i++) {
@@ -42,11 +51,6 @@ public class MainService {
 
     public MainResponse getFirstPage() {
         try {
-            /**
-             * JWT를 사용할 경우 아래의 SecurityUtils에서 뽑아서 사용할 수 있음
-             * 하지만 SecurityContextHolder의 경우 각 스레드마다 독립적으로 존재하는데, 스프링의 경우 각 요청당 하나의 스레드가 생성되기 때문에
-             * JWT 요청으로 ContextHolder에 계속해서 저장이 되지 않는 이상 사용할 수 없다...
-             */
             User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
             return loginUser(user);
         } catch (ClassCastException e) {
