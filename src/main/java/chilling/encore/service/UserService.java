@@ -8,6 +8,7 @@ import chilling.encore.dto.UserDto.UserSignUpRequest;
 import chilling.encore.global.config.jwt.JwtTokenProvider;
 import chilling.encore.global.config.jwt.TokenInfoResponse;
 import chilling.encore.global.config.redis.RedisRepository;
+import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.repository.springDataJpa.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -125,5 +126,11 @@ public class UserService {
     public User validateUserId(String id) {
         User user = userRepository.findByUserId(id).orElseThrow();
         return user;
+    }
+
+    public UserGrade getGrade() {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        UserGrade grade = UserGrade.from(user);
+        return grade;
     }
 }
