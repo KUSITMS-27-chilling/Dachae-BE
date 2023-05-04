@@ -3,12 +3,13 @@ package chilling.encore.dto.responseMessage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public class MainConstants {
+public class ProgramConstant {
     @Getter
     @RequiredArgsConstructor
     public enum SuccessMessage {
-        MAIN_SELECT_SUCCESS("메인페이지 조회에 성공했습니다."),
-        CHANGE_NEWPROGRAM_SUCCESS("새로운 프로그램 조회에 성공했습니다.");
+        SELECT_NEW_SUCCESS("새소식 조회에 성공했습니다."),
+        SELECT_PROGRAM_SUCCESS("프로그램 조회에 성공했습니다."),
+        EDIT_REGION_SUCCESS("지역 변경에 성공했습니다.");
         private final String message;
     }
 

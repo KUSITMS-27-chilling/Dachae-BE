@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public abstract class ProgramDto {
     @Getter
@@ -34,10 +35,23 @@ public abstract class ProgramDto {
                     .build();
         }
     }
-
+    
     @Getter
     @Builder
-    @ApiModel(description = "프로그램 3개 보여주기 위한 응답 객체")
+    @ApiModel(description = "ProgramMainResponse 모음 응답")
+    public static class AllProgramMainResponses {
+        Map<String, ProgramMainResponse> programMainResponses;
+
+        public static AllProgramMainResponses from(Map<String, ProgramMainResponse> programMainResponses) {
+            return AllProgramMainResponses.builder()
+                    .programMainResponses(programMainResponses)
+                    .build();
+        }
+    }
+    
+    @Getter
+    @Builder
+    @ApiModel(description = "프로그램 3개와 정보")
     public static class ProgramMainResponse {
         private int favCount;
         private List<getPrograms> programs;

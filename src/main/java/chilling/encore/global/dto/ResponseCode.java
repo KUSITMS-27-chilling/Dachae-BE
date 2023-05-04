@@ -13,4 +13,13 @@ public abstract class ResponseCode {
         DELETE_SUCCESS_CODE(204);
         private final int code;
     }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum globalFailCode {
+        AUTHORIZATION_FAIL_CODE(403);
+        private final int code;
+    }
+
+
 }
