@@ -28,17 +28,17 @@ import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_S
 public class DetailController {
     private final DetailsService detailsService;
 
-    @GetMapping("/{region}")
-    @ApiOperation(value = "모아보기의 상세보기", notes = "상세보기 첫 진입 요청")
-    public ResponseEntity<ResponseDto<DetailResponse>> getDetails(@PathVariable String region) {
-        DetailResponse details = detailsService.firstDetails(region);
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), DETAIL_SELECT_SUCCESS.getMessage(), details));
-    }
+//    @GetMapping("/{region}")
+//    @ApiOperation(value = "모아보기의 상세보기", notes = "상세보기 첫 진입 요청")
+//    public ResponseEntity<ResponseDto<DetailResponse>> getDetails(@PathVariable String region) {
+//        DetailResponse details = detailsService.firstDetails(region);
+//        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), DETAIL_SELECT_SUCCESS.getMessage(), details));
+//    }
 
-    @GetMapping("/{region}/program/{page}")
-    @ApiOperation(value = "프로그램 페이징", notes = "프로그램의 페이지 조절")
-    public ResponseEntity<ResponseDto<PagingPrograms>> programPaging(@PathVariable String region, @PathVariable Integer page) {
-        PagingPrograms pagingPrograms = detailsService.getProgramPaging(region, page);
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), DETAIL_SELECT_SUCCESS.getMessage(), pagingPrograms));
-    }
+//    @GetMapping("/{region}/program/{page}")
+//    @ApiOperation(value = "프로그램 페이징", notes = "프로그램의 페이지 조절")
+//    public ResponseEntity<ResponseDto<PagingPrograms>> programPaging(@PathVariable String region, @PathVariable Integer page) {
+//        PagingPrograms pagingPrograms = detailsService.getProgramPaging(region, page);
+//        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), DETAIL_SELECT_SUCCESS.getMessage(), pagingPrograms));
+//    }
 }

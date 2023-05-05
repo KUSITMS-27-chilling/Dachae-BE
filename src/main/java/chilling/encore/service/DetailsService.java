@@ -42,7 +42,7 @@ public class DetailsService {
     public PagingPrograms getProgramPaging(String region, int page) {
         Page<Program> fullPrograms = getFullPrograms(region, page - 1);
         List<GetDetailPrograms> programs = getPrograms(fullPrograms);
-        PagingPrograms pagingPrograms = PagingPrograms.from(programs);
+        PagingPrograms pagingPrograms = PagingPrograms.from(page, programs);
         return pagingPrograms;
     }
 

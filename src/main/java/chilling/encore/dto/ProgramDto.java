@@ -27,10 +27,12 @@ public abstract class ProgramDto {
     @Builder
     @ApiModel(description = "상세보기 프로그램을 위한 응답 객체")
     public static class PagingPrograms {
+        private int totalProgramPage;
         private List<GetDetailPrograms> programs;
 
-        public static PagingPrograms from(List<GetDetailPrograms> programs) {
+        public static PagingPrograms from(int totalProgramPage, List<GetDetailPrograms> programs) {
             return PagingPrograms.builder()
+                    .totalProgramPage(totalProgramPage)
                     .programs(programs)
                     .build();
         }
