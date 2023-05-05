@@ -1,7 +1,9 @@
 package chilling.encore.controller;
 
+import chilling.encore.dto.ProgramDto;
 import chilling.encore.dto.ProgramDto.AllProgramMainResponses;
 import chilling.encore.dto.ProgramDto.NewProgramsResponse;
+import chilling.encore.dto.ProgramDto.PagingPrograms;
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.ProgramService;
 import io.swagger.annotations.Api;
@@ -42,10 +44,17 @@ public class ProgramController {
     }
     
     @GetMapping()
-    @ApiOperation(value = "각 센터 프로그램 조회", notes = "3개씩")
+    @ApiOperation(value = "모아보기 각 센터 프로그램 조회", notes = "3개씩")
     public ResponseEntity<ResponseDto<AllProgramMainResponses>> getPrograms() {
         AllProgramMainResponses centerPrograms = programService.getCenterPrograms();
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_PROGRAM_SUCCESS.getMessage(), centerPrograms));
     }
+
+//    @GetMapping()
+//    @ApiOperation(value = "상세보기 각 센터 프로그램 조회", notes = "6개씩")
+//    public ResponseEntity<ResponseDto<PagingPrograms>> getDetailsPrograms() {
+//        PagingPrograms pagingPrograms = programService.getCenterPrograms();
+//        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_PROGRAM_SUCCESS.getMessage(), centerPrograms));
+//    }
 
 }

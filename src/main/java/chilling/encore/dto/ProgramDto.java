@@ -25,7 +25,7 @@ public abstract class ProgramDto {
 
     @Getter
     @Builder
-    @ApiModel(description = "프로그램 페이징 위한 응답 객체")
+    @ApiModel(description = "상세보기 프로그램을 위한 응답 객체")
     public static class PagingPrograms {
         private List<GetDetailPrograms> programs;
 
