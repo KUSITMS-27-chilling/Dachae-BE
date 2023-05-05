@@ -8,6 +8,7 @@ import chilling.encore.global.config.email.EmailService;
 import chilling.encore.global.dto.ResponseCode;
 import chilling.encore.service.UserService;
 import chilling.encore.global.dto.ResponseDto;
+import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -98,7 +99,7 @@ public class UserController {
 
     @GetMapping("/grade")
     @ApiOperation(value = "회원 등급 조회", notes = "등급과 관심 분야")
-    public ResponseEntity<ResponseDto<?>> selectGrade() {
+    public ResponseEntity<ResponseDto<UserGrade>> selectGrade() {
         try {
             UserGrade grade = userService.getGrade();
             return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_GRADE_SUCCESS.getMessage(), grade));
@@ -106,5 +107,12 @@ public class UserController {
             e.printStackTrace();
             return ResponseEntity.ok(ResponseDto.create(AUTHORIZATION_FAIL_CODE.getCode(), AUTHORIZATION_FAIL.getMessage()));
         }
+    }
+    
+    @GetMapping("/regions")
+    @ApiOperation(value = "유저 관심 지역 조회", notes = "로그인 하지 않은 경우 인기 지역 조회")
+    public ResponseEntity<ResponseDto<UserFavCenter>> selectFavCenter() {
+        UserFavCenter favCenter = userService.getFavCenter();
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_REGION_SUCCESS.getMessage(), favCenter));
     }
 }

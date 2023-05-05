@@ -22,6 +22,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static chilling.encore.dto.UserDto.*;
@@ -132,5 +134,33 @@ public class UserService {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         UserGrade grade = UserGrade.from(user);
         return grade;
+    }
+
+    public UserFavCenter getFavCenter() {
+        List<String> centers = new ArrayList<>();
+        try {
+            return getLoginRegion(centers);
+        } catch (ClassCastException e) {
+            return notLoginRegion(centers);
+        }
+    }
+
+    private UserFavCenter getLoginRegion(List<String> centers) {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        String region = user.getRegion();
+        centers.add(region);
+        if (user.getFavRegion() != null) {
+            String[] split = user.getFavRegion().split(",");
+            for (int i = 0; i < split.length; i++)
+                centers.add(split[i]);
+        }
+        return UserFavCenter.from(centers);
+    }
+
+    private UserFavCenter notLoginRegion(List<String> centers) {
+        List<Center> topCenters = centerRepository.findTop4ByOrderByFavCountDesc();
+        for (int i = 0; i < topCenters.size(); i++)
+            centers.add(topCenters.get(i).getRegion());
+        return UserFavCenter.from(centers);
     }
 }
