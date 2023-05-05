@@ -50,11 +50,13 @@ public class ProgramController {
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_PROGRAM_SUCCESS.getMessage(), centerPrograms));
     }
 
-//    @GetMapping()
-//    @ApiOperation(value = "상세보기 각 센터 프로그램 조회", notes = "6개씩")
-//    public ResponseEntity<ResponseDto<PagingPrograms>> getDetailsPrograms() {
-//        PagingPrograms pagingPrograms = programService.getCenterPrograms();
-//        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_PROGRAM_SUCCESS.getMessage(), centerPrograms));
-//    }
+    @GetMapping(value = {"/page/{region}", "/page/{region}/{page}"})
+    @ApiOperation(value = "상세보기 각 센터 프로그램 조회", notes = "6개씩")
+    public ResponseEntity<ResponseDto<PagingPrograms>> getDetailsPrograms(@PathVariable String region, @PathVariable @Nullable Integer page) {
+        if (page == null)
+            page = 1;
+        PagingPrograms pagingPrograms = programService.getPagingProgram(region, page);
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_PROGRAM_SUCCESS.getMessage(), pagingPrograms));
+    }
 
 }

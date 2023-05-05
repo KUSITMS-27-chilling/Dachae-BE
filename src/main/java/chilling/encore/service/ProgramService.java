@@ -13,6 +13,9 @@ import chilling.encore.repository.springDataJpa.ProgramRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,11 +31,36 @@ public class ProgramService {
     private final ProgramRepository programRepository;
     private final CenterRepository centerRepository;
 
-    private LocalDate yesterDay = LocalDate.now().minusDays(1);
+    private final int PROGRAM_PAGE_SIZE = 6;
+    private final LocalDate now = LocalDate.now();
 
-//    public PagingPrograms getPagingPrograms(String region) {
-//        Page<Program> programs = programRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndLearningCenter_Region();
-//    }
+    public PagingPrograms getPagingProgram(String region, int page) {
+        Page<Program> fullPrograms = getFullPrograms(region, page - 1);
+        List<ProgramDto.GetDetailPrograms> programs = getPrograms(fullPrograms);
+        PagingPrograms pagingPrograms = PagingPrograms.from(fullPrograms.getTotalPages(), programs);
+        return pagingPrograms;
+    }
+
+    private Page<Program> getFullPrograms(String region, int page) {
+        String startDate = "startDate";
+        Pageable pageable = PageRequest.of(page, PROGRAM_PAGE_SIZE, Sort.by(startDate).descending());
+        Page<Program> fullPrograms = programRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndLearningCenter_Region(
+                now,
+                now,
+                region,
+                pageable
+        );
+        return fullPrograms;
+    }
+
+    private List<ProgramDto.GetDetailPrograms> getPrograms(Page<Program> fullPrograms) {
+        List<ProgramDto.GetDetailPrograms> programs = new ArrayList<>();
+        for (int i = 0; i < fullPrograms.getContent().size(); i++) {
+            log.info("startDate = {}", fullPrograms.getContent().get(i).getStartDate());
+            programs.add(ProgramDto.GetDetailPrograms.from(fullPrograms.getContent().get(i)));
+        }
+        return programs;
+    }
 
     public AllProgramMainResponses getCenterPrograms() {
         try {
@@ -104,7 +132,7 @@ public class ProgramService {
     }
 
     private NewProgramsResponse getNewProgramsResponse(String region) {
-        List<Program> programs = programRepository.findAllByStartDateGreaterThanEqualAndLearningCenter_Region(yesterDay, region);
+        List<Program> programs = programRepository.findAllByStartDateGreaterThanEqualAndLearningCenter_Region(now.minusDays(1L), region);
         List<ProgramDto.NewProgram> newPrograms = new ArrayList<>();
         for (int i = 0; i < programs.size(); i++) {
             newPrograms.add(ProgramDto.NewProgram.from(programs.get(i)));
