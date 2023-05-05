@@ -4,51 +4,51 @@ import chilling.encore.domain.ListenTogether;
 import chilling.encore.domain.Program;
 import chilling.encore.domain.User;
 import io.swagger.annotations.ApiModel;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ListenTogetherDto {
-    /**
-     * 같이들어요에서
-     * 보여줘야 하는 부분
-     * listenTogetherIdx
-     * isRecruiting(모집중인가)
-     * UserProfile
-     * UserNickname
-     * title
-     * UserFavField
-     * goalNum (목표인원)
-     * 모집된 인원 (participant에서)
-     * programName
-     * tag1
-     * tag2
-     */
     @Getter
     @Builder
+    @RequiredArgsConstructor
+    public static class ListenTogetherPage {
+        private final int totalListenTogetherPage;
+        private final List<SelectListenTogether> listenTogethers;
+        public static ListenTogetherPage from(int totalListenTogetherPage, List<SelectListenTogether> listenTogethers) {
+            return ListenTogetherPage.builder()
+                    .totalListenTogetherPage(totalListenTogetherPage)
+                    .listenTogethers(listenTogethers)
+                    .build();
+        }
+    }
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
     public static class SelectListenTogether {
-        private Long listenTogetherIdx;
-        private boolean isRecruiting;
-        private String profile;
-        private String nickName;
-        private String title;
-        private List<String> favFields;
-        private int goalNum;
-        private int currentNum;
-        private String programName;
-        private List<String> tags;
-
+        private final Long listenTogetherIdx;
+        private final boolean isRecruiting;
+        private final String profile;
+        private final String nickName;
+        private final String createdAt;
+        private final String title;
+        private final List<String> favFields;
+        private final int goalNum;
+        private final int currentNum;
+        private final String programName;
+        private final List<String> tags;
         public static SelectListenTogether from(
                 boolean isRecruiting,
-                User user,
                 ListenTogether listenTogether,
-                int currentNum,
-                Program program
+                int currentNum
         ) {
+            User user = listenTogether.getUser();
+            Program program = listenTogether.getProgram();
             String[] split;
-            List<String> favField = null;
+            List<String> favField = new ArrayList<>();
             if (user.getFavField() != null) {
                 split = user.getFavField().split(",");
                 favField = List.of(split);
@@ -58,6 +58,8 @@ public abstract class ListenTogetherDto {
                     .listenTogetherIdx(listenTogether.getListenIdx())
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
+                    .createdAt(listenTogether.getCreatedAt()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
                     .title(listenTogether.getTitle())
                     .favFields(favField)
                     .goalNum(listenTogether.getGoalNum())
@@ -91,14 +93,6 @@ public abstract class ListenTogetherDto {
     @Builder
     @ApiModel(description = "인기 같이들어요 3개 보여주기 위한 응답 객체")
     public static class PopularListenTogether {
-        /**
-         * 같이들어요 인기글에서 반환
-         * listenIdx
-         * title
-         * hit
-         * createdAt
-         */
-
         private Long listenIdx;
         private String title;
         private int hit;
