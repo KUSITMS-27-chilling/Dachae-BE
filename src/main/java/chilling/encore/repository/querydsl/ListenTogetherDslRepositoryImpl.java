@@ -2,7 +2,9 @@ package chilling.encore.repository.querydsl;
 
 import chilling.encore.domain.*;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.annotations.QueryDelegate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -21,16 +23,24 @@ public class ListenTogetherDslRepositoryImpl implements ListenTogetherDslReposit
         this.query = new JPAQueryFactory(em);
     }
 
+    @QueryDelegate(ListenTogether.class)
+    public static QLearningCenter learningCenter(QListenTogether listenTogether) {
+        return QLearningCenter.learningCenter;
+    }
+
     @Override
     public List<ListenTogether> findTop3ByOrderByHitDesc(String region) {
 
         QListenTogether qListenTogether = QListenTogether.listenTogether;
+        QProgram qProgram = QProgram.program;
         QLearningCenter qLearningCenter = QLearningCenter.learningCenter;
 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qLearningCenter.region.like("%" + region + "%"));
 
-        List<ListenTogether> results = query.selectFrom(QListenTogether.listenTogether)
+        List<ListenTogether> results = query.selectFrom(qListenTogether)
+                .join(qListenTogether.program, qProgram)
+                .join(qProgram.learningCenter, qLearningCenter)
                 .where(builder)
                 .orderBy(qListenTogether.hit.desc())
                 .limit(3)
