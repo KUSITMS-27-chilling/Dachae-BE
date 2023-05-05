@@ -5,10 +5,7 @@ import chilling.encore.global.config.jwt.TokenInfoResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +87,19 @@ public abstract class UserDto {
             return UserGrade.builder()
                     .grade(user.getGrade())
                     .favFiled(favField)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class UserFavCenter {
+        private final List<String> centers;
+
+        public static UserFavCenter from(List<String> centers) {
+            return UserFavCenter.builder()
+                    .centers(centers)
                     .build();
         }
     }
