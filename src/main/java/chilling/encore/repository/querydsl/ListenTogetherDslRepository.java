@@ -1,10 +1,10 @@
 package chilling.encore.repository.querydsl;
 
 import chilling.encore.domain.ListenTogether;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ListenTogetherDslRepository {
 
-    List<ListenTogether> findTop3ByOrderByHitDesc(String region);
+    Page<ListenTogether> findRegionListenTogether(String[] region, Pageable pageable);
 }
