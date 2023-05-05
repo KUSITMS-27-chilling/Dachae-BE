@@ -5,12 +5,14 @@ import chilling.encore.domain.*;
 import chilling.encore.dto.ProgramDto;
 import chilling.encore.dto.ProgramDto.AllProgramMainResponses;
 import chilling.encore.dto.ProgramDto.NewProgramsResponse;
+import chilling.encore.dto.ProgramDto.PagingPrograms;
 import chilling.encore.dto.ProgramDto.ProgramMainResponse;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.repository.springDataJpa.ProgramRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,6 +29,10 @@ public class ProgramService {
     private final CenterRepository centerRepository;
 
     private LocalDate yesterDay = LocalDate.now().minusDays(1);
+
+//    public PagingPrograms getPagingPrograms(String region) {
+//        Page<Program> programs = programRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndLearningCenter_Region();
+//    }
 
     public AllProgramMainResponses getCenterPrograms() {
         try {
