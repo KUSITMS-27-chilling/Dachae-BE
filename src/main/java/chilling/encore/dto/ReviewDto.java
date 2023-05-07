@@ -37,6 +37,7 @@ public abstract class ReviewDto {
         private final String nickName;
         private final String createdAt;
         private final String title;
+        private final String content;
         private final List<String> favFields;
         private final int week;
         private final List<String> image;
@@ -62,6 +63,7 @@ public abstract class ReviewDto {
                     .createdAt(review.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
                     .title(review.getTitle())
+                    .content(review.getContent())
                     .favFields(favField)
                     .week(review.getWeek())
                     .image(image)
