@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewDslRepository {
 
     Page<Review> findAllByProgram_LearningCenter_Region(String region, Pageable pageable);
+
 }

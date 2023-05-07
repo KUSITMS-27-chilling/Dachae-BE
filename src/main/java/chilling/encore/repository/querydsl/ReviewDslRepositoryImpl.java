@@ -28,7 +28,7 @@ public class ReviewDslRepositoryImpl implements ReviewDslRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Review> findRegionReview(String[] region, Pageable pageable) {
+    public Page<Review> findRegionReviewPage(String[] region, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
         for (int i = 0; i < region.length; i++) {
             builder.or(program.learningCenter.region.eq(region[i]));
@@ -43,5 +43,19 @@ public class ReviewDslRepositoryImpl implements ReviewDslRepository {
         long total = query.fetchCount();
 
         return new PageImpl<>(reviews, pageable, total);
+    }
+
+    @Override
+    public List<Review> findRegionReview(String[] region) {
+        BooleanBuilder builder = new BooleanBuilder();
+        for (int i = 0; i < region.length; i++) {
+            builder.or(program.learningCenter.region.eq(region[i]));
+        }
+        JPAQuery<Review> query = queryFactory.selectFrom(review)
+                .leftJoin(review.user, user)
+                .leftJoin(review.program, program)
+                .where(builder);
+        List<Review> reviews = query.fetch();
+        return reviews;
     }
 }

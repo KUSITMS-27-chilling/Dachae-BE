@@ -18,6 +18,7 @@ public abstract class ReviewDto {
     @Getter
     @Builder
     @RequiredArgsConstructor
+    @ApiModel(description = "수강후기 페이징 조회 응답 객체")
     public static class ReviewPage {
         private final int totalReviewPage;
         private final List<SelectReview> reviews;
@@ -69,6 +70,42 @@ public abstract class ReviewDto {
                     .image(image)
                     .programName(program.getProgramName())
                     .tags(List.of(program.getLearningCenter().getRegion(), program.getLearningCenter().getLearningName()))
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @ApiModel(description = "수강후기 인기글 조회 응답 객체")
+    public static class PopularReviewPage {
+        private List<PopularReview> popularReviews;
+        public static PopularReviewPage from(List<PopularReview> popularReviews) {
+            return PopularReviewPage.builder()
+                    .popularReviews(popularReviews)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class PopularReview {
+        private Long reviewIdx;
+        private String title;
+        private int hit;
+        List<String> favField;
+        public static PopularReview from(
+                Review review
+        ) {
+            User user = review.getUser();
+            List<String> favField = new ArrayList<>();
+            if (user.getFavField() != null) {
+                favField = List.of(user.getFavField().split(","));
+            }
+            return PopularReview.builder()
+                    .reviewIdx(review.getReviewIdx())
+                    .title(review.getTitle())
+                    .hit(review.getHit())
+                    .favField(favField)
                     .build();
         }
     }
