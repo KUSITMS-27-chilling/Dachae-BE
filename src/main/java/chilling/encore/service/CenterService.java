@@ -1,16 +1,17 @@
 package chilling.encore.service;
 
 import chilling.encore.domain.Center;
-import chilling.encore.dto.CenterDto;
 import chilling.encore.dto.CenterDto.CenterInfo;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
+@Transactional
 public class CenterService {
     private final CenterRepository centerRepository;
 
