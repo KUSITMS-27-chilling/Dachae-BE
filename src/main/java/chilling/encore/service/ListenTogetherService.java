@@ -7,14 +7,12 @@ import chilling.encore.domain.Program;
 import chilling.encore.domain.User;
 import chilling.encore.dto.DetailDto;
 import chilling.encore.dto.ListenTogetherDto;
-import chilling.encore.dto.ListenTogetherDto.ListenTogetherPage;
-import chilling.encore.dto.ListenTogetherDto.ListenTogetherResponse;
-import chilling.encore.dto.ListenTogetherDto.PopularListenTogether;
-import chilling.encore.dto.ListenTogetherDto.SelectListenTogether;
+import chilling.encore.dto.ListenTogetherDto.*;
 import chilling.encore.dto.ProgramDto;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.ListenTogetherRepository;
 import chilling.encore.repository.springDataJpa.ParticipantsRepository;
+import chilling.encore.repository.springDataJpa.ProgramRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -29,11 +28,29 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class ListenTogetherService {
     private final ParticipantsRepository participantsRepository;
     private final ListenTogetherRepository listenTogetherRepository;
+    private final ProgramRepository programRepository;
 
     private final int LISTEN_TOGETHER_PAGE_SIZE = 8;
+
+    public void save(CreateListenTogetherRequest createListenTogetherReq) {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        Program program = programRepository.findById(createListenTogetherReq.getProgramIdx()).orElseThrow();
+
+        ListenTogether listenTogether = ListenTogether.builder()
+                .goalNum(createListenTogetherReq.getGoalNum())
+                .title(createListenTogetherReq.getTitle())
+                .content(createListenTogetherReq.getContent())
+                .hit(0)
+                .program(program)
+                .user(user)
+                .build();
+        listenTogetherRepository.save(listenTogether);
+        return;
+    }
 
     public ListenTogetherPage getListenTogetherPage(String region, Integer page) {
         if (page == null)
