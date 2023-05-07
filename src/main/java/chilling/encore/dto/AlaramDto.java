@@ -13,13 +13,17 @@ public abstract class AlaramDto {
     public static class NewAlarm {
         private Long listenCommentsIdx;
         private Long reviewCommentIdx;
+        private String title;
         private String nickName;
+        private String content;
 
-        public static NewAlarm from(Long listenCommentsIdx, Long reviewCommentIdx, String nickName) {
+        public static NewAlarm from(Long listenCommentsIdx, Long reviewCommentIdx, String title, String nickName, String content) {
             return NewAlarm.builder()
                     .listenCommentsIdx(listenCommentsIdx)
                     .reviewCommentIdx(reviewCommentIdx)
+                    .title(title)
                     .nickName(nickName)
+                    .content(content)
                     .build();
         }
     }
