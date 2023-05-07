@@ -20,6 +20,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import static chilling.encore.dto.responseMessage.UserConstants.Role.ROLE_USER;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
@@ -58,6 +60,7 @@ public class UserService {
                 .role(ROLE_USER)
                 .status(0)
                 .region(userSignUpRequest.getRegion())
+                .profile(userSignUpRequest.getProfile())
                 .build();
         return userRepository.save(user);
     }
@@ -81,6 +84,7 @@ public class UserService {
                 .status(0)
                 .provider(oauth2SignUpRequest.getProvider())
                 .region(oauth2SignUpRequest.getRegion())
+                .profile(oauth2SignUpRequest.getProfile())
                 .build();
         return userRepository.save(user);
     }
