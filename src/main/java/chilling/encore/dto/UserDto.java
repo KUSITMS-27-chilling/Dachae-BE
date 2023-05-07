@@ -27,6 +27,7 @@ public abstract class UserDto {
         private String nickName;
         private String phoneNumber;
         private String region;
+        private String profile;
     }
 
     @Getter
@@ -43,6 +44,7 @@ public abstract class UserDto {
         private String phoneNumber;
         private String provider;
         private String region;
+        private String profile;
     }
 
     @Getter
@@ -75,8 +77,10 @@ public abstract class UserDto {
 
     @Getter
     @Builder
-    @ApiModel(description = "회원 등급 조회를 위한 응답객체")
+    @ApiModel(description = "회원 등급 모듈을 위한 응답객체")
     public static class UserGrade {
+        private String profile;
+        private String nickName;
         private int grade;
         private List<String> favFiled;
 
@@ -85,6 +89,8 @@ public abstract class UserDto {
             if (user.getFavField() != null)
                 favField = List.of(user.getFavField().split(","));
             return UserGrade.builder()
+                    .profile(user.getProfile())
+                    .nickName(user.getNickName())
                     .grade(user.getGrade())
                     .favFiled(favField)
                     .build();

@@ -1,8 +1,6 @@
 package chilling.encore.service;
 
-import chilling.encore.domain.ListenAlarm;
-import chilling.encore.domain.ReviewAlarm;
-import chilling.encore.domain.User;
+import chilling.encore.domain.*;
 import chilling.encore.dto.AlaramDto;
 import chilling.encore.dto.AlaramDto.AlarmResponse;
 import chilling.encore.dto.AlaramDto.NewAlarm;
@@ -35,18 +33,30 @@ public class AlarmService {
         List<NewAlarm> newAlarms = new ArrayList<>();
 
         for (int i = 0; i < reviewAlarms.size(); i++) {
+            ReviewComments reviewComments = reviewAlarms.get(i).getReviewComments();
+            Review review = reviewComments.getReview();
+            String title = "[" + String.valueOf(review.getWeek()) + "주차] " + review.getProgram().getProgramName();
+            String content = reviewComments.getContent();
             NewAlarm alarm = NewAlarm.from(
                     null,
                     reviewAlarms.get(i).getReviewAlarmIdx(),
-                    reviewAlarms.get(i).getUser().getNickName()
+                    title,
+                    reviewAlarms.get(i).getUser().getNickName(),
+                    content
             );
             newAlarms.add(alarm);
         }
         for (int i = 0; i < listenAlarms.size(); i++) {
+            ListenComments listenComments = listenAlarms.get(i).getListenComments();
+            ListenTogether listenTogether = listenComments.getListenTogether();
+            String title = listenTogether.getTitle();
+            String content = listenComments.getContent();
             NewAlarm alarm = NewAlarm.from(
                     listenAlarms.get(i).getListenAlarmIdx(),
                     null,
-                    listenAlarms.get(i).getUser().getNickName()
+                    title,
+                    listenAlarms.get(i).getUser().getNickName(),
+                    content
             );
             newAlarms.add(alarm);
         }
