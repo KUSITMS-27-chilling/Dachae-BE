@@ -19,10 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -98,7 +95,7 @@ public class ProgramService {
     }
 
     private Map<String, ProgramMainResponse> getProgramResponses(List<Center> favCenters) {
-        Map<String, ProgramMainResponse> programDatas = new HashMap<>();
+        Map<String, ProgramMainResponse> programDatas = new LinkedHashMap<>();
         log.info("size = {}", favCenters.size());
 
         for (int i = 0; i < favCenters.size(); i++) {
@@ -118,7 +115,6 @@ public class ProgramService {
             ProgramMainResponse programMainResponse = ProgramMainResponse.from(favCount, mainResponses);
             programDatas.put(favCenters.get(i).getRegion(), programMainResponse);
         }
-
         return programDatas;
     }
 
