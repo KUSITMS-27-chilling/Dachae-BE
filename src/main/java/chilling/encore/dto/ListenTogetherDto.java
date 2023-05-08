@@ -15,6 +15,63 @@ public abstract class ListenTogetherDto {
     @Getter
     @Builder
     @RequiredArgsConstructor
+    public static class ListenTogetherDetail {
+        private final String title;
+        private final String programName;
+        private final String createdAt;
+        private final String content;
+        private final String profile;
+        private final String nickName;
+        private final List<String> favField;
+        private final int currentNum;
+        private final int goalNum;
+        private final List<ParticipantsInfo> participantsInfos;
+        public static ListenTogetherDetail from(ListenTogether listenTogether, List<ParticipantsInfo> participantsInfos) {
+            User user = listenTogether.getUser();
+            List<String> favField = new ArrayList<>();
+            if (user.getFavField() != null)
+                favField = List.of(user.getFavField().split(","));
+            return ListenTogetherDetail.builder()
+                    .title(listenTogether.getTitle())
+                    .programName(listenTogether.getProgram().getProgramName())
+                    .createdAt(listenTogether.getCreatedAt()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
+                    .content(listenTogether.getContent())
+                    .profile(user.getProfile())
+                    .nickName(user.getNickName())
+                    .favField(favField)
+                    .currentNum(participantsInfos.size())
+                    .goalNum(listenTogether.getGoalNum())
+                    .participantsInfos(participantsInfos)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class ParticipantsInfo {
+        private final String profile;
+        private final String nickName;
+        private final int age;
+        private final List<String> favField;
+
+        public static ParticipantsInfo from(User user) {
+            List<String> favField = new ArrayList<>();
+            if (user.getFavField() != null)
+                favField = List.of(user.getFavField().split(","));
+            return ParticipantsInfo.builder()
+                    .profile(user.getProfile())
+                    .nickName(user.getNickName())
+                    .age(user.getAge())
+                    .favField(favField)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
     public static class AllMyListenTogether {
         private final List<MyListenTogether> myListenTogethers;
         public static AllMyListenTogether from(List<MyListenTogether> myListenTogethers) {
@@ -27,11 +84,11 @@ public abstract class ListenTogetherDto {
     @Builder
     @RequiredArgsConstructor
     public static class MyListenTogether {
-        private final Long listenTogetherIdx;
+        private final Long listenIdx;
         private final String title;
         public static MyListenTogether from(ListenTogether listenTogether) {
             return MyListenTogether.builder()
-                    .listenTogetherIdx(listenTogether.getListenIdx())
+                    .listenIdx(listenTogether.getListenIdx())
                     .title(listenTogether.getTitle())
                     .build();
         }
@@ -52,11 +109,11 @@ public abstract class ListenTogetherDto {
     @Builder
     @RequiredArgsConstructor
     public static class PopularListenTogether {
-        private final Long listenTogetherIdx;
+        private final Long listenIdx;
         private final String title;
         public static PopularListenTogether from(ListenTogether listenTogether) {
             return PopularListenTogether.builder()
-                    .listenTogetherIdx(listenTogether.getListenIdx())
+                    .listenIdx(listenTogether.getListenIdx())
                     .title(listenTogether.getTitle())
                     .build();
         }
@@ -78,7 +135,7 @@ public abstract class ListenTogetherDto {
     @Builder
     @RequiredArgsConstructor
     public static class SelectListenTogether {
-        private final Long listenTogetherIdx;
+        private final Long listenIdx;
         private final boolean isRecruiting;
         private final String profile;
         private final String nickName;
@@ -104,7 +161,7 @@ public abstract class ListenTogetherDto {
             }
             return SelectListenTogether.builder()
                     .isRecruiting(isRecruiting)
-                    .listenTogetherIdx(listenTogether.getListenIdx())
+                    .listenIdx(listenTogether.getListenIdx())
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .createdAt(listenTogether.getCreatedAt()
