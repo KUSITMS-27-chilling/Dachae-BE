@@ -140,7 +140,7 @@ public class UserService {
         return grade;
     }
 
-    public UserFavCenter getFavCenter() {
+    public UserFavRegion getFavCenter() {
         List<String> centers = new ArrayList<>();
         try {
             return getLoginRegion(centers);
@@ -149,7 +149,7 @@ public class UserService {
         }
     }
 
-    private UserFavCenter getLoginRegion(List<String> centers) {
+    private UserFavRegion getLoginRegion(List<String> centers) {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         String region = user.getRegion();
         centers.add(region);
@@ -158,13 +158,28 @@ public class UserService {
             for (int i = 0; i < split.length; i++)
                 centers.add(split[i]);
         }
-        return UserFavCenter.from(centers);
+        return UserFavRegion.from(centers);
     }
 
-    private UserFavCenter notLoginRegion(List<String> centers) {
+    private UserFavRegion notLoginRegion(List<String> centers) {
         List<Center> topCenters = centerRepository.findTop4ByOrderByFavCountDesc();
         for (int i = 0; i < topCenters.size(); i++)
             centers.add(topCenters.get(i).getRegion());
-        return UserFavCenter.from(centers);
+        return UserFavRegion.from(centers);
+    }
+
+    public UserFavRegion onlyFavRegion() {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        List<String> favRegion = new ArrayList<>();
+        if (user.getFavRegion() != null) {
+            favRegion = List.of(user.getFavRegion().split(","));
+        }
+        return UserFavRegion.from(favRegion);
+    }
+
+    public void editFavRegion(EditFavRegion favRegion) {
+        User securityUser = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = userRepository.findById(securityUser.getUserIdx()).get();
+        user.updateFavRegion(favRegion.getFavRegion());
     }
 }

@@ -1,10 +1,7 @@
 package chilling.encore.controller;
 
 import chilling.encore.dto.ListenTogetherDto;
-import chilling.encore.dto.ListenTogetherDto.AllMyListenTogether;
-import chilling.encore.dto.ListenTogetherDto.AllPopularListenTogether;
-import chilling.encore.dto.ListenTogetherDto.CreateListenTogetherRequest;
-import chilling.encore.dto.ListenTogetherDto.ListenTogetherPage;
+import chilling.encore.dto.ListenTogetherDto.*;
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.ListenTogetherService;
 import io.swagger.annotations.Api;
@@ -60,9 +57,16 @@ public class ListenTogetherController {
     }
 
     @GetMapping("/mine")
-    @ApiOperation(value = "내가 작성한 제안할래요", notes = "TOP3 로그인 하지 않은 경우 요청 X")
+    @ApiOperation(value = "내가 제안한 글", notes = "TOP3 로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto<AllMyListenTogether>> getMine() {
         AllMyListenTogether allMyListenTogethers = listenTogetherService.getMyListenTogether();
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_MINE_SUCCESS_MESSAGE.getMessage(), allMyListenTogethers));
+    }
+    
+    @GetMapping("/{listenIdx}")
+    @ApiOperation(value = "같이할래요 게시글 상세 조회", notes = "게시글 클릭시 들어가는 부분")
+    public ResponseEntity<ResponseDto<ListenTogetherDetail>> getDetail(@PathVariable Long listenIdx) {
+        ListenTogetherDetail listenTogetherDetail = listenTogetherService.getListenTogetherDetail(listenIdx);
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_DETAIL_SUCCESS_MESSAGE.getMessage(), listenTogetherDetail));
     }
 }

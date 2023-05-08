@@ -1,10 +1,7 @@
 package chilling.encore.service;
 
 
-import chilling.encore.domain.Center;
-import chilling.encore.domain.ListenTogether;
-import chilling.encore.domain.Program;
-import chilling.encore.domain.User;
+import chilling.encore.domain.*;
 import chilling.encore.dto.DetailDto;
 import chilling.encore.dto.ListenTogetherDto;
 import chilling.encore.dto.ListenTogetherDto.*;
@@ -37,6 +34,18 @@ public class ListenTogetherService {
     private final CenterRepository centerRepository;
 
     private final int LISTEN_TOGETHER_PAGE_SIZE = 8;
+
+    public ListenTogetherDetail getListenTogetherDetail(Long listenIdx) {
+        ListenTogether listenTogether = listenTogetherRepository.findById(listenIdx).orElseThrow();
+        List<Participants> participants = participantsRepository.findAllByListenTogether_ListenIdx(listenIdx);
+        List<ParticipantsInfo> participantsInfos = new ArrayList<>();
+        for (int i = 0; i < participants.size(); i++) {
+            ParticipantsInfo participantsInfo = ParticipantsInfo.from(participants.get(i).getUser());
+            participantsInfos.add(participantsInfo);
+        }
+
+        return ListenTogetherDetail.from(listenTogether, participantsInfos);
+    }
 
     public AllMyListenTogether getMyListenTogether() {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));

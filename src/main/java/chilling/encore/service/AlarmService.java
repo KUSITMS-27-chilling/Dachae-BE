@@ -34,20 +34,12 @@ public class AlarmService {
     private List<NewAlarm> getNewAlarms(List<ReviewAlarm> reviewAlarms, List<ListenAlarm> listenAlarms) {
         List<NewAlarm> newAlarms = new ArrayList<>();
 
-        for (int i = 0; i < reviewAlarms.size(); i++) {
-            ReviewComments reviewComments = reviewAlarms.get(i).getReviewComments();
-            Review review = reviewComments.getReview();
-            String title = "[" + String.valueOf(review.getWeek()) + "주차] " + review.getProgram().getProgramName();
-            String content = reviewComments.getContent();
-            NewAlarm alarm = NewAlarm.from(
-                    null,
-                    reviewAlarms.get(i).getReviewAlarmIdx(),
-                    title,
-                    reviewAlarms.get(i).getUser().getNickName(),
-                    content
-            );
-            newAlarms.add(alarm);
-        }
+        addReviewAlarm(reviewAlarms, newAlarms);
+        addListenAlarm(listenAlarms, newAlarms);
+        return newAlarms;
+    }
+
+    private void addListenAlarm(List<ListenAlarm> listenAlarms, List<NewAlarm> newAlarms) {
         for (int i = 0; i < listenAlarms.size(); i++) {
             ListenComments listenComments = listenAlarms.get(i).getListenComments();
             ListenTogether listenTogether = listenComments.getListenTogether();
@@ -62,6 +54,22 @@ public class AlarmService {
             );
             newAlarms.add(alarm);
         }
-        return newAlarms;
+    }
+
+    private void addReviewAlarm(List<ReviewAlarm> reviewAlarms, List<NewAlarm> newAlarms) {
+        for (int i = 0; i < reviewAlarms.size(); i++) {
+            ReviewComments reviewComments = reviewAlarms.get(i).getReviewComments();
+            Review review = reviewComments.getReview();
+            String title = review.getTitle();
+            String content = reviewComments.getContent();
+            NewAlarm alarm = NewAlarm.from(
+                    null,
+                    reviewAlarms.get(i).getReviewAlarmIdx(),
+                    title,
+                    reviewAlarms.get(i).getUser().getNickName(),
+                    content
+            );
+            newAlarms.add(alarm);
+        }
     }
 }
