@@ -15,7 +15,8 @@ public class UserConstants {
         EMAIL_SEND_SUCCESS("EMAIL 인증번호 전송에 성공했습니다."),
         CHECK_DUP("중복확인 조회에 성공했습니다."),
         SELECT_GRADE_SUCCESS("회원 등급 조회에 성공했습니다."),
-        SELECT_REGION_SUCCESS("관심 지역 조회에 성공했습니다.");
+        SELECT_REGION_SUCCESS("관심 지역 조회에 성공했습니다."),
+        EDIT_REGION_SUCCESS("관심 지역 수정에 성공했습니다.");
         private final String message;
     }
 

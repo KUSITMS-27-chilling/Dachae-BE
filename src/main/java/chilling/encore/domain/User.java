@@ -44,4 +44,7 @@ public class User {
     public void updateLoginAt(LocalDate now) {
         this.loginAt = now;
     }
+    public void updateFavRegion(String favRegion) {
+        this.favRegion = favRegion;
+    }
 }

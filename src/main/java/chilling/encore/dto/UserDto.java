@@ -100,13 +100,21 @@ public abstract class UserDto {
     @Getter
     @Builder
     @RequiredArgsConstructor
-    public static class UserFavCenter {
-        private final List<String> centers;
+    public static class UserFavRegion {
+        private final List<String> regions;
 
-        public static UserFavCenter from(List<String> centers) {
-            return UserFavCenter.builder()
-                    .centers(centers)
+        public static UserFavRegion from(List<String> regions) {
+            return UserFavRegion.builder()
+                    .regions(regions)
                     .build();
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class EditFavRegion {
+        private String favRegion;
     }
 }
