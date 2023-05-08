@@ -111,8 +111,19 @@ public class UserController {
     
     @GetMapping("/regions")
     @ApiOperation(value = "유저 관심 지역 조회", notes = "로그인 하지 않은 경우 인기 지역 조회")
-    public ResponseEntity<ResponseDto<UserFavCenter>> selectFavCenter() {
-        UserFavCenter favCenter = userService.getFavCenter();
+    public ResponseEntity<ResponseDto<UserFavRegion>> selectFavRegion() {
+        UserFavRegion favCenter = userService.getFavCenter();
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_REGION_SUCCESS.getMessage(), favCenter));
+    }
+
+    @PutMapping("/edit/regions")
+    @ApiOperation(value = "유저 관심 지역 수정", notes = "로그인 하지 않은 경우 요청 X")
+    public ResponseEntity<ResponseDto> editFavRegion(@RequestBody EditFavRegion editFavRegion) {
+        try {
+            userService.editFavRegion(editFavRegion);
+            return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_REGION_SUCCESS.getMessage()));
+        } catch (ClassCastException e) {
+            return ResponseEntity.ok(ResponseDto.create(AUTHORIZATION_FAIL_CODE.getCode(), AUTHORIZATION_FAIL.getMessage()));
+        }
     }
 }
