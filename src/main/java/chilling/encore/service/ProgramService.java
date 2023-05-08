@@ -3,10 +3,7 @@ package chilling.encore.service;
 
 import chilling.encore.domain.*;
 import chilling.encore.dto.ProgramDto;
-import chilling.encore.dto.ProgramDto.AllProgramMainResponses;
-import chilling.encore.dto.ProgramDto.NewProgramsResponse;
-import chilling.encore.dto.ProgramDto.PagingPrograms;
-import chilling.encore.dto.ProgramDto.ProgramMainResponse;
+import chilling.encore.dto.ProgramDto.*;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.repository.springDataJpa.ProgramRepository;
@@ -17,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -24,6 +22,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Slf4j
 @Service
+@Transactional
 public class ProgramService {
     private final ProgramRepository programRepository;
     private final CenterRepository centerRepository;
@@ -31,9 +30,17 @@ public class ProgramService {
     private final int PROGRAM_PAGE_SIZE = 6;
     private final LocalDate now = LocalDate.now();
 
+    public AllProgramInCenter getAllProgram(String region) {
+        List<Program> allPrograms = programRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndLearningCenter_Region(now, now, region);
+        List<GetProgramTitle> programTitles = new ArrayList<>();
+        for (int i = 0; i < allPrograms.size(); i++)
+            programTitles.add(GetProgramTitle.from(allPrograms.get(i)));
+        return AllProgramInCenter.from(programTitles);
+    }
+
     public PagingPrograms getPagingProgram(String region, int page) {
         Page<Program> fullPrograms = getFullPrograms(region, page - 1);
-        List<ProgramDto.GetDetailPrograms> programs = getPrograms(fullPrograms);
+        List<GetDetailPrograms> programs = getPrograms(fullPrograms);
         PagingPrograms pagingPrograms = PagingPrograms.from(fullPrograms.getTotalPages(), programs);
         return pagingPrograms;
     }
@@ -50,11 +57,11 @@ public class ProgramService {
         return fullPrograms;
     }
 
-    private List<ProgramDto.GetDetailPrograms> getPrograms(Page<Program> fullPrograms) {
-        List<ProgramDto.GetDetailPrograms> programs = new ArrayList<>();
+    private List<GetDetailPrograms> getPrograms(Page<Program> fullPrograms) {
+        List<GetDetailPrograms> programs = new ArrayList<>();
         for (int i = 0; i < fullPrograms.getContent().size(); i++) {
             log.info("startDate = {}", fullPrograms.getContent().get(i).getStartDate());
-            programs.add(ProgramDto.GetDetailPrograms.from(fullPrograms.getContent().get(i)));
+            programs.add(GetDetailPrograms.from(fullPrograms.getContent().get(i)));
         }
         return programs;
     }

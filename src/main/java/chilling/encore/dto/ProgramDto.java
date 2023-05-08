@@ -65,6 +65,19 @@ public abstract class ProgramDto {
                     .build();
         }
     }
+
+    @Getter
+    @Builder
+    @ApiModel(description = "센터의 모든 프로그램 정보")
+    public static class AllProgramInCenter {
+        private List<GetProgramTitle> programs;
+
+        public static AllProgramInCenter from(List<GetProgramTitle> programs) {
+            return AllProgramInCenter.builder()
+                    .programs(programs)
+                    .build();
+        }
+    }
     @Getter
     @Builder
     public static class getPrograms {
@@ -101,6 +114,20 @@ public abstract class ProgramDto {
                     .programName(program.getProgramName())
                     .category(program.getCategory())
                     .url(program.getUrl())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class GetProgramTitle {
+        private Long programIdx;
+        private String programName;
+        public static GetProgramTitle from(Program program) {
+            return GetProgramTitle
+                    .builder()
+                    .programIdx(program.getProgramIdx())
+                    .programName(program.getProgramName())
                     .build();
         }
     }

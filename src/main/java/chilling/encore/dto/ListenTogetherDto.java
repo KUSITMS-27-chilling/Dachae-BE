@@ -15,6 +15,55 @@ public abstract class ListenTogetherDto {
     @Getter
     @Builder
     @RequiredArgsConstructor
+    public static class AllMyListenTogether {
+        private final List<MyListenTogether> myListenTogethers;
+        public static AllMyListenTogether from(List<MyListenTogether> myListenTogethers) {
+            return AllMyListenTogether.builder()
+                    .myListenTogethers(myListenTogethers)
+                    .build();
+        }
+    }
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class MyListenTogether {
+        private final Long listenTogetherIdx;
+        private final String title;
+        public static MyListenTogether from(ListenTogether listenTogether) {
+            return MyListenTogether.builder()
+                    .listenTogetherIdx(listenTogether.getListenIdx())
+                    .title(listenTogether.getTitle())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class AllPopularListenTogether {
+        private final List<PopularListenTogether> popularListenTogethers;
+        public static AllPopularListenTogether from(List<PopularListenTogether> popularListenTogethers) {
+            return AllPopularListenTogether.builder()
+                    .popularListenTogethers(popularListenTogethers)
+                    .build();
+        }
+    }
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class PopularListenTogether {
+        private final Long listenTogetherIdx;
+        private final String title;
+        public static PopularListenTogether from(ListenTogether listenTogether) {
+            return PopularListenTogether.builder()
+                    .listenTogetherIdx(listenTogether.getListenIdx())
+                    .title(listenTogether.getTitle())
+                    .build();
+        }
+    }
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
     public static class ListenTogetherPage {
         private final int totalListenTogetherPage;
         private final List<SelectListenTogether> listenTogethers;
@@ -69,42 +118,17 @@ public abstract class ListenTogetherDto {
                     .build();
         }
     }
-
+    
     @Getter
-    @Builder
-    @ApiModel(description = "같이들어요 접근을 위한 응답객체")
-    public static class ListenTogetherResponse {
-
-
-        private List<PopularListenTogether> popularListenTogether;
-        // 인기글
-        // 같이들어요 리스트
-        // 내가 작성한 제안할래요 글 추가필요
-
-        public static ListenTogetherResponse from(
-                List<PopularListenTogether> popularListenTogether
-        ) {
-            return ListenTogetherResponse.builder()
-                    .popularListenTogether(popularListenTogether)
-                    .build();
-        }
-    }
-    @Getter
-    @Builder
-    @ApiModel(description = "인기 같이들어요 3개 보여주기 위한 응답 객체")
-    public static class PopularListenTogether {
-        private Long listenIdx;
+    @AllArgsConstructor
+    @ApiModel(description = "같이 들어요 작성을 위한 요청 객체")
+    public static class CreateListenTogetherRequest {
         private String title;
-        private int hit;
-        private LocalDateTime createdAt;
-
-        public static PopularListenTogether from(ListenTogether listenTogether) {
-            return PopularListenTogether.builder()
-                    .listenIdx(listenTogether.getListenIdx())
-                    .title(listenTogether.getTitle())
-                    .hit(listenTogether.getHit())
-                    .createdAt(listenTogether.getCreatedAt())
-                    .build();
-        }
+        private String region;
+        private Long programIdx;
+        private String programName;
+        private int goalNum;
+        private String content;
     }
+
 }

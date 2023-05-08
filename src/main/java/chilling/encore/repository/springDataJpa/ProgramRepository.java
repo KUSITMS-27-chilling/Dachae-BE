@@ -11,5 +11,6 @@ import java.util.List;
 public interface ProgramRepository extends JpaRepository<Program, Long> {
     List<Program> findTop3ByStartDateLessThanEqualAndEndDateGreaterThanEqualAndLearningCenter_RegionOrderByStartDateDesc(LocalDate now1, LocalDate now2, String region);
     List<Program> findAllByStartDateGreaterThanEqualAndLearningCenter_Region(LocalDate yesterday, String region);
+    List<Program> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndLearningCenter_Region(LocalDate now1, LocalDate now2, String region);
     Page<Program> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndLearningCenter_Region(LocalDate now1, LocalDate now2, String region, Pageable pageable);
 }
