@@ -10,6 +10,7 @@ import chilling.encore.dto.ListenTogetherDto;
 import chilling.encore.dto.ListenTogetherDto.*;
 import chilling.encore.dto.ProgramDto;
 import chilling.encore.global.config.security.util.SecurityUtils;
+import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.repository.springDataJpa.ListenTogetherRepository;
 import chilling.encore.repository.springDataJpa.ParticipantsRepository;
 import chilling.encore.repository.springDataJpa.ProgramRepository;
@@ -33,8 +34,48 @@ public class ListenTogetherService {
     private final ParticipantsRepository participantsRepository;
     private final ListenTogetherRepository listenTogetherRepository;
     private final ProgramRepository programRepository;
+    private final CenterRepository centerRepository;
 
     private final int LISTEN_TOGETHER_PAGE_SIZE = 8;
+
+    public AllPopularListenTogether popularListenTogether() {
+        List<String> regions = new ArrayList<>();
+        List<String> popularTitles = new ArrayList<>();
+        try {
+            return login(regions, popularTitles);
+        } catch (ClassCastException e) {
+            return notLogin(regions, popularTitles);
+        }
+    }
+
+    private AllPopularListenTogether login(List<String> regions, List<String> popularTitles) {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        regions.add(user.getRegion());
+        if (user.getFavRegion() != null) {
+            String[] favRegions = user.getFavRegion().split(",");
+            for (int i = 0; i < favRegions.length; i++) {
+                regions.add(favRegions[i]);
+            }
+        }
+        return getPopularTitles(regions, popularTitles);
+    }
+
+    private AllPopularListenTogether notLogin(List<String> regions, List<String> popularTitles) {
+        List<Center> centers = centerRepository.findTop4ByOrderByFavCountDesc();
+        for (int i = 0; i < centers.size(); i++) {
+            regions.add(centers.get(i).getRegion());
+        }
+        return getPopularTitles(regions, popularTitles);
+    }
+
+    private AllPopularListenTogether getPopularTitles(List<String> regions, List<String> popularTitles) {
+        List<ListenTogether> listenTogethers = listenTogetherRepository.findPopularListenTogether(regions);
+        List<PopularListenTogether> popularListenTogethers = new ArrayList<>();
+        for (int i = 0; i < listenTogethers.size(); i++) {
+            popularListenTogethers.add(PopularListenTogether.from(listenTogethers.get(i)));
+        }
+        return AllPopularListenTogether.from(popularListenTogethers);
+    }
 
     public void save(CreateListenTogetherRequest createListenTogetherReq) {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
@@ -62,7 +103,7 @@ public class ListenTogetherService {
 
     private Page<ListenTogether> getFullListenTogether(String region, int page) {
         String[] regions = region.split(",");
-        Pageable pageable = PageRequest.of(page, LISTEN_TOGETHER_PAGE_SIZE, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page, LISTEN_TOGETHER_PAGE_SIZE);
         log.info("regions = {}", regions[0]);
         Page<ListenTogether> listenTogetherPage = listenTogetherRepository.findRegionListenTogether(regions, pageable);
         return listenTogetherPage;

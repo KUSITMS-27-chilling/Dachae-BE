@@ -8,6 +8,7 @@ public class ListenTogetherConstants {
     @RequiredArgsConstructor
     public enum ListenTogetherSuccessMessage {
         SELECT_SUCCESS_MESSAGE("같이들어요 조회에 성공했습니다."),
+        SELECT_POPULAR_SUCCESS_MESSAGE("같이들어요 인기글 조회에 성공했습니다."),
         CREATE_SUCCESS_MESSAGE("같이들어요 생성에 성공했습니다.");
         private final String message;
     }

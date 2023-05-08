@@ -1,5 +1,6 @@
 package chilling.encore.controller;
 
+import chilling.encore.dto.ListenTogetherDto.AllPopularListenTogether;
 import chilling.encore.dto.ListenTogetherDto.CreateListenTogetherRequest;
 import chilling.encore.dto.ListenTogetherDto.ListenTogetherPage;
 import chilling.encore.global.dto.ResponseDto;
@@ -15,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 
 import static chilling.encore.dto.responseMessage.ListenTogetherConstants.ListenTogetherFailMessage.SAVE_FAIL_MESSAGE;
-import static chilling.encore.dto.responseMessage.ListenTogetherConstants.ListenTogetherSuccessMessage.CREATE_SUCCESS_MESSAGE;
-import static chilling.encore.dto.responseMessage.ListenTogetherConstants.ListenTogetherSuccessMessage.SELECT_SUCCESS_MESSAGE;
+import static chilling.encore.dto.responseMessage.ListenTogetherConstants.ListenTogetherSuccessMessage.*;
 import static chilling.encore.global.dto.ResponseCode.globalFailCode.AUTHORIZATION_FAIL_CODE;
 import static chilling.encore.global.dto.ResponseCode.globalFailCode.SERVER_ERROR;
 import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.CREATE_SUCCESS_CODE;
@@ -48,5 +48,12 @@ public class ListenTogetherController {
         } catch (NoSuchElementException e) {
             return ResponseEntity.ok(ResponseDto.create(SERVER_ERROR.getCode(), SAVE_FAIL_MESSAGE.getMessage()));
         }
+    }
+    
+    @GetMapping("/popular")
+    @ApiOperation(value = "내지역 인기글 조회", notes = "로그인하지 않은 경우 인기 지역에서 조회")
+    public ResponseEntity<ResponseDto<AllPopularListenTogether>> getPopular() {
+        AllPopularListenTogether allPopularListenTogethers = listenTogetherService.popularListenTogether();
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_POPULAR_SUCCESS_MESSAGE.getMessage(), allPopularListenTogethers));
     }
 }

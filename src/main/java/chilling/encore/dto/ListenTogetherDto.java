@@ -15,6 +15,30 @@ public abstract class ListenTogetherDto {
     @Getter
     @Builder
     @RequiredArgsConstructor
+    public static class AllPopularListenTogether {
+        private final List<PopularListenTogether> popularListenTogethers;
+        public static AllPopularListenTogether from(List<PopularListenTogether> popularListenTogethers) {
+            return AllPopularListenTogether.builder()
+                    .popularListenTogethers(popularListenTogethers)
+                    .build();
+        }
+    }
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class PopularListenTogether {
+        private final Long listenTogetherIdx;
+        private final String title;
+        public static PopularListenTogether from(ListenTogether listenTogether) {
+            return PopularListenTogether.builder()
+                    .listenTogetherIdx(listenTogether.getListenIdx())
+                    .title(listenTogether.getTitle())
+                    .build();
+        }
+    }
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
     public static class ListenTogetherPage {
         private final int totalListenTogetherPage;
         private final List<SelectListenTogether> listenTogethers;
