@@ -17,6 +17,9 @@ import reactor.util.annotation.Nullable;
 
 import java.util.List;
 
+import static chilling.encore.dto.responseMessage.ReviewConstants.ReviewSuccessMessage.REVIEW_SUCCESS_MESSAGE;
+import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -25,17 +28,17 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @GetMapping({"/page/{region}/{page}", "/page/{region}"})
+    @GetMapping(value={"/page/{region}/{page}", "/page/{region}"})
     @ApiOperation(value = "후기 페이징 조회")
     public ResponseEntity<ResponseDto<ReviewPage>> getReviewPage(@PathVariable String region, @PathVariable @Nullable Integer page) {
         ReviewPage reviewPage = reviewService.getReviewPage(region, page);
-        return ResponseEntity.ok(ResponseDto.create(1, "", reviewPage));
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), REVIEW_SUCCESS_MESSAGE.getMessage(), reviewPage));
     }
 
     @GetMapping("/popular/{region}")
     @ApiOperation(value = "후기 인기글 조회")
     public ResponseEntity<ResponseDto<List<ReviewDto.PopularReview>>> getPopularReview(@PathVariable String region) {
         List<ReviewDto.PopularReview> popularReviews = reviewService.getPopularReview(region);
-        return ResponseEntity.ok(ResponseDto.create(1, "", popularReviews));
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), REVIEW_SUCCESS_MESSAGE.getMessage(), popularReviews));
     }
 }
