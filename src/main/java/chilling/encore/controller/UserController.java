@@ -116,6 +116,13 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_REGION_SUCCESS.getMessage(), favCenter));
     }
 
+    @GetMapping("/favRegions")
+    @ApiOperation(value = "거주지 이외의 관심지역 조회 (관심지역 수정시 사용)", notes = "로그인 하지 않은 경우 요청 X")
+    public ResponseEntity<ResponseDto<UserFavRegion>> selectOnlyFavRegion() {
+        UserFavRegion favCenter = userService.onlyFavRegion();
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_REGION_SUCCESS.getMessage(), favCenter));
+    }
+
     @PutMapping("/edit/regions")
     @ApiOperation(value = "유저 관심 지역 수정", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto> editFavRegion(@RequestBody EditFavRegion editFavRegion) {

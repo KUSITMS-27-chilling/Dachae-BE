@@ -168,6 +168,15 @@ public class UserService {
         return UserFavRegion.from(centers);
     }
 
+    public UserFavRegion onlyFavRegion() {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        List<String> favRegion = new ArrayList<>();
+        if (user.getFavRegion() != null) {
+            favRegion = List.of(user.getFavRegion().split(","));
+        }
+        return UserFavRegion.from(favRegion);
+    }
+
     public void editFavRegion(EditFavRegion favRegion) {
         User securityUser = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         User user = userRepository.findById(securityUser.getUserIdx()).get();
