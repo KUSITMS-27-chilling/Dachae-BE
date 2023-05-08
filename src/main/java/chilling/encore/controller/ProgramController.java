@@ -1,6 +1,7 @@
 package chilling.encore.controller;
 
 import chilling.encore.dto.ProgramDto;
+import chilling.encore.dto.ProgramDto.AllProgramInCenter;
 import chilling.encore.dto.ProgramDto.AllProgramMainResponses;
 import chilling.encore.dto.ProgramDto.NewProgramsResponse;
 import chilling.encore.dto.ProgramDto.PagingPrograms;
@@ -57,6 +58,13 @@ public class ProgramController {
             page = 1;
         PagingPrograms pagingPrograms = programService.getPagingProgram(region, page);
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_PROGRAM_SUCCESS.getMessage(), pagingPrograms));
+    }
+
+    @GetMapping("/{region}")
+    @ApiOperation(value = "센터의 모든 프로그램 조회", notes = "글 작성시 모집중인 프로그램 모두 확인")
+    public ResponseEntity<ResponseDto<AllProgramInCenter>> getAllProgram(@PathVariable String region) {
+        AllProgramInCenter allProgram = programService.getAllProgram(region);
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_PROGRAM_SUCCESS.getMessage(), allProgram));
     }
 
 }

@@ -1,6 +1,7 @@
 package chilling.encore.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,5 +24,6 @@ public class ReviewAlarm {
     private ReviewComments reviewComments;
 
     private boolean isRead;
+    @CreationTimestamp
     private LocalDateTime createdAt;
 }

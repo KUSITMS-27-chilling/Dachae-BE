@@ -16,6 +16,7 @@ import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
@@ -27,6 +28,7 @@ import static chilling.encore.dto.responseMessage.UserConstants.SuccessMessage.S
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class KakaoService implements Oauth2Service {
     private final UserRepository userRepository;
     private final JwtTokenProvider tokenProvider;

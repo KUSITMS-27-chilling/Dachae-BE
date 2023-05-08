@@ -33,12 +33,27 @@ public class ListenTogetherDslRepositoryImpl implements ListenTogetherDslReposit
         JPAQuery<ListenTogether> query = queryFactory.selectFrom(listenTogether)
                 .leftJoin(listenTogether.user, user)
                 .leftJoin(listenTogether.program, program)
-                .where(builder);
+                .where(builder)
+                .orderBy(listenTogether.createdAt.desc()); // 정렬 조건 추가
+
         List<ListenTogether> listenTogethers = query.offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
         long total = query.fetchCount();
 
         return new PageImpl<>(listenTogethers, pageable, total);
+    }
+
+    @Override
+    public List<ListenTogether> findPopularListenTogether(List<String> regions) {
+        BooleanBuilder builder = new BooleanBuilder();
+        for (int i = 0; i < regions.size(); i++) {
+            builder.or(program.learningCenter.region.eq(regions.get(i)));
+        }
+        return queryFactory.selectFrom(listenTogether)
+                .where(builder)
+                .limit(3L)
+                .orderBy(listenTogether.hit.desc())
+                .fetch();
     }
 }
