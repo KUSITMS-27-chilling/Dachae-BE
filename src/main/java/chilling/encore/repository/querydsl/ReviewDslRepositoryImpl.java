@@ -1,7 +1,5 @@
 package chilling.encore.repository.querydsl;
 
-import chilling.encore.domain.ListenTogether;
-import chilling.encore.domain.QReview;
 import chilling.encore.domain.Review;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static chilling.encore.domain.QListenTogether.listenTogether;
 import static chilling.encore.domain.QProgram.program;
 import static chilling.encore.domain.QReview.review;
 import static chilling.encore.domain.QUser.user;
@@ -36,7 +33,8 @@ public class ReviewDslRepositoryImpl implements ReviewDslRepository {
         JPAQuery<Review> query = queryFactory.selectFrom(review)
                 .leftJoin(review.user, user)
                 .leftJoin(review.program, program)
-                .where(builder);
+                .where(builder)
+                .orderBy(review.createdAt.desc());
         List<Review> reviews = query.offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -51,11 +49,10 @@ public class ReviewDslRepositoryImpl implements ReviewDslRepository {
         for (int i = 0; i < region.length; i++) {
             builder.or(program.learningCenter.region.eq(region[i]));
         }
-        JPAQuery<Review> query = queryFactory.selectFrom(review)
+        return queryFactory.selectFrom(review)
                 .leftJoin(review.user, user)
                 .leftJoin(review.program, program)
-                .where(builder);
-        List<Review> reviews = query.fetch();
-        return reviews;
+                .where(builder)
+                .fetch();
     }
 }
