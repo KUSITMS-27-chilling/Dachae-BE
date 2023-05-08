@@ -38,17 +38,28 @@ public class ListenTogetherService {
 
     private final int LISTEN_TOGETHER_PAGE_SIZE = 8;
 
+    public AllMyListenTogether getMyListenTogether() {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        Long userIdx = user.getUserIdx();
+        List<ListenTogether> listenTogethers = listenTogetherRepository.findTop3ByUser_UserIdxOrderByCreatedAtDesc(userIdx);
+        List<MyListenTogether> myListenTogethers = new ArrayList<>();
+        for (int i = 0; i < listenTogethers.size(); i++) {
+            MyListenTogether myListenTogether = MyListenTogether.from(listenTogethers.get(i));
+            myListenTogethers.add(myListenTogether);
+        }
+        return AllMyListenTogether.from(myListenTogethers);
+    }
+
     public AllPopularListenTogether popularListenTogether() {
         List<String> regions = new ArrayList<>();
-        List<String> popularTitles = new ArrayList<>();
         try {
-            return login(regions, popularTitles);
+            return login(regions);
         } catch (ClassCastException e) {
-            return notLogin(regions, popularTitles);
+            return notLogin(regions);
         }
     }
 
-    private AllPopularListenTogether login(List<String> regions, List<String> popularTitles) {
+    private AllPopularListenTogether login(List<String> regions) {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         regions.add(user.getRegion());
         if (user.getFavRegion() != null) {
@@ -57,18 +68,18 @@ public class ListenTogetherService {
                 regions.add(favRegions[i]);
             }
         }
-        return getPopularTitles(regions, popularTitles);
+        return getPopularTitles(regions);
     }
 
-    private AllPopularListenTogether notLogin(List<String> regions, List<String> popularTitles) {
+    private AllPopularListenTogether notLogin(List<String> regions) {
         List<Center> centers = centerRepository.findTop4ByOrderByFavCountDesc();
         for (int i = 0; i < centers.size(); i++) {
             regions.add(centers.get(i).getRegion());
         }
-        return getPopularTitles(regions, popularTitles);
+        return getPopularTitles(regions);
     }
 
-    private AllPopularListenTogether getPopularTitles(List<String> regions, List<String> popularTitles) {
+    private AllPopularListenTogether getPopularTitles(List<String> regions) {
         List<ListenTogether> listenTogethers = listenTogetherRepository.findPopularListenTogether(regions);
         List<PopularListenTogether> popularListenTogethers = new ArrayList<>();
         for (int i = 0; i < listenTogethers.size(); i++) {

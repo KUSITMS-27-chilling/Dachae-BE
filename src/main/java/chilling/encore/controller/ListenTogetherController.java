@@ -1,5 +1,7 @@
 package chilling.encore.controller;
 
+import chilling.encore.dto.ListenTogetherDto;
+import chilling.encore.dto.ListenTogetherDto.AllMyListenTogether;
 import chilling.encore.dto.ListenTogetherDto.AllPopularListenTogether;
 import chilling.encore.dto.ListenTogetherDto.CreateListenTogetherRequest;
 import chilling.encore.dto.ListenTogetherDto.ListenTogetherPage;
@@ -55,5 +57,12 @@ public class ListenTogetherController {
     public ResponseEntity<ResponseDto<AllPopularListenTogether>> getPopular() {
         AllPopularListenTogether allPopularListenTogethers = listenTogetherService.popularListenTogether();
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_POPULAR_SUCCESS_MESSAGE.getMessage(), allPopularListenTogethers));
+    }
+
+    @GetMapping("/mine")
+    @ApiOperation(value = "내가 작성한 제안할래요", notes = "TOP3 로그인 하지 않은 경우 요청 X")
+    public ResponseEntity<ResponseDto<AllMyListenTogether>> getMine() {
+        AllMyListenTogether allMyListenTogethers = listenTogetherService.getMyListenTogether();
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_MINE_SUCCESS_MESSAGE.getMessage(), allMyListenTogethers));
     }
 }
