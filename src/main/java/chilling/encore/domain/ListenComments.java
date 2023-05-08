@@ -1,6 +1,7 @@
 package chilling.encore.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,6 +32,6 @@ public class ListenComments {
     private Long parentIdx;
     private int childSum;
     private boolean isDelete;
-
+    @CreationTimestamp
     private LocalDateTime createdAt;
 }

@@ -1,6 +1,7 @@
 package chilling.encore.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
@@ -26,7 +27,7 @@ public class Suggest {
     private String content;
     private String teacherName;
     private String category;
-
+    @CreationTimestamp
     private LocalDate createdAt;
     private LocalDate endDate;
 }
