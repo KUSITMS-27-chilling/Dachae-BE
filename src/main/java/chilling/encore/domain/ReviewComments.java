@@ -16,10 +16,10 @@ public class ReviewComments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewCommentIdx;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userIdx")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewIdx")
     private Review review;
 

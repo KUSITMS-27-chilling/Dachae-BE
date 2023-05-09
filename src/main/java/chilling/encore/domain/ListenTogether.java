@@ -7,6 +7,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -18,10 +20,10 @@ public class ListenTogether {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long listenIdx;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userIdx")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "programIdx")
     private Program program;
 
@@ -38,4 +40,7 @@ public class ListenTogether {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "listenTogether")
+    List<ListenComments> listenComments = new ArrayList<>();
 }

@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -135,7 +137,9 @@ public class ProgramService {
     }
 
     private NewProgramsResponse getNewProgramsResponse(String region) {
-        List<Program> programs = programRepository.findAllByStartDateGreaterThanEqualAndLearningCenter_Region(now.minusDays(1L), region);
+        LocalDate thisMonth = LocalDate.parse(now.format(DateTimeFormatter.ofPattern("yyyy-MM")) + "-01");
+        LocalDate nextMonth = LocalDate.parse(now.plusMonths(1L).format(DateTimeFormatter.ofPattern("yyyy-MM")) + "-01");
+        List<Program> programs = programRepository.findTop10ByStartDateBetweenAndEndDateGreaterThanEqualAndLearningCenter_RegionOrderByStartDateDesc(thisMonth, nextMonth, now, region);
         List<ProgramDto.NewProgram> newPrograms = new ArrayList<>();
         for (int i = 0; i < programs.size(); i++) {
             newPrograms.add(ProgramDto.NewProgram.from(programs.get(i)));

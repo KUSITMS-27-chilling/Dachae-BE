@@ -199,4 +199,23 @@ public class UserService {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         return UserInfo.from(user);
     }
+
+    public GetTotalParticipants getUserParticipant() {
+        User user = userRepository.findById(
+                SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"))
+                        .getUserIdx()).orElseThrow();
+        int participantsTotal = user.getParticipants().size();
+        return GetTotalParticipants.from(participantsTotal);
+    }
+
+    public GetTotalWrite getTotalWrite() {
+        User user = userRepository.findById(
+                SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"))
+                        .getUserIdx()).orElseThrow();
+        int listenTotal = user.getListenTogethers().size();
+        int reviewTotal = user.getReviews().size();
+        int allTotal = listenTotal + reviewTotal;
+
+        return GetTotalWrite.from(allTotal, listenTotal, reviewTotal);
+    }
 }

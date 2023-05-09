@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -40,6 +42,13 @@ public class User {
     private String favRegion;
     private int grade;
     private String favField;
+
+    @OneToMany(mappedBy = "user")
+    List<ListenTogether> listenTogethers = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    List<Review> reviews = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    List<Participants> participants = new ArrayList<>();
 
     public void updateLoginAt(LocalDate now) {
         this.loginAt = now;

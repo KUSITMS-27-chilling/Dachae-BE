@@ -15,7 +15,7 @@ public class Program {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long programIdx;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "learningCenterIdx")
     private LearningCenter learningCenter;
 
