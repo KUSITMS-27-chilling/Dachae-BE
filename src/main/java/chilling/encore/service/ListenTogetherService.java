@@ -50,7 +50,7 @@ public class ListenTogetherService {
     public AllMyListenTogether getMyListenTogether() {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         Long userIdx = user.getUserIdx();
-        List<ListenTogether> listenTogethers = listenTogetherRepository.findTop3ByUser_UserIdxOrderByCreatedAtDesc(userIdx);
+        List<ListenTogether> listenTogethers = listenTogetherRepository.findTop3ByUser_UserIdxOrderByHitDesc(userIdx);
         List<MyListenTogether> myListenTogethers = new ArrayList<>();
         for (int i = 0; i < listenTogethers.size(); i++) {
             MyListenTogether myListenTogether = MyListenTogether.from(listenTogethers.get(i));
