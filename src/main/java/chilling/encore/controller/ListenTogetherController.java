@@ -21,6 +21,10 @@ import static chilling.encore.global.dto.ResponseCode.globalFailCode.SERVER_ERRO
 import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.CREATE_SUCCESS_CODE;
 import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
 
+/**
+ * 조회수 추가되어야 함
+ */
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
