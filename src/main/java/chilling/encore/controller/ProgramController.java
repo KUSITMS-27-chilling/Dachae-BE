@@ -1,6 +1,5 @@
 package chilling.encore.controller;
 
-import chilling.encore.dto.ProgramDto;
 import chilling.encore.dto.ProgramDto.AllProgramInCenter;
 import chilling.encore.dto.ProgramDto.AllProgramMainResponses;
 import chilling.encore.dto.ProgramDto.NewProgramsResponse;
@@ -20,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static chilling.encore.dto.responseMessage.ProgramConstant.SuccessMessage.SELECT_NEW_SUCCESS;
 import static chilling.encore.dto.responseMessage.ProgramConstant.SuccessMessage.SELECT_PROGRAM_SUCCESS;
-import static chilling.encore.dto.responseMessage.UserConstants.UserFailMessage.AUTHORIZATION_FAIL;
-import static chilling.encore.global.dto.ResponseCode.globalFailCode.AUTHORIZATION_FAIL_CODE;
 import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
 
 @RestController
@@ -35,15 +32,10 @@ public class ProgramController {
     @GetMapping(value = {"/new", "/new/{region}"})
     @ApiOperation(value = "센터 새소식 조회", notes = "/new 는 기본 새소식, /new/{region}은 다른 지역 선택")
     public ResponseEntity<ResponseDto<NewProgramsResponse>> getNewPrograms(@Nullable @PathVariable String region) {
-        try {
-            NewProgramsResponse newPrograms = programService.getNewPrograms(region);
-            return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_NEW_SUCCESS.getMessage(), newPrograms));
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-            return ResponseEntity.ok(ResponseDto.create(AUTHORIZATION_FAIL_CODE.getCode(), AUTHORIZATION_FAIL.getMessage()));
-        }
+        NewProgramsResponse newPrograms = programService.getNewPrograms(region);
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_NEW_SUCCESS.getMessage(), newPrograms));
     }
-    
+
     @GetMapping()
     @ApiOperation(value = "모아보기 각 센터 프로그램 조회", notes = "3개씩")
     public ResponseEntity<ResponseDto<AllProgramMainResponses>> getPrograms() {

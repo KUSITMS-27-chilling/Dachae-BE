@@ -2,25 +2,18 @@ package chilling.encore.controller;
 
 
 import chilling.encore.domain.User;
-import chilling.encore.dto.UserDto;
 import chilling.encore.dto.UserDto.*;
 import chilling.encore.global.config.email.EmailService;
-import chilling.encore.global.dto.ResponseCode;
 import chilling.encore.service.UserService;
 import chilling.encore.global.dto.ResponseDto;
-import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import static chilling.encore.dto.responseMessage.UserConstants.SuccessMessage.*;
-import static chilling.encore.dto.responseMessage.UserConstants.UserFailMessage.AUTHORIZATION_FAIL;
-import static chilling.encore.dto.responseMessage.UserConstants.UserFailMessage.NOT_FOUND_USER;
-import static chilling.encore.global.dto.ResponseCode.globalFailCode.AUTHORIZATION_FAIL_CODE;
 import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.CREATE_SUCCESS_CODE;
 import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
 
@@ -89,26 +82,17 @@ public class UserController {
     @PostMapping("/login")
     @ApiOperation(value = "로그인", notes = "로그인 진행")
     public ResponseEntity<ResponseDto<UserLoginResponse>> login(@RequestBody UserLoginRequest userLoginRequest) {
-        try {
-            UserLoginResponse loginResponse = userService.login(userLoginRequest);
-            return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), LOGIN_SUCCESS.getMessage(), loginResponse));
-        } catch (AuthenticationException e) {
-            return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), NOT_FOUND_USER.getMessage()));
-        }
+        UserLoginResponse loginResponse = userService.login(userLoginRequest);
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), LOGIN_SUCCESS.getMessage(), loginResponse));
     }
 
     @GetMapping("/grade")
     @ApiOperation(value = "회원 등급 조회", notes = "등급과 관심 분야")
     public ResponseEntity<ResponseDto<UserGrade>> selectGrade() {
-        try {
-            UserGrade grade = userService.getGrade();
-            return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_GRADE_SUCCESS.getMessage(), grade));
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-            return ResponseEntity.ok(ResponseDto.create(AUTHORIZATION_FAIL_CODE.getCode(), AUTHORIZATION_FAIL.getMessage()));
-        }
+        UserGrade grade = userService.getGrade();
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_GRADE_SUCCESS.getMessage(), grade));
     }
-    
+
     @GetMapping("/regions")
     @ApiOperation(value = "유저 관심 지역 조회", notes = "로그인 하지 않은 경우 인기 지역 조회")
     public ResponseEntity<ResponseDto<UserFavRegion>> selectFavRegion() {
@@ -126,11 +110,7 @@ public class UserController {
     @PutMapping("/edit/regions")
     @ApiOperation(value = "유저 관심 지역 수정", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto> editFavRegion(@RequestBody EditFavRegion editFavRegion) {
-        try {
-            userService.editFavRegion(editFavRegion);
-            return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_REGION_SUCCESS.getMessage()));
-        } catch (ClassCastException e) {
-            return ResponseEntity.ok(ResponseDto.create(AUTHORIZATION_FAIL_CODE.getCode(), AUTHORIZATION_FAIL.getMessage()));
-        }
+        userService.editFavRegion(editFavRegion);
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_REGION_SUCCESS.getMessage()));
     }
 }

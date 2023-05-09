@@ -1,20 +1,44 @@
 package chilling.encore.global.exception;
 
 import chilling.encore.global.dto.ErrorResponse;
+import chilling.encore.global.dto.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.NoSuchElementException;
+
+import static chilling.encore.dto.responseMessage.ListenTogetherConstants.ListenTogetherFailMessage.SAVE_FAIL_MESSAGE;
+import static chilling.encore.dto.responseMessage.UserConstants.UserFailMessage.AUTHORIZATION_FAIL;
+import static chilling.encore.dto.responseMessage.UserConstants.UserFailMessage.NOT_FOUND_USER;
+import static chilling.encore.global.dto.ResponseCode.globalFailCode.AUTHORIZATION_FAIL_CODE;
+import static chilling.encore.global.dto.ResponseCode.globalFailCode.SERVER_ERROR;
+import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
 import static java.util.Objects.requireNonNull;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     private static final String LOG_FORMAT = "Class : {}, Code : {}, Message : {}";
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> LoginException(AuthenticationException ex) {
+        String errorCode = String.valueOf(SELECT_SUCCESS_CODE.getCode());
+        log.warn(LOG_FORMAT, ex.getClass(), errorCode, ex.getMessage());
+        return ResponseEntity.ok(new ErrorResponse(errorCode, NOT_FOUND_USER.getMessage()));
+    }
+
+    @ExceptionHandler(ClassCastException.class)
+    public ResponseEntity<ErrorResponse> AuthorizationException(ClassCastException ex) {
+        String errorCode = String.valueOf(AUTHORIZATION_FAIL_CODE.getCode());
+        log.warn(LOG_FORMAT, ex.getClass(), errorCode, ex.getMessage());
+        return ResponseEntity.ok(new ErrorResponse(String.valueOf(AUTHORIZATION_FAIL_CODE.getCode()), AUTHORIZATION_FAIL.getMessage()));
+    }
 
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<ErrorResponse> handleApplicationException(ApplicationException ex) {
