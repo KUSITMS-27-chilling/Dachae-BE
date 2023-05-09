@@ -1,6 +1,7 @@
 package chilling.encore.service;
 
 import chilling.encore.domain.Center;
+import chilling.encore.domain.Program;
 import chilling.encore.domain.Review;
 import chilling.encore.domain.User;
 import chilling.encore.dto.ReviewDto;
@@ -9,7 +10,9 @@ import chilling.encore.dto.ReviewDto.ReviewPage;
 import chilling.encore.dto.ReviewDto.SelectReview;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
+import chilling.encore.repository.springDataJpa.ProgramRepository;
 import chilling.encore.repository.springDataJpa.ReviewRepository;
+import chilling.encore.repository.springDataJpa.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,6 +31,8 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final CenterRepository centerRepository;
+    private final ProgramRepository programRepository;
+    private final UserRepository userRepository;
 
     private final int REVIEW_PAGE_SIZE = 8;
 
@@ -58,39 +63,21 @@ public class ReviewService {
         return reviewPage;
     }
 
-/*    public List<PopularReview> popularReview(String region) {
-        String[] regions = region.split(",");
-        List<Review> Reviews = reviewRepository.findRegionReview(regions);
-        Comparator<Review> hitComparator = Comparator.comparingInt(Review::getHit).reversed();
-        Collections.sort(Reviews, hitComparator);
-
-        List<PopularReview> popularReviews = new ArrayList<>();
-        for (Review review : Reviews) {
-            popularReviews.add(PopularReview.from(review));
-            if (popularReviews.size() == 3) {
-                break;
-            }
-        }
-
-        return popularReviews;
-    }*/
-
-///////////////////////////////////////////////////////////////
     public ReviewDto.PopularReviewPage getPopularReview() {
         List<String> regions = new ArrayList<>();
         try {
-            List<PopularReview> popularReviewList = new ArrayList<>();
-
             List<Review> userRegionsReviewList = login(regions);
+
+            List<PopularReview> popularReviewList = new ArrayList<>();
             for (Review review : userRegionsReviewList) {
                 popularReviewList.add(PopularReview.from(review));
             }
 
             return ReviewDto.PopularReviewPage.from(popularReviewList);
         } catch (ClassCastException e) {
-            List<PopularReview> popularReviewList = new ArrayList<>();
-
             List<Review> userRegionsReviewList = notLogin(regions);
+
+            List<PopularReview> popularReviewList = new ArrayList<>();
             for (Review review : userRegionsReviewList) {
                 popularReviewList.add(PopularReview.from(review));
             }
@@ -117,5 +104,23 @@ public class ReviewService {
             regions.add(centers.get(i).getRegion());
         }
         return reviewRepository.findRegionReview(regions);
+    }
+
+    public void save(ReviewDto.CreateReviewRequest createReviewRequest) {
+        User securityUser = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        Program program = programRepository.findById(createReviewRequest.getProgramIdx()).orElseThrow();
+
+        Review review = Review.builder()
+                .title(createReviewRequest.getTitle())
+                .week(createReviewRequest.getWeek())
+                .content(createReviewRequest.getContent())
+                .image(createReviewRequest.getImage())
+                .hit(0)
+                .program(program)
+                .user(securityUser).build();
+        reviewRepository.save(review);
+
+        User user = userRepository.findById(securityUser.getUserIdx()).orElseThrow();
+        user.updateGrade();
     }
 }
