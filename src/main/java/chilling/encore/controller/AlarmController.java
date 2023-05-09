@@ -31,12 +31,7 @@ public class AlarmController {
     @GetMapping()
     @ApiOperation(value = "알람 새소식 조회", notes = "있다면 값이 들어있고 없다면 빈값")
     public ResponseEntity<ResponseDto<AlarmResponse>> getAlarm() {
-        try {
-            AlarmResponse alarms = alarmService.getAlarm();
-            return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_ALARM_SUCCESS.getMessage(), alarms));
-        }  catch (ClassCastException e) {
-            e.printStackTrace();
-            return ResponseEntity.ok(ResponseDto.create(AUTHORIZATION_FAIL_CODE.getCode(), AUTHORIZATION_FAIL.getMessage()));
-        }
+        AlarmResponse alarms = alarmService.getAlarm();
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_ALARM_SUCCESS.getMessage(), alarms));
     }
 }

@@ -117,4 +117,52 @@ public abstract class UserDto {
     public static class EditFavRegion {
         private String favRegion;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class EditNickName {
+        private String nickName;
+    }
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class EditFavField {
+        private String favField;
+    }
+
+
+    @Getter
+    @Builder
+    @ApiModel(description = "마이페이지에서 회원 정보 응답객체")
+    public static class UserInfo {
+        private String profile;
+        private String nickName;
+        private int grade;
+        private List<String> favFiled;
+        private List<String> favRegion;
+
+        public static UserInfo from(User user) {
+            List<String> favField = new ArrayList<>();
+            if (user.getFavField() != null)
+                favField = List.of(user.getFavField().split(","));
+            List<String> favRegion = new ArrayList<>();
+            favRegion.add(user.getRegion());
+            if (user.getFavRegion() != null) {
+                String[] split = user.getFavRegion().split(",");
+                for (int i = 0; i < split.length; i++) {
+                    favRegion.add(split[i]);
+                }
+            }
+            return UserInfo.builder()
+                    .profile(user.getProfile())
+                    .nickName(user.getNickName())
+                    .grade(user.getGrade())
+                    .favFiled(favField)
+                    .favRegion(favRegion)
+                    .build();
+        }
+    }
 }

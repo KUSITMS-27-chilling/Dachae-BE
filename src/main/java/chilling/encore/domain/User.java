@@ -47,4 +47,16 @@ public class User {
     public void updateFavRegion(String favRegion) {
         this.favRegion = favRegion;
     }
+
+    public void updateFavField(String favField) {
+        this.favField = favField;
+    }
+
+    public void updateNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void updateGrade() {
+        this.grade += 2;
+    }
 }
