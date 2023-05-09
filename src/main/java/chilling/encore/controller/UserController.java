@@ -113,4 +113,11 @@ public class UserController {
         userService.editFavRegion(editFavRegion);
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_REGION_SUCCESS.getMessage()));
     }
+
+    @GetMapping("/userInfo")
+    @ApiOperation(value = "마이페이지에서 유저 정보 조회", notes = "프로필, 닉네임, 유저 등급 등등")
+    public ResponseEntity<ResponseDto<UserInfo>> getUserInfo() {
+        UserInfo userInfo = userService.getUserInfo();
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_INFO_SUCCESS.getMessage(), userInfo));
+    }
 }
