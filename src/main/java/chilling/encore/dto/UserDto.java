@@ -133,6 +133,41 @@ public abstract class UserDto {
         private String favField;
     }
 
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class GetTotalWrite {
+        private int allTotal;
+        private int listenTotal;
+        private int reviewTotal;
+
+        public static GetTotalWrite from(int allTotal, int listenTotal, int reviewTotal) {
+            return GetTotalWrite.builder()
+                    .allTotal(allTotal)
+                    .listenTotal(listenTotal)
+                    .reviewTotal(reviewTotal)
+                    .build();
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class GetTotalParticipants {
+        private int participantTotal;
+
+        /**
+         * 강사 부분은 이후에 채워야함
+         */
+        public static GetTotalParticipants from(int participantTotal) {
+            return GetTotalParticipants.builder()
+                    .participantTotal(participantTotal)
+                    .build();
+        }
+    }
+
 
     @Getter
     @Builder

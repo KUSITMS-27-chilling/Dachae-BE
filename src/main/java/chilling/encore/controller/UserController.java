@@ -2,6 +2,7 @@ package chilling.encore.controller;
 
 
 import chilling.encore.domain.User;
+import chilling.encore.dto.UserDto;
 import chilling.encore.dto.UserDto.*;
 import chilling.encore.global.config.email.EmailService;
 import chilling.encore.service.UserService;
@@ -133,5 +134,19 @@ public class UserController {
     public ResponseEntity<ResponseDto<UserInfo>> getUserInfo() {
         UserInfo userInfo = userService.getUserInfo();
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_INFO_SUCCESS.getMessage(), userInfo));
+    }
+
+    @GetMapping("/participants")
+    @ApiOperation(value = "마이페이지 유저가 참여한 회수 조회")
+    public ResponseEntity<ResponseDto<GetTotalParticipants>> getUserParticipant() {
+        GetTotalParticipants userParticipant = userService.getUserParticipant();
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_INFO_SUCCESS.getMessage(), userParticipant));
+    }
+
+    @GetMapping("/write")
+    @ApiOperation(value = "마이페이지 유저의 작성글 조회", notes = "전체 ~ 각각")
+    public ResponseEntity<ResponseDto<UserDto.GetTotalWrite>> getTotalWrite() {
+        UserDto.GetTotalWrite total = userService.getTotalWrite();
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_INFO_SUCCESS.getMessage(), total));
     }
 }
