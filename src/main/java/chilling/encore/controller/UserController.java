@@ -121,6 +121,13 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_NICKNAME_SUCCESS.getMessage()));
     }
 
+    @PutMapping("/edit/favField")
+    @ApiOperation(value = "유저 활동 분야 수정", notes = "로그인 하지 않은 경우 요청 X")
+    public ResponseEntity<ResponseDto> editFavField(@RequestBody EditFavField editFavField) {
+        userService.editFavField(editFavField);
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_FAV_FIELD_SUCCESS.getMessage()));
+    }
+
     @GetMapping("/userInfo")
     @ApiOperation(value = "마이페이지에서 유저 정보 조회", notes = "프로필, 닉네임, 유저 등급 등등")
     public ResponseEntity<ResponseDto<UserInfo>> getUserInfo() {
