@@ -16,10 +16,10 @@ public class ReviewAlarm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewAlarmIdx;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userIdx")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewCommentIdx")
     private ReviewComments reviewComments;
 

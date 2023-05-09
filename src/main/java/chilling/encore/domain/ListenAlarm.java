@@ -16,10 +16,10 @@ public class ListenAlarm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long listenAlarmIdx;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userIdx")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "listenCommentIdx")
     private ListenComments listenComments;
 

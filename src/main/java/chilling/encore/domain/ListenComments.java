@@ -16,10 +16,10 @@ public class ListenComments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long listenCommentIdx;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userIdx")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "listenIdx")
     private ListenTogether listenTogether;
 

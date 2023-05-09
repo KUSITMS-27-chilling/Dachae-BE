@@ -13,10 +13,10 @@ public class Participants {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long participantsIdx;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userIdx")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "listenIdx")
     private ListenTogether listenTogether;
 }

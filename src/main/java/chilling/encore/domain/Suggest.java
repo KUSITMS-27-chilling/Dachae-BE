@@ -17,7 +17,7 @@ public class Suggest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long suggestIdx;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userIdx")
     private User user;
 
