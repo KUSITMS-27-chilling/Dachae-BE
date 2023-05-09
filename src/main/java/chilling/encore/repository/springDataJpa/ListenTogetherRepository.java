@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ListenTogetherRepository extends JpaRepository<ListenTogether, Long>, ListenTogetherDslRepository {
-    List<ListenTogether> findTop3ByUser_UserIdxOrderByCreatedAtDesc(Long userIdx);
+    List<ListenTogether> findTop3ByUser_UserIdxOrderByHitDesc(Long userIdx);
 }

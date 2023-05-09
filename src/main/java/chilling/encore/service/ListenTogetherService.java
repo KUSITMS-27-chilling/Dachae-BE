@@ -7,10 +7,7 @@ import chilling.encore.dto.ListenTogetherDto;
 import chilling.encore.dto.ListenTogetherDto.*;
 import chilling.encore.dto.ProgramDto;
 import chilling.encore.global.config.security.util.SecurityUtils;
-import chilling.encore.repository.springDataJpa.CenterRepository;
-import chilling.encore.repository.springDataJpa.ListenTogetherRepository;
-import chilling.encore.repository.springDataJpa.ParticipantsRepository;
-import chilling.encore.repository.springDataJpa.ProgramRepository;
+import chilling.encore.repository.springDataJpa.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,6 +29,7 @@ public class ListenTogetherService {
     private final ListenTogetherRepository listenTogetherRepository;
     private final ProgramRepository programRepository;
     private final CenterRepository centerRepository;
+    private final UserRepository userRepository;
 
     private final int LISTEN_TOGETHER_PAGE_SIZE = 8;
 
@@ -50,7 +48,7 @@ public class ListenTogetherService {
     public AllMyListenTogether getMyListenTogether() {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         Long userIdx = user.getUserIdx();
-        List<ListenTogether> listenTogethers = listenTogetherRepository.findTop3ByUser_UserIdxOrderByCreatedAtDesc(userIdx);
+        List<ListenTogether> listenTogethers = listenTogetherRepository.findTop3ByUser_UserIdxOrderByHitDesc(userIdx);
         List<MyListenTogether> myListenTogethers = new ArrayList<>();
         for (int i = 0; i < listenTogethers.size(); i++) {
             MyListenTogether myListenTogether = MyListenTogether.from(listenTogethers.get(i));
@@ -98,7 +96,7 @@ public class ListenTogetherService {
     }
 
     public void save(CreateListenTogetherRequest createListenTogetherReq) {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User securityUser = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         Program program = programRepository.findById(createListenTogetherReq.getProgramIdx()).orElseThrow();
 
         ListenTogether listenTogether = ListenTogether.builder()
@@ -107,9 +105,12 @@ public class ListenTogetherService {
                 .content(createListenTogetherReq.getContent())
                 .hit(0)
                 .program(program)
-                .user(user)
+                .user(securityUser)
                 .build();
         listenTogetherRepository.save(listenTogether);
+
+        User user = userRepository.findById(securityUser.getUserIdx()).orElseThrow();
+        user.updateGrade();
         return;
     }
 

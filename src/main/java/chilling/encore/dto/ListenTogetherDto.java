@@ -25,6 +25,7 @@ public abstract class ListenTogetherDto {
         private final List<String> favField;
         private final int currentNum;
         private final int goalNum;
+        private final int hit;
         private final List<ParticipantsInfo> participantsInfos;
         public static ListenTogetherDetail from(ListenTogether listenTogether, List<ParticipantsInfo> participantsInfos) {
             User user = listenTogether.getUser();
@@ -42,6 +43,7 @@ public abstract class ListenTogetherDto {
                     .favField(favField)
                     .currentNum(participantsInfos.size())
                     .goalNum(listenTogether.getGoalNum())
+                    .hit(listenTogether.getHit())
                     .participantsInfos(participantsInfos)
                     .build();
         }
@@ -146,6 +148,7 @@ public abstract class ListenTogetherDto {
         private final int currentNum;
         private final String programName;
         private final List<String> tags;
+        private final int hit;
         public static SelectListenTogether from(
                 boolean isRecruiting,
                 ListenTogether listenTogether,
@@ -172,6 +175,7 @@ public abstract class ListenTogetherDto {
                     .currentNum(currentNum)
                     .programName(program.getProgramName())
                     .tags(List.of(program.getLearningCenter().getRegion(), program.getLearningCenter().getLearningName()))
+                    .hit(listenTogether.getHit())
                     .build();
         }
     }
