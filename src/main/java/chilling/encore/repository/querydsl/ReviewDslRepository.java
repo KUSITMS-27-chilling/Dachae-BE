@@ -10,5 +10,5 @@ public interface ReviewDslRepository {
 
     Page<Review> findRegionReviewPage(String[] region, Pageable pageable);
 
-    List<Review> findRegionReview(String[] region);
+    List<Review> findRegionReview(List<String> regions);
 }

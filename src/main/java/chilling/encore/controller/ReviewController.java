@@ -1,6 +1,6 @@
 package chilling.encore.controller;
 
-import chilling.encore.dto.ReviewDto;
+import chilling.encore.dto.ReviewDto.PopularReviewPage;
 import chilling.encore.dto.ReviewDto.ReviewPage;
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.ReviewService;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.util.annotation.Nullable;
 
-import java.util.List;
 
+import static chilling.encore.dto.responseMessage.ReviewConstants.ReviewSuccessMessage.POPULAR_REVIEW_SUCCESS_MESSAGE;
 import static chilling.encore.dto.responseMessage.ReviewConstants.ReviewSuccessMessage.REVIEW_SUCCESS_MESSAGE;
 import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
 
@@ -35,10 +35,10 @@ public class ReviewController {
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), REVIEW_SUCCESS_MESSAGE.getMessage(), reviewPage));
     }
 
-    @GetMapping("/popular/{region}")
+    @GetMapping("/popular")
     @ApiOperation(value = "후기 인기글 조회")
-    public ResponseEntity<ResponseDto<List<ReviewDto.PopularReview>>> getPopularReview(@PathVariable String region) {
-        List<ReviewDto.PopularReview> popularReviews = reviewService.getPopularReview(region);
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), REVIEW_SUCCESS_MESSAGE.getMessage(), popularReviews));
+    public ResponseEntity<ResponseDto<PopularReviewPage>> getPopularReview() {
+        PopularReviewPage popularReviews = reviewService.getPopularReview();
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), POPULAR_REVIEW_SUCCESS_MESSAGE.getMessage(), popularReviews));
     }
 }
