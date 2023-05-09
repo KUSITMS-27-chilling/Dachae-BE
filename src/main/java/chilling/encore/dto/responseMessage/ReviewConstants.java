@@ -8,7 +8,8 @@ public class ReviewConstants {
     @RequiredArgsConstructor
     public enum ReviewSuccessMessage {
         REVIEW_SUCCESS_MESSAGE("수강후기 조회에 성공했습니다."),
-        POPULAR_REVIEW_SUCCESS_MESSAGE("인기 수강후기 조회에 성공했습니다.");
+        POPULAR_REVIEW_SUCCESS_MESSAGE("인기 수강후기 조회에 성공했습니다."),
+        CREATE_SUCCESS_MESSAGE("수강후기 생성에 성공했습니다");
         private final String message;
     }
 }

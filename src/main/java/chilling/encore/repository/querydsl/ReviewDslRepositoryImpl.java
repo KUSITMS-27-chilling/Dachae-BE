@@ -44,14 +44,16 @@ public class ReviewDslRepositoryImpl implements ReviewDslRepository {
     }
 
     @Override
-    public List<Review> findRegionReview(String[] region) {
+    public List<Review> findRegionReview(List<String> region) {
         BooleanBuilder builder = new BooleanBuilder();
-        for (int i = 0; i < region.length; i++) {
-            builder.or(program.learningCenter.region.eq(region[i]));
+        for (int i = 0; i < region.size(); i++) {
+            builder.or(program.learningCenter.region.eq(region.get(i)));
         }
         return queryFactory.selectFrom(review)
                 .leftJoin(review.user, user)
                 .leftJoin(review.program, program)
+                .orderBy(review.hit.desc())
+                .limit(3)
                 .where(builder)
                 .fetch();
     }

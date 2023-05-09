@@ -5,6 +5,7 @@ import chilling.encore.domain.Program;
 import chilling.encore.domain.Review;
 import chilling.encore.domain.User;
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -102,5 +103,18 @@ public abstract class ReviewDto {
                     .title(review.getTitle())
                     .build();
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @ApiModel(description = "수강후기 작성을 위한 요청 객체")
+    public static class CreateReviewRequest {
+        private String title;
+        private String region;
+        private Long programIdx;
+        private String programName;
+        private int week;
+        private String content;
+        private String image;
     }
 }
