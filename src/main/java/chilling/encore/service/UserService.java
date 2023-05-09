@@ -182,4 +182,21 @@ public class UserService {
         User user = userRepository.findById(securityUser.getUserIdx()).get();
         user.updateFavRegion(favRegion.getFavRegion());
     }
+
+    public void editNickName(EditNickName editNickName) {
+        User securityUser = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = userRepository.findById(securityUser.getUserIdx()).get();
+        user.updateNickName(editNickName.getNickName());
+    }
+
+    public void editFavField(EditFavField editFavField) {
+        User securityUser = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = userRepository.findById(securityUser.getUserIdx()).get();
+        user.updateFavField(editFavField.getFavField());
+    }
+
+    public UserInfo getUserInfo() {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        return UserInfo.from(user);
+    }
 }

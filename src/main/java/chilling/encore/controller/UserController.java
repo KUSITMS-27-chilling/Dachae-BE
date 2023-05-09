@@ -113,4 +113,25 @@ public class UserController {
         userService.editFavRegion(editFavRegion);
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_REGION_SUCCESS.getMessage()));
     }
+
+    @PutMapping("/edit/nickName")
+    @ApiOperation(value = "유저 닉네임 수정", notes = "로그인 하지 않은 경우 요청 X")
+    public ResponseEntity<ResponseDto> editNickName(@RequestBody EditNickName editNickName) {
+        userService.editNickName(editNickName);
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_NICKNAME_SUCCESS.getMessage()));
+    }
+
+    @PutMapping("/edit/favField")
+    @ApiOperation(value = "유저 활동 분야 수정", notes = "로그인 하지 않은 경우 요청 X")
+    public ResponseEntity<ResponseDto> editFavField(@RequestBody EditFavField editFavField) {
+        userService.editFavField(editFavField);
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_FAV_FIELD_SUCCESS.getMessage()));
+    }
+
+    @GetMapping("/userInfo")
+    @ApiOperation(value = "마이페이지에서 유저 정보 조회", notes = "프로필, 닉네임, 유저 등급 등등")
+    public ResponseEntity<ResponseDto<UserInfo>> getUserInfo() {
+        UserInfo userInfo = userService.getUserInfo();
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_INFO_SUCCESS.getMessage(), userInfo));
+    }
 }
