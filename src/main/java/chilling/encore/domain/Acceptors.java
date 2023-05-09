@@ -13,10 +13,10 @@ public class Acceptors {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long acceptorIdx;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userIdx")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "suggestIdx")
     private Suggest suggest;
 }
