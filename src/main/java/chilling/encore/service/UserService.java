@@ -214,10 +214,15 @@ public class UserService {
                         .getUserIdx()).orElseThrow();
         int listenTotal = user.getListenTogethers().size();
         int reviewTotal = user.getReviews().size();
+        int freeTotal = user.getFreeBoards().size();
         int allTotal = listenTotal + reviewTotal;
 
-        return GetTotalWrite.from(allTotal, listenTotal, reviewTotal);
+        return GetTotalWrite.from(allTotal, listenTotal, reviewTotal, freeTotal);
     }
+
+    /**
+     * 배움 소식 결정 되면 다시 진행
+     */
 
     public AlarmResponse getAlarm() {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));

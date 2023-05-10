@@ -45,7 +45,7 @@ public class RedisRepository {
         return Optional.ofNullable(isBlackList);
     }
 
-    public void addNotification(String userIdx, String notificationId, String title, String boardType, String boardIdx, String nickName, String content, LocalDateTime now, Duration duration) {
+    public void addNotification(String userIdx, String notificationId, String title, String boardType, String boardIdx, String nickName, String content, LocalDateTime now) {
         ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
 
         // 알림 내용을 문자열로 구성하여 저장
@@ -57,9 +57,6 @@ public class RedisRepository {
         // 알림 Sorted Set에는 알림의 점수만 저장
         ZoneOffset offset = ZoneOffset.of("+09:00");
         zSetOps.add("userIdx:" + userIdx + ":notifications:sorted", notificationId, now.toEpochSecond(offset));
-
-        // 개별 알림의 만료 시간 설정
-        redisTemplate.expire("userIdx:" + userIdx + ":notifications", duration);
     }
 
     public Set<String> getNotificationIds(String userIdx, long start, long end) {
