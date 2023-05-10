@@ -1,9 +1,6 @@
 package chilling.encore.controller;
 
-import chilling.encore.dto.AlaramDto;
 import chilling.encore.dto.AlaramDto.AlarmResponse;
-import chilling.encore.dto.responseMessage.AlarmConstant;
-import chilling.encore.global.dto.ResponseCode;
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.AlarmService;
 import io.swagger.annotations.Api;
@@ -15,9 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static chilling.encore.dto.responseMessage.AlarmConstant.SuccessMessage.SELECT_ALARM_SUCCESS;
-import static chilling.encore.dto.responseMessage.UserConstants.UserFailMessage.AUTHORIZATION_FAIL;
-import static chilling.encore.global.dto.ResponseCode.globalFailCode.AUTHORIZATION_FAIL_CODE;
+import static chilling.encore.dto.responseMessage.AlarmConstants.SuccessMessage.SELECT_ALARM_SUCCESS;
 import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
 
 @RestController
