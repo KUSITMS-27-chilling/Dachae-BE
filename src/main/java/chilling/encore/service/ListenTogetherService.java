@@ -2,10 +2,7 @@ package chilling.encore.service;
 
 
 import chilling.encore.domain.*;
-import chilling.encore.dto.DetailDto;
-import chilling.encore.dto.ListenTogetherDto;
 import chilling.encore.dto.ListenTogetherDto.*;
-import chilling.encore.dto.ProgramDto;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.*;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +21,6 @@ import java.util.*;
 @Slf4j
 @Transactional
 public class ListenTogetherService {
-    private final ParticipantsRepository participantsRepository;
     private final ListenTogetherRepository listenTogetherRepository;
     private final ProgramRepository programRepository;
     private final CenterRepository centerRepository;
@@ -35,7 +30,7 @@ public class ListenTogetherService {
 
     public ListenTogetherDetail getListenTogetherDetail(Long listenIdx) {
         ListenTogether listenTogether = listenTogetherRepository.findById(listenIdx).orElseThrow();
-        List<Participants> participants = participantsRepository.findAllByListenTogether_ListenIdx(listenIdx);
+        List<Participants> participants = listenTogether.getParticipants();
         List<ParticipantsInfo> participantsInfos = new ArrayList<>();
         for (int i = 0; i < participants.size(); i++) {
             ParticipantsInfo participantsInfo = ParticipantsInfo.from(participants.get(i).getUser());
@@ -134,7 +129,7 @@ public class ListenTogetherService {
         List<SelectListenTogether> listenTogethers = new ArrayList<>();
         for (int i = 0; i < listenTogetherPage.getContent().size(); i++) {
             ListenTogether listenTogether = listenTogetherPage.getContent().get(i);
-            int currentNum = participantsRepository.findAllByListenTogether_ListenIdx(listenTogether.getListenIdx()).size();
+            int currentNum = listenTogether.getParticipants().size();
             boolean isRecruiting = true;
             if (listenTogether.getProgram().getEndDate().isBefore(LocalDate.now()) || currentNum >= listenTogether.getGoalNum())
                 isRecruiting = false;

@@ -3,7 +3,7 @@ package chilling.encore.dto.responseMessage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public class AlarmConstant {
+public class AlarmConstants {
     @Getter
     @RequiredArgsConstructor
     public enum SuccessMessage {
