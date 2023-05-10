@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,6 @@ public class AlarmController {
     @ApiOperation(value = "알람 새소식 조회", notes = "있다면 값이 들어있고 없다면 빈값")
     public ResponseEntity<ResponseDto<AlarmResponse>> getAlarm() {
         AlarmResponse alarms = alarmService.getAlarm();
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_ALARM_SUCCESS.getMessage(), alarms));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_ALARM_SUCCESS.getMessage(), alarms));
     }
 }
