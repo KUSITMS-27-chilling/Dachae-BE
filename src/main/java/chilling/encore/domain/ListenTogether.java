@@ -43,4 +43,6 @@ public class ListenTogether {
 
     @OneToMany(mappedBy = "listenTogether")
     List<ListenComments> listenComments = new ArrayList<>();
+    @OneToMany(mappedBy = "listenTogether")
+    List<Participants> participants = new ArrayList<>();
 }
