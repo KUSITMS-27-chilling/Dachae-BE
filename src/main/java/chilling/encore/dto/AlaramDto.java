@@ -11,14 +11,16 @@ public abstract class AlaramDto {
     @Getter
     @Builder
     public static class NewAlarm {
+        private String notificationId;
         private Long listenCommentsIdx;
         private Long reviewCommentIdx;
         private String title;
         private String nickName;
         private String content;
 
-        public static NewAlarm from(Long listenCommentsIdx, Long reviewCommentIdx, String title, String nickName, String content) {
+        public static NewAlarm from(String notificationId, Long listenCommentsIdx, Long reviewCommentIdx, String title, String nickName, String content) {
             return NewAlarm.builder()
+                    .notificationId(notificationId)
                     .listenCommentsIdx(listenCommentsIdx)
                     .reviewCommentIdx(reviewCommentIdx)
                     .title(title)
