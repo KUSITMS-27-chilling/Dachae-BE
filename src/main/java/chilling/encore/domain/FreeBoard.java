@@ -5,9 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,32 +13,27 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
-public class Review {
+public class FreeBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewIdx;
-
+    private Long freeBoardIdx;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userIdx")
     private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "programIdx")
-    private Program program;
-
-    private int week;
-
     private String title;
     @Column(columnDefinition = "TEXT")
     private String content;
-
-    private String image;
+    private String region;
     private int hit;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+    
+    @OneToMany(mappedBy = "freeBoard")
+    List<FreeBoardComments> freeBoardComments;
 
-    @OneToMany(mappedBy = "review")
-    private List<ReviewComments> reviewComments = new ArrayList<>();
+    public void updateHit() {
+        this.hit++;
+    }
 }
