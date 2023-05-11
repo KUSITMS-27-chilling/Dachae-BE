@@ -50,11 +50,9 @@ public class ReviewDslRepositoryImpl implements ReviewDslRepository {
             builder.or(program.learningCenter.region.eq(region.get(i)));
         }
         return queryFactory.selectFrom(review)
-                .leftJoin(review.user, user)
-                .leftJoin(review.program, program)
+                .where(builder)
                 .orderBy(review.hit.desc())
                 .limit(3)
-                .where(builder)
                 .fetch();
     }
 }

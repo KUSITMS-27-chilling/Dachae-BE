@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,21 @@ public class ReviewService {
         return reviews;
     }
 
+    public SelectReview getReview(Long reviewIdx) {
+        Review review = reviewRepository.findByReviewIdx(reviewIdx);
+        return SelectReview.from(review);
+    }
+
+    public List<ReviewDto.SelectMyReview> getMyReview() {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        List<Review> myReviews = reviewRepository.findTop2ByUser_UserIdxOrderByUpdatedAtDesc(user.getUserIdx());
+        List<ReviewDto.SelectMyReview> myReviewSelect = new ArrayList<>();
+        for (Review myReview : myReviews) {
+            myReviewSelect.add(ReviewDto.SelectMyReview.from(myReview));
+        }
+        return myReviewSelect;
+    }
+
     private Page<Review> getFullReview(String region, Integer page) {
         String[] regions = region.split(",");
         Pageable pageable = PageRequest.of(page, REVIEW_PAGE_SIZE, Sort.by("createdAt").descending());
@@ -75,10 +91,10 @@ public class ReviewService {
 
             return ReviewDto.PopularReviewPage.from(popularReviewList);
         } catch (ClassCastException e) {
-            List<Review> userRegionsReviewList = notLogin(regions);
+            List<Review> favRegionsReviewList = notLogin(regions);
 
             List<PopularReview> popularReviewList = new ArrayList<>();
-            for (Review review : userRegionsReviewList) {
+            for (Review review : favRegionsReviewList) {
                 popularReviewList.add(PopularReview.from(review));
             }
 
@@ -102,6 +118,7 @@ public class ReviewService {
         List<Center> centers = centerRepository.findTop4ByOrderByFavCountDesc();
         for (int i = 0; i < centers.size(); i++) {
             regions.add(centers.get(i).getRegion());
+            log.info("regions = {}", centers.get(i).getRegion());
         }
         return reviewRepository.findRegionReview(regions);
     }
@@ -123,4 +140,5 @@ public class ReviewService {
         User user = userRepository.findById(securityUser.getUserIdx()).orElseThrow();
         user.updateGrade();
     }
+
 }
