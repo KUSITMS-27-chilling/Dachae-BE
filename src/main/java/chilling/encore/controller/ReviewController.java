@@ -55,7 +55,7 @@ public class ReviewController {
     }
 
     @GetMapping("/mine")
-    @ApiOperation(value = "나의 수강후기")
+    @ApiOperation(value = "나의 수강후기", notes = "작성시간 내림차순으로 top2 조회")
     public ResponseEntity<ResponseDto<List<SelectMyReview>>> getMyReview() {
         List<SelectMyReview> myReview = reviewService.getMyReview();
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), MY_REVIEW_SUCCESS_MESSAGE.getMessage(), myReview));
