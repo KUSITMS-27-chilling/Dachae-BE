@@ -5,6 +5,7 @@ import chilling.encore.domain.Program;
 import chilling.encore.domain.Review;
 import chilling.encore.domain.User;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -116,5 +117,23 @@ public abstract class ReviewDto {
         private int week;
         private String content;
         private String image;
+    }
+
+
+    @Getter
+    @Builder
+    @ApiOperation(value = "나의 수강후기 조회를 위한 응답 객체")
+    public static class SelectMyReview {
+        private Long reviewIdx;
+        private String title;
+        private LocalDateTime updatedAt;
+
+        public static SelectMyReview from(Review review) {
+            return SelectMyReview.builder()
+                    .reviewIdx(review.getReviewIdx())
+                    .title(review.getTitle())
+                    .updatedAt(review.getUpdatedAt())
+                    .build();
+        }
     }
 }
