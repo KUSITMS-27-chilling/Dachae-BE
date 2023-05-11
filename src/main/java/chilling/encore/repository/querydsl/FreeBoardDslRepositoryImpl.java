@@ -61,14 +61,20 @@ public class FreeBoardDslRepositoryImpl implements FreeBoardDslRepository {
     }
 
     @Override
-    public List<FreeBoard> findPopularFreeBoard() {
+    public List<String> findPopularFreeBoard(List<String> regions) {
+        BooleanBuilder builder = new BooleanBuilder();
+        for (int i = 0; i < regions.size(); i++) {
+            builder.or(freeBoard.region.eq(regions.get(i)));
+        }
         NumberExpression<Integer> hitCount = freeBoard.hit;
         NumberExpression<Integer> commentCount = freeBoard.freeBoardComments.size();
         Expression<Integer> total = hitCount.add(commentCount);
         OrderSpecifier<Integer> orderByTotalDesc = Expressions.numberPath(Integer.class, total.toString()).desc();
 
-        return queryFactory.selectFrom(freeBoard)
+        return queryFactory.select(freeBoard.title)
+                .from(freeBoard)
                 .limit(3L)
+                .where(builder)
                 .orderBy(orderByTotalDesc)
                 .fetch();
     }

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface FreeBoardDslRepository {
     Page<FreeBoard> findRegionFreeBoard(String region, String orderBy, Pageable pageable);
-    List<FreeBoard> findPopularFreeBoard();
+    List<String> findPopularFreeBoard(List<String> regions);
 }
