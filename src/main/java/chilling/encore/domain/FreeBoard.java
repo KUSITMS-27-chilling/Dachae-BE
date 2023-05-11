@@ -23,6 +23,7 @@ public class FreeBoard {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String content;
+    private String region;
     private int hit;
     @CreationTimestamp
     private LocalDateTime createdAt;
