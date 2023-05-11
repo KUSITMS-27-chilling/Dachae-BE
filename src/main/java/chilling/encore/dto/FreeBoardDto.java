@@ -12,6 +12,13 @@ public abstract class FreeBoardDto {
     @Getter
     @Builder
     @RequiredArgsConstructor
+    public static class PopularFreeBoards {
+        private final List<String> popularFreeBoards;
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
     public static class AllFreeBoards {
         private final List<SelectFreeBoard> freeBoards;
     }
