@@ -14,6 +14,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewDsl
 
     Page<Review> findAllByProgram_LearningCenter_Region(String region, Pageable pageable);
 
+    Review findByReviewIdx(Long reviewIdx);
+
+    List<Review> findTop2ByUser_UserIdxOrderByUpdatedAtDesc(Long userIdx);
+
 //    List<ReviewDto.PopularReview> findAllByOrderByHitDesc();
 
 //    List<Review> findAllByOrderByHitDesc();
