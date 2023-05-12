@@ -22,6 +22,7 @@ public abstract class ListenTogetherDto {
         private final String content;
         private final String profile;
         private final String nickName;
+        private final int grade;
         private final List<String> favField;
         private final int currentNum;
         private final int goalNum;
@@ -40,6 +41,7 @@ public abstract class ListenTogetherDto {
                     .content(listenTogether.getContent())
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
+                    .grade(user.getGrade()/10 + 1)
                     .favField(favField)
                     .currentNum(participantsInfos.size())
                     .goalNum(listenTogether.getGoalNum())
