@@ -30,6 +30,7 @@ public class ListenTogetherService {
 
     public ListenTogetherDetail getListenTogetherDetail(Long listenIdx) {
         ListenTogether listenTogether = listenTogetherRepository.findById(listenIdx).orElseThrow();
+        listenTogether.upHit();
         List<Participants> participants = listenTogether.getParticipants();
         List<ParticipantsInfo> participantsInfos = new ArrayList<>();
         for (int i = 0; i < participants.size(); i++) {
