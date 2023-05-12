@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -116,6 +117,7 @@ public abstract class ReviewDto {
         private String programName;
         private int week;
         private String content;
+        @Nullable
         private String image;
     }
 
