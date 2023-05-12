@@ -10,6 +10,13 @@ import java.util.List;
 
 public abstract class FreeBoardDto {
     @Getter
+    @RequiredArgsConstructor
+    public static class CreateFreeBoardRequest {
+        private final String title;
+        private final String region;
+        private final String content;
+    }
+    @Getter
     @Builder
     @RequiredArgsConstructor
     public static class PopularFreeBoards {
