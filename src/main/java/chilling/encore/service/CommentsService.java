@@ -1,7 +1,7 @@
 package chilling.encore.service;
 
 import chilling.encore.domain.*;
-import chilling.encore.dto.ReviewCommentsDto.CreateCommentsRequest;
+import chilling.encore.dto.CommentsDto.CreateCommentsRequest;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.ListenCommentRepository;
 import chilling.encore.repository.springDataJpa.ListenTogetherRepository;

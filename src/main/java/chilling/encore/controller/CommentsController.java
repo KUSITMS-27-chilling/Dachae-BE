@@ -1,6 +1,6 @@
 package chilling.encore.controller;
 
-import chilling.encore.dto.ReviewCommentsDto.CreateCommentsRequest;
+import chilling.encore.dto.CommentsDto.CreateCommentsRequest;
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.CommentsService;
 import io.swagger.annotations.Api;

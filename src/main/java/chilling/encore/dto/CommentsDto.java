@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public abstract class ReviewCommentsDto {
+public abstract class CommentsDto {
     @Getter
     @RequiredArgsConstructor
     @ApiModel(description = "댓글을 위한 요청 객체")
