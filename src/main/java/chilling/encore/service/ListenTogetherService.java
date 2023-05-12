@@ -120,7 +120,6 @@ public class ListenTogetherService {
     private Page<ListenTogether> getFullListenTogether(String region, int page) {
         String[] regions = region.split(",");
         Pageable pageable = PageRequest.of(page, LISTEN_TOGETHER_PAGE_SIZE);
-        log.info("regions = {}", regions[0]);
         Page<ListenTogether> listenTogetherPage = listenTogetherRepository.findRegionListenTogether(regions, pageable);
         return listenTogetherPage;
     }

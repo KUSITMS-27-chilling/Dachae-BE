@@ -5,8 +5,6 @@ import chilling.encore.dto.AlaramDto.AlarmResponse;
 import chilling.encore.dto.AlaramDto.NewAlarm;
 import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.util.SecurityUtils;
-import chilling.encore.repository.springDataJpa.ListenAlarmRepository;
-import chilling.encore.repository.springDataJpa.ReviewAlarmRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,6 +27,12 @@ public class AlarmService {
         Set<String> notificationIds = redisRepository.getNotificationIds(String.valueOf(user.getUserIdx()), 0, -1);
         List<String> notifications = redisRepository.getNotifications(String.valueOf(user.getUserIdx()), notificationIds);
         Iterator<String> notificationIdIterator = notificationIds.iterator();
+        List<NewAlarm> newAlarms = getNewAlarms(notifications, notificationIdIterator);
+
+        return AlarmResponse.from(newAlarms);
+    }
+
+    private List<NewAlarm> getNewAlarms(List<String> notifications, Iterator<String> notificationIdIterator) {
         List<NewAlarm> newAlarms = new ArrayList<>();
         for (int i = 0; i < notifications.size(); i++) {
             String[] splitDatas = notifications.get(i).split(":");
@@ -44,7 +48,6 @@ public class AlarmService {
             newAlarms.add(NewAlarm.from(notificationIdIterator.next(), null, Long.parseLong(splitDatas[1]),
                     title, nickName, content));
         }
-
-        return AlarmResponse.from(newAlarms);
+        return newAlarms;
     }
 }

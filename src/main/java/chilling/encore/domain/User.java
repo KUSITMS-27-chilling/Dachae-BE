@@ -49,6 +49,8 @@ public class User {
     List<Review> reviews = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     List<Participants> participants = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    List<FreeBoard> freeBoards = new ArrayList<>();
 
     public void updateLoginAt(LocalDate now) {
         this.loginAt = now;

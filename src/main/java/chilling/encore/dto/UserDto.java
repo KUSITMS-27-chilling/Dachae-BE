@@ -141,12 +141,14 @@ public abstract class UserDto {
         private int allTotal;
         private int listenTotal;
         private int reviewTotal;
+        private int freeTotal;
 
-        public static GetTotalWrite from(int allTotal, int listenTotal, int reviewTotal) {
+        public static GetTotalWrite from(int allTotal, int listenTotal, int reviewTotal, int freeTotal) {
             return GetTotalWrite.builder()
                     .allTotal(allTotal)
                     .listenTotal(listenTotal)
                     .reviewTotal(reviewTotal)
+                    .freeTotal(freeTotal)
                     .build();
         }
     }
