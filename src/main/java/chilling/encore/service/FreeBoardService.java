@@ -6,6 +6,7 @@ import chilling.encore.domain.ListenTogether;
 import chilling.encore.domain.User;
 import chilling.encore.dto.FreeBoardDto;
 import chilling.encore.dto.FreeBoardDto.AllFreeBoards;
+import chilling.encore.dto.FreeBoardDto.CreateFreeBoardRequest;
 import chilling.encore.dto.FreeBoardDto.PopularFreeBoards;
 import chilling.encore.dto.FreeBoardDto.SelectFreeBoard;
 import chilling.encore.global.config.security.util.SecurityUtils;
@@ -71,5 +72,11 @@ public class FreeBoardService {
         for (int i = 0; i < favRegions.length; i++) {
             regions.add(favRegions[i]);
         }
+    }
+
+    public void save(CreateFreeBoardRequest createFreeBoardRequest) {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        FreeBoard freeBoard = CreateFreeBoardRequest.to(createFreeBoardRequest, user);
+        freeBoardRepository.save(freeBoard);
     }
 }
