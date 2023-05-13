@@ -2,6 +2,7 @@ package chilling.encore.controller;
 
 import chilling.encore.dto.FreeBoardDto;
 import chilling.encore.dto.FreeBoardDto.AllFreeBoards;
+import chilling.encore.dto.FreeBoardDto.CreateFreeBoardRequest;
 import chilling.encore.dto.FreeBoardDto.PopularFreeBoards;
 import chilling.encore.dto.responseMessage.FreeBoardConstants;
 import chilling.encore.global.dto.ResponseDto;
@@ -13,13 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static chilling.encore.dto.responseMessage.FreeBoardConstants.SuccessMessage.FREE_SELECT_SUCCESS;
-import static chilling.encore.dto.responseMessage.FreeBoardConstants.SuccessMessage.POPULAR_SELECT_SUCCESS;
+import static chilling.encore.dto.responseMessage.FreeBoardConstants.SuccessMessage.*;
 
 @RestController
 @Slf4j
@@ -41,5 +38,12 @@ public class FreeBoardController {
     public ResponseEntity<ResponseDto<PopularFreeBoards>> getPopular() {
         PopularFreeBoards popular = freeBoardService.getPopular();
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), POPULAR_SELECT_SUCCESS.getMessage(), popular));
+    }
+    
+    @PostMapping("/save")
+    @ApiOperation(value = "자유게시판 글 작성", notes = "로그인X의 경우 접근 불가")
+    public ResponseEntity<ResponseDto> save(@RequestBody CreateFreeBoardRequest createFreeBoardRequest) {
+        freeBoardService.save(createFreeBoardRequest);
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), FREE_CREATE_SUCCESS.getMessage()));
     }
 }
