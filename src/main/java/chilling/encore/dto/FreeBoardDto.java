@@ -1,6 +1,7 @@
 package chilling.encore.dto;
 
 import chilling.encore.domain.FreeBoard;
+import chilling.encore.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,15 @@ public abstract class FreeBoardDto {
         private final String title;
         private final String region;
         private final String content;
+
+        public static FreeBoard to(CreateFreeBoardRequest createFreeBoardRequest, User user) {
+            return FreeBoard.builder()
+                    .title(createFreeBoardRequest.title)
+                    .region(createFreeBoardRequest.region)
+                    .content(createFreeBoardRequest.content)
+                    .user(user)
+                    .build();
+        }
     }
     @Getter
     @Builder
