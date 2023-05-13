@@ -10,4 +10,6 @@ import java.util.List;
 public interface ListenTogetherRepository extends JpaRepository<ListenTogether, Long>, ListenTogetherDslRepository {
     List<ListenTogether> findTop3ByUser_UserIdxOrderByHitDesc(Long userIdx);
     List<ListenTogether> findAllByUser(User user);
+
+    ListenTogether findByListenIdx(Long listenIdx);
 }
