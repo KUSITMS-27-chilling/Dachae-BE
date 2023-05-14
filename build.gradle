@@ -62,10 +62,6 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.slack.api/slack-api-client
 	// 슬랙 api 추가
 	implementation group: 'com.slack.api', name: 'slack-api-client', version: '1.29.2'
-
-	//  build.gradle
-	// s3 추가
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {

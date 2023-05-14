@@ -38,7 +38,7 @@ public class CommentsController {
     public ResponseEntity<ResponseDto> listenCommentSave(
             @PathVariable Long listenIdx,
             @RequestBody CreateListenCommentsRequest createListenCommentsRequest) {
-        commentsService.listenCommentSave(listenIdx, createListenCommentsRequest);
+//        commentsService.listenCommentSave(listenIdx, createListenCommentsRequest);
         return ResponseEntity.ok(ResponseDto.create(CREATE_SUCCESS_CODE.getCode(), CREATE_LISTEN_COMMENT_SUCCESS_MESSAGE.getMessage()));
     }
 
@@ -52,7 +52,8 @@ public class CommentsController {
     @GetMapping("/listen/{listenIdx}/comments")
     @ApiOperation(value = "같이들어요 댓글 조회", notes = "대댓글은 아직 로직 고민중...")
     public ResponseEntity<ResponseDto<List<ListenCommentResponse>>> getListenComment(@PathVariable Long listenIdx) {
-        List<ListenCommentResponse> listenComments = commentsService.getListenComments(listenIdx);
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_LISTEN_COMMENT_SUCCESS_MESSAGE.getMessage(), listenComments));
+//        List<ListenCommentResponse> listenComments = commentsService.getListenComments(listenIdx);
+//        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_LISTEN_COMMENT_SUCCESS_MESSAGE.getMessage(), listenComments));
+        return null;
     }
 }
