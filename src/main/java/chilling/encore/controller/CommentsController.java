@@ -1,7 +1,6 @@
 package chilling.encore.controller;
 
-import chilling.encore.dto.CommentsDto;
-import chilling.encore.dto.CommentsDto.CreateCommentsRequest;
+import chilling.encore.dto.CommentsDto.CreateReviewCommentsRequest;
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.CommentsService;
 import io.swagger.annotations.Api;
@@ -29,8 +28,8 @@ public class CommentsController {
     @ApiOperation(value = "수강후기 댓글 작성", notes = "대댓글은 아직 로직 고민중...")
     public ResponseEntity<ResponseDto> reviewCommentSave(
             @PathVariable Long reviewIdx,
-            @RequestBody CreateCommentsRequest createCommentsRequest) {
-        commentsService.reviewCommentSave(reviewIdx, createCommentsRequest);
+            @RequestBody CreateReviewCommentsRequest createReviewCommentsRequest) {
+        commentsService.reviewCommentSave(reviewIdx, createReviewCommentsRequest);
         return ResponseEntity.ok(ResponseDto.create(CREATE_SUCCESS_CODE.getCode(), CREATE_REVIEW_COMMENT_SUCCESS_MESSAGE.getMessage()));
     }
 
@@ -38,8 +37,8 @@ public class CommentsController {
     @ApiOperation(value = "같이들어요 댓글 작성", notes = "대댓글은 아직 로직 고민중...")
     public ResponseEntity<ResponseDto> listenCommentSave(
             @PathVariable Long listenIdx,
-            @RequestBody CreateCommentsRequest createCommentsRequest) {
-        commentsService.listenCommentSave(listenIdx, createCommentsRequest);
+            @RequestBody CreateListenCommentsRequest createListenCommentsRequest) {
+        commentsService.listenCommentSave(listenIdx, createListenCommentsRequest);
         return ResponseEntity.ok(ResponseDto.create(CREATE_SUCCESS_CODE.getCode(), CREATE_LISTEN_COMMENT_SUCCESS_MESSAGE.getMessage()));
     }
 
