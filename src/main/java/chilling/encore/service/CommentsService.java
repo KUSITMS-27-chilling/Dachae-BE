@@ -73,12 +73,8 @@ public class CommentsService {
 
         List<ReviewCommentResponse> reviewCommentResponses = new ArrayList<>();
         for (int i = 0; i < reviewComments.size(); i++) {
-            log.info("reviewComments.size = {}", reviewComments.size());
             List<ChildReviewComment> childReviewComments = getChildReviewComments(reviewComments.get(i));
-            log.info("idx = {}", i);
-            log.info("content = {}", reviewComments.get(i).getContent());
             if (childReviewComments == null) continue;
-            log.info("childNum = {}", childReviewComments.size());
             reviewCommentResponses.add(ReviewCommentResponse.from(reviewComments.get(i), childReviewComments));
         }
         return reviewCommentResponses;
