@@ -1,7 +1,6 @@
 package chilling.encore.dto;
 
 import chilling.encore.domain.ListenComments;
-import chilling.encore.domain.Review;
 import chilling.encore.domain.ReviewComments;
 import chilling.encore.domain.User;
 import io.swagger.annotations.ApiModel;
@@ -10,6 +9,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public abstract class CommentsDto {
@@ -17,11 +17,7 @@ public abstract class CommentsDto {
     @RequiredArgsConstructor
     @ApiModel(description = "댓글 생성을 위한 요청 객체")
     public static class CreateReviewCommentsRequest {
-        private final int ref;
-        private final int refOrder;
-        private final int step;
         private final String content;
-        private final int childSum;
         private final Long parentIdx;
     }
     @Getter
@@ -30,10 +26,8 @@ public abstract class CommentsDto {
     public static class CreateListenCommentsRequest {
         private final int ref;
         private final int refOrder;
-        private final int step;
         private final String content;
         private final int childSum;
-//        private final ReviewComments parent;
     }
 
     @Getter
@@ -44,24 +38,43 @@ public abstract class CommentsDto {
         private final String profile;
         private final String nickName;
         private final String content;
-//        int ref;
-//        int refOrder;
-        private final int step;
-        private final List<ReviewComments> child;
-        private final LocalDateTime createAt;
-        public static ReviewCommentResponse from(ReviewComments reviewComments) {
+        private final String createAt;
+        private final Long parentIdx;
+        private final List<ChildReviewComment> childs;
+        public static ReviewCommentResponse from(ReviewComments reviewComments, List<ChildReviewComment> childs) {
             User user = reviewComments.getUser();
             return ReviewCommentResponse.builder()
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .content(reviewComments.getContent())
-                    .step(reviewComments.getStep())
-                    .createAt(reviewComments.getCreatedAt())
-                    .child(reviewComments.getChild())
+                    .createAt(reviewComments.getCreatedAt()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
+                    .parentIdx(reviewComments.getReviewCommentIdx())
+                    .childs(childs)
                     .build();
         }
     }
-
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class ChildReviewComment {
+        private final String profile;
+        private final String nickName;
+        private final String content;
+        private final Long parentIdx;
+        private final String createAt;
+        public static ChildReviewComment from(ReviewComments reviewComments) {
+            User user = reviewComments.getUser();
+            return ChildReviewComment.builder()
+                    .profile(user.getProfile())
+                    .nickName(user.getNickName())
+                    .content(reviewComments.getContent())
+                    .parentIdx(reviewComments.getParent().getReviewCommentIdx())
+                    .createAt(reviewComments.getCreatedAt()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
+                    .build();
+        }
+    }
 
     @Getter
     @Builder
@@ -71,9 +84,6 @@ public abstract class CommentsDto {
         private final String profile;
         private final String nickName;
         private final String content;
-//        int ref;
-//        int refOrder;
-        private final int step;
         private final Long parentIdx;
         private final LocalDateTime createAt;
 
@@ -83,7 +93,6 @@ public abstract class CommentsDto {
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .content(listenComments.getContent())
-                    .step(listenComments.getStep())
                     .parentIdx(listenComments.getParentIdx())
                     .createAt(listenComments.getCreatedAt())
                     .build();
