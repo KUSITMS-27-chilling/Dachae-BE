@@ -1,7 +1,10 @@
 package chilling.encore.service;
 
 import chilling.encore.domain.*;
+import chilling.encore.dto.CommentsDto;
 import chilling.encore.dto.CommentsDto.CreateCommentsRequest;
+import chilling.encore.dto.CommentsDto.ListenCommentResponse;
+import chilling.encore.dto.CommentsDto.ReviewCommentResponse;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.ListenCommentRepository;
 import chilling.encore.repository.springDataJpa.ListenTogetherRepository;
@@ -10,6 +13,9 @@ import chilling.encore.repository.springDataJpa.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -54,5 +60,26 @@ public class CommentsService {
                 .build();
 
         listenCommentRepository.save(listenComments);
+    }
+
+    public List<ReviewCommentResponse> getReviewComments(Long reviewIdx) {
+        Review review = reviewRepository.findByReviewIdx(reviewIdx);
+        List<ReviewComments> reviewComments = review.getReviewComments();
+        List<ReviewCommentResponse> reviewCommentResponseList = new ArrayList<>();
+
+        for (ReviewComments reviewComment : reviewComments) {
+            reviewCommentResponseList.add(ReviewCommentResponse.from(reviewComment));
+        }
+        return reviewCommentResponseList;
+    }
+    public List<ListenCommentResponse> getListenComments(Long listenIdx) {
+        ListenTogether listenTogether = listenTogetherRepository.findByListenIdx(listenIdx);
+        List<ListenComments> listenComments = listenTogether.getListenComments();
+        List<ListenCommentResponse> listenCommentResponseList = new ArrayList<>();
+
+        for (ListenComments listenComment : listenComments) {
+            listenCommentResponseList.add(ListenCommentResponse.from(listenComment));
+        }
+        return listenCommentResponseList;
     }
 }
