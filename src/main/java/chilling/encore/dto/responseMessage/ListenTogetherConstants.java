@@ -11,8 +11,7 @@ public class ListenTogetherConstants {
         SELECT_POPULAR_SUCCESS_MESSAGE("같이들어요 인기글 조회에 성공했습니다."),
         SELECT_MINE_SUCCESS_MESSAGE("내가 제안한 글 조회에 성공했습니다."),
         SELECT_DETAIL_SUCCESS_MESSAGE("같이 들어요 게시글 상세 조회에 성공했습니다."),
-        CREATE_SUCCESS_MESSAGE("같이들어요 생성에 성공했습니다."),
-        CREATE_LISTEN_COMMENT_SUCCESS_MESSAGE("같이들어요 댓글 생성에 성공했습니다");
+        CREATE_SUCCESS_MESSAGE("같이들어요 생성에 성공했습니다.");
 
         private final String message;
     }
