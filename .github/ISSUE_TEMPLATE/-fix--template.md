@@ -1,5 +1,5 @@
 ---
-name: Feature request
+name: "[FIX] template"
 about: Suggest an idea for this project
 title: "[FIX] template"
 labels: fix
