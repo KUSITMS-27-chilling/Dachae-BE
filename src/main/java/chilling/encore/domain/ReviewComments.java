@@ -28,17 +28,13 @@ public class ReviewComments {
 
     @Column(columnDefinition = "TEXT")
     private String content;
-    private int ref;
-    private int refOrder;
-    private int step;
-    private int childSum;
     private boolean isDelete;
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parentIdx", referencedColumnName = "reviewCommentIdx")
+    @JoinColumn(name = "parentIdx")
     private ReviewComments parent;
 
     @JsonManagedReference
@@ -56,5 +52,9 @@ public class ReviewComments {
      *     private String reparent; //부모댓글 !!
      *     private String redepth; //깊이 !!
      *     private Integer reorder; //순서 !!
+     */
+    /**
+     * 다 필요없을 것 같아
+     * 필수적인 것 빼고 다 지웠음
      */
 }
