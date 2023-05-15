@@ -1,11 +1,15 @@
-package chilling.encore.global.config.jwt;
+package chilling.encore.global.config.security.filter;
 
-import chilling.encore.global.config.jwt.JwtConstants.JWTExceptionList;
+import chilling.encore.global.config.security.exception.SecurityException;
+import chilling.encore.global.config.security.jwt.JwtConstants.JwtExcpetionCode;
+import chilling.encore.global.config.security.jwt.JwtConstants.JwtExcpetionMessage;
+import chilling.encore.global.config.security.jwt.JwtTokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -17,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static chilling.encore.global.config.jwt.JwtConstants.JWTExceptionList.*;
+import static chilling.encore.global.config.security.jwt.JwtConstants.JwtExcpetionCode.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -42,23 +46,19 @@ public class JwtFilter extends OncePerRequestFilter {
                 log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
             }
         } catch (SecurityException | MalformedJwtException e) {
-            request.setAttribute("exception", WRONG_TYPE_TOKEN.getErrorCode());
+            log.info("exception", e.getMessage());
+            throw new SecurityException.InvalidJwtFormatException(JwtExcpetionMessage.INVALID_FORMAT.getMessage(), JwtExcpetionCode.INVALID_FORMAT.getCode(), HttpStatus.FORBIDDEN);
         } catch (ExpiredJwtException e) {
-            request.setAttribute("exception", EXPIRED_TOKEN.getErrorCode());
+            log.info("exception", e.getMessage());
+            throw new SecurityException.ExpiredJwtException(JwtExcpetionMessage.JWT_EXPIRED.getMessage(), JWT_EXPIRED.getCode(), HttpStatus.FORBIDDEN);
         } catch (UnsupportedJwtException e) {
-            request.setAttribute("exception", UNSUPPORTED_TOKEN.getErrorCode());
+            log.info("exception", e.getMessage());
+            throw new SecurityException.NonSupportedJwtException(JwtExcpetionMessage.JWT_NOT_SUPPORTED.getMessage(), JWT_NOT_SUPPORTED.getCode(), HttpStatus.FORBIDDEN);
         } catch (IllegalArgumentException e) {
-            request.setAttribute("exception", WRONG_TOKEN.getErrorCode());
+            log.info("exception", e.getMessage());
+            throw new SecurityException.WrongTokenException(JwtExcpetionMessage.WRONG_TOKEN.getMessage(), WRONG_TOKEN.getCode(), HttpStatus.FORBIDDEN);
         } catch (Exception e) {
-            log.error("================================================");
-            log.error("JwtFilter - doFilterInternal() 오류발생");
-            log.error("token : {}", jwt);
-            log.error("Exception Message : {}", e.getMessage());
-            log.error("Exception StackTrace : {");
-            e.printStackTrace();
-            log.error("}");
-            log.error("================================================");
-            request.setAttribute("exception", UNKNOWN_ERROR.getErrorCode());
+            throw new SecurityException.UnKnownException(JwtExcpetionMessage.UNKHOWN_EXCEPTION.getMessage(), UNKHOWN_EXCEPTION.getCode(), HttpStatus.FORBIDDEN);
         }
 
         filterChain.doFilter(request, response);
