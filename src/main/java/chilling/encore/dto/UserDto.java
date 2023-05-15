@@ -1,7 +1,7 @@
 package chilling.encore.dto;
 
 import chilling.encore.domain.User;
-import chilling.encore.global.config.jwt.TokenInfoResponse;
+import chilling.encore.global.config.security.jwt.TokenInfoResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
