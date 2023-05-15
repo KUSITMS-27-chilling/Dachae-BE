@@ -1,7 +1,10 @@
 package chilling.encore.global.config.security;
 
-import chilling.encore.global.config.jwt.JwtFilter;
-import chilling.encore.global.config.jwt.JwtTokenProvider;
+import chilling.encore.global.config.security.filter.CustomAccessDeniedHandler;
+import chilling.encore.global.config.security.filter.CustomAuthenticationEntryPoint;
+import chilling.encore.global.config.security.filter.JwtExceptionFilter;
+import chilling.encore.global.config.security.filter.JwtFilter;
+import chilling.encore.global.config.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +24,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final JwtExceptionFilter exceptionFilter;
     @Bean
     public BCryptPasswordEncoder encodePassword() {
         return new BCryptPasswordEncoder();
@@ -37,17 +43,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .authorizeRequests()
-                /**
-                 * 경로에 따라서 설정해주자
-                 */
-                .anyRequest().permitAll()
+                .antMatchers("/alarm").authenticated()
+                .antMatchers("/free/save").authenticated()
+                .antMatchers("/listen/mine").authenticated()
+                .antMatchers("/listen/save").authenticated()
+                .antMatchers("/listen/participant").authenticated()
+                .antMatchers("/program/new/**").authenticated()
+                .antMatchers("/review/mine").authenticated()
+                .antMatchers("/review/save").authenticated()
+                .antMatchers("/user/edit/**").authenticated()
+                .antMatchers("/user/favRegions").authenticated()
+                .antMatchers("/user/grade").authenticated()
+                .antMatchers("/user/participants").authenticated()
+                .antMatchers("/user/userInfo").authenticated()
+                .antMatchers("/user/write").authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-        /**
-         * 임시로 authorization 모두 허용함
-         */
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(customAccessDeniedHandler)
+                .and()
+                .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionFilter, JwtFilter.class);
     }
 
     @Override
