@@ -1,4 +1,4 @@
-package chilling.encore.global.config.jwt;
+package chilling.encore.global.config.security.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

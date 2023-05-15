@@ -1,4 +1,4 @@
-package chilling.encore.global.config.jwt;
+package chilling.encore.global.config.security.jwt;
 
 import chilling.encore.domain.User;
 import lombok.Getter;
@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-@Getter
 @RequiredArgsConstructor
-public class PrincipalDetails implements UserDetails {
+@Getter
+public class Oauth2PrincipalDetails implements UserDetails {
     private final User user;
 
     @Override
@@ -22,7 +22,7 @@ public class PrincipalDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.user.getPassword();
+        return null;
     }
 
     @Override

@@ -2,10 +2,10 @@ package chilling.encore.service.kakao;
 
 import chilling.encore.domain.User;
 import chilling.encore.dto.UserDto.UserLoginResponse;
-import chilling.encore.global.config.jwt.JwtTokenProvider;
-import chilling.encore.global.config.jwt.TokenInfoResponse;
+import chilling.encore.global.config.security.jwt.JwtTokenProvider;
+import chilling.encore.global.config.security.jwt.TokenInfoResponse;
 import chilling.encore.global.dto.ResponseDto;
-import chilling.encore.global.config.jwt.Oauth2PrincipalDetails;
+import chilling.encore.global.config.security.jwt.Oauth2PrincipalDetails;
 import chilling.encore.dto.oauth.Oauth2SignUpResponse;
 import chilling.encore.dto.oauth.KakaoResponseInfo;
 import chilling.encore.repository.springDataJpa.UserRepository;

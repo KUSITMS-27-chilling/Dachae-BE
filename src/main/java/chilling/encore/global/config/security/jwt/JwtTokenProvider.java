@@ -1,4 +1,4 @@
-package chilling.encore.global.config.jwt;
+package chilling.encore.global.config.security.jwt;
 
 import chilling.encore.domain.User;
 import chilling.encore.global.config.redis.RedisRepository;
