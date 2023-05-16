@@ -22,8 +22,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static chilling.encore.dto.responseMessage.LectureConstants.LectureCategory.*;
-
 @Service
 @Transactional
 @Slf4j

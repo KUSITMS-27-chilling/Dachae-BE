@@ -28,11 +28,11 @@ public class LectureDslRepositoryImpl implements LectureDslRepository{
     public List<LectureInfo> findTodayLectureWithRegion(LocalDate now, String[] regions) {
         BooleanBuilder builder = new BooleanBuilder();
         for (int i = 0; i < regions.length; i++) {
-            builder.or(lecture.region.eq(regions[i]));
+            builder.or(lecture.region.contains(regions[i]));
         }
         builder.and(lecture.createdAt.eq(now));
 
-        List<LectureInfo> lectureInfos = queryFactory.select(Projections.bean(LectureInfo.class,
+        List<LectureInfo> lectureInfos = queryFactory.select(Projections.constructor(LectureInfo.class,
                         lecture.lectureIdx,
                         lecture.title,
                         lecture.category,
@@ -50,10 +50,10 @@ public class LectureDslRepositoryImpl implements LectureDslRepository{
     public Page<LectureInfo> findTop10LectureWithCategoryAndRegion(String category, String[] regions, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
         for (int i = 0; i < regions.length; i++) {
-            builder.or(lecture.region.eq(regions[i]));
+            builder.or(lecture.region.contains(regions[i]));
         }
         builder.and(lecture.category.eq(category));
-        JPAQuery<LectureInfo> query = queryFactory.select(Projections.bean(LectureInfo.class,
+        JPAQuery<LectureInfo> query = queryFactory.select(Projections.constructor(LectureInfo.class,
                         lecture.lectureIdx,
                         lecture.title,
                         lecture.category,
