@@ -1,0 +1,44 @@
+package chilling.encore.repository.querydsl;
+
+import chilling.encore.dto.LectureDto;
+import chilling.encore.dto.LectureDto.LectureInfo;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static chilling.encore.domain.QLecture.lecture;
+
+@Repository
+@Slf4j
+@RequiredArgsConstructor
+public class LectureDslRepositoryImpl implements LectureDslRepository{
+    private final JPAQueryFactory queryFactory;
+
+    @Override
+    public List<LectureInfo> findTodayLectureWithRegion(LocalDate now, String[] regions) {
+        BooleanBuilder builder = new BooleanBuilder();
+        for (int i = 0; i < regions.length; i++) {
+            builder.or(lecture.region.eq(regions[i]));
+        }
+        builder.and(lecture.createdAt.eq(now));
+
+        List<LectureInfo> lectureInfos = queryFactory.select(Projections.bean(LectureInfo.class,
+                        lecture.lectureIdx,
+                        lecture.title,
+                        lecture.category,
+                        lecture.teacherInfo.profile,
+                        lecture.teacherInfo.user.name,
+                        lecture.teacherInfo.years,
+                        lecture.teacherInfo.introduce))
+                .from(lecture)
+                .where(builder)
+                .fetch();
+        return lectureInfos;
+    }
+}

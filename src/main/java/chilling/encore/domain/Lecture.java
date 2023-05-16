@@ -3,6 +3,7 @@ package chilling.encore.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class Lecture {
     private String proceed;
     private String image;
     private String region;
+    private LocalDate createdAt;
     @OneToMany(mappedBy = "lecture")
     private List<LectureMessage> lectureMessages = new ArrayList<>();
 }

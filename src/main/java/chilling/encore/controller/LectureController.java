@@ -1,5 +1,6 @@
 package chilling.encore.controller;
 
+import chilling.encore.domain.Lecture;
 import chilling.encore.dto.LectureDto.LectureInfo;
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.LectureService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static chilling.encore.dto.responseMessage.LectureConstants.LectureSuccessMessage.SELECT_SUCCESS_MESSAGE;
+import static chilling.encore.dto.responseMessage.LectureConstants.LectureSuccessMessage.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +26,12 @@ public class LectureController {
     @GetMapping("/my")
     public ResponseEntity<ResponseDto<List<LectureInfo>>> getMyParticipate() {
         List<LectureInfo> participateLectures = lectureService.getParticipateLecture();
-        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_SUCCESS_MESSAGE.getMessage(), participateLectures));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_MY_MESSAGE.getMessage(), participateLectures));
+    }
+
+    @GetMapping("/today")
+    public ResponseEntity<ResponseDto<List<LectureInfo>>> getTodayLecture() {
+        List<LectureInfo> todayLectures = lectureService.getTodayLecture();
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_TODAY_MESSAGE.getMessage(), todayLectures));
     }
 }
