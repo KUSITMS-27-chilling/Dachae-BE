@@ -1,6 +1,6 @@
 package chilling.encore.controller;
 
-import chilling.encore.dto.CommentsDto.CreateReviewCommentsRequest;
+import chilling.encore.dto.CommentsDto.CreateCommentsRequest;
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.CommentsService;
 import io.swagger.annotations.Api;
@@ -25,35 +25,34 @@ public class CommentsController {
     private final CommentsService commentsService;
 
     @PostMapping("/review/{reviewIdx}/comments")
-    @ApiOperation(value = "수강후기 댓글 작성", notes = "대댓글은 아직 로직 고민중...")
+    @ApiOperation(value = "수강후기 댓글 작성")
     public ResponseEntity<ResponseDto> reviewCommentSave(
             @PathVariable Long reviewIdx,
-            @RequestBody CreateReviewCommentsRequest createReviewCommentsRequest) {
-        commentsService.reviewCommentSave(reviewIdx, createReviewCommentsRequest);
+            @RequestBody CreateCommentsRequest createCommentsRequest) {
+        commentsService.reviewCommentSave(reviewIdx, createCommentsRequest);
         return ResponseEntity.ok(ResponseDto.create(CREATE_SUCCESS_CODE.getCode(), CREATE_REVIEW_COMMENT_SUCCESS_MESSAGE.getMessage()));
     }
 
     @PostMapping("/listen/{listenIdx}/comments")
-    @ApiOperation(value = "같이들어요 댓글 작성", notes = "대댓글은 아직 로직 고민중...")
+    @ApiOperation(value = "같이들어요 댓글 작성")
     public ResponseEntity<ResponseDto> listenCommentSave(
             @PathVariable Long listenIdx,
-            @RequestBody CreateListenCommentsRequest createListenCommentsRequest) {
-//        commentsService.listenCommentSave(listenIdx, createListenCommentsRequest);
+            @RequestBody CreateCommentsRequest createCommentsRequest) {
+        commentsService.listenCommentSave(listenIdx, createCommentsRequest);
         return ResponseEntity.ok(ResponseDto.create(CREATE_SUCCESS_CODE.getCode(), CREATE_LISTEN_COMMENT_SUCCESS_MESSAGE.getMessage()));
     }
 
     @GetMapping("/review/{reviewIdx}/comments")
-    @ApiOperation(value = "수강후기 댓글 조회", notes = "대댓글은 아직 로직 고민중...")
+    @ApiOperation(value = "수강후기 댓글 조회")
     public ResponseEntity<ResponseDto<List<ReviewCommentResponse>>> getReviewComment(@PathVariable Long reviewIdx) {
         List<ReviewCommentResponse> reviewComments = commentsService.getReviewComments(reviewIdx);
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_REVIEW_COMMENT_SUCCESS_MESSAGE.getMessage(), reviewComments));
     }
     
     @GetMapping("/listen/{listenIdx}/comments")
-    @ApiOperation(value = "같이들어요 댓글 조회", notes = "대댓글은 아직 로직 고민중...")
+    @ApiOperation(value = "같이들어요 댓글 조회")
     public ResponseEntity<ResponseDto<List<ListenCommentResponse>>> getListenComment(@PathVariable Long listenIdx) {
-//        List<ListenCommentResponse> listenComments = commentsService.getListenComments(listenIdx);
-//        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_LISTEN_COMMENT_SUCCESS_MESSAGE.getMessage(), listenComments));
-        return null;
+        List<ListenCommentResponse> listenComments = commentsService.getListenComments(listenIdx);
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_LISTEN_COMMENT_SUCCESS_MESSAGE.getMessage(), listenComments));
     }
 }

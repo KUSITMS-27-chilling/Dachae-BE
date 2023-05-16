@@ -1,11 +1,7 @@
 package chilling.encore.service;
 
 import chilling.encore.domain.*;
-import chilling.encore.dto.CommentsDto;
-import chilling.encore.dto.CommentsDto.ChildReviewComment;
-import chilling.encore.dto.CommentsDto.CreateReviewCommentsRequest;
-import chilling.encore.dto.CommentsDto.ListenCommentResponse;
-import chilling.encore.dto.CommentsDto.ReviewCommentResponse;
+import chilling.encore.dto.CommentsDto.*;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.ListenCommentRepository;
 import chilling.encore.repository.springDataJpa.ListenTogetherRepository;
@@ -29,43 +25,72 @@ public class CommentsService {
     private final ListenCommentRepository listenCommentRepository;
     private final ListenTogetherRepository listenTogetherRepository;
 
-    public void reviewCommentSave(Long reviewIdx, CreateReviewCommentsRequest createReviewCommentsRequest) {
+    public void reviewCommentSave(Long reviewIdx, CreateCommentsRequest createCommentsRequest) {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         Review review = reviewRepository.findById(reviewIdx).orElseThrow();
 
         ReviewComments reviewComments;
-        if (createReviewCommentsRequest.getParentIdx() == null) {
-            reviewComments = saveParentReviewComments(createReviewCommentsRequest, user, review);
+        if (createCommentsRequest.getParentIdx() == null) {
+            reviewComments = saveParentComments(createCommentsRequest, user, review);
         } else {
-            reviewComments = saveChildReviewComments(createReviewCommentsRequest, user, review);
+            reviewComments = saveChildComments(createCommentsRequest, user, review);
         }
 
         reviewCommentRepository.save(reviewComments);
     }
+    public void listenCommentSave(Long listenIdx, CreateCommentsRequest createCommentsRequest) {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        ListenTogether listenTogether = listenTogetherRepository.findById(listenIdx).orElseThrow();
 
-    private ReviewComments saveChildReviewComments(CreateReviewCommentsRequest createReviewCommentsRequest, User user, Review review) {
-        ReviewComments reviewComments;
-        Optional<ReviewComments> parent = reviewCommentRepository.findById(createReviewCommentsRequest.getParentIdx());
+        ListenComments listenComments;
+        if (createCommentsRequest.getParentIdx() == null) {
+            listenComments = saveParentComments(createCommentsRequest, user, listenTogether);
+        } else {
+            listenComments = saveChildComments(createCommentsRequest, user, listenTogether);
+        }
 
-        reviewComments = ReviewComments.builder()
-                .user(user)
-                .review(review)
-                .isDelete(false)
-                .content(createReviewCommentsRequest.getContent())
-                .parent(parent.get())
-                .build();
-        return reviewComments;
+        listenCommentRepository.save(listenComments);
     }
 
-    private ReviewComments saveParentReviewComments(CreateReviewCommentsRequest createReviewCommentsRequest, User user, Review review) {
-        ReviewComments reviewComments;
-        reviewComments = ReviewComments.builder()
+    private ReviewComments saveChildComments(CreateCommentsRequest createCommentsRequest, User user, Review review) {
+        Optional<ReviewComments> parent = reviewCommentRepository.findById(createCommentsRequest.getParentIdx());
+
+        return ReviewComments.builder()
                 .user(user)
                 .review(review)
                 .isDelete(false)
-                .content(createReviewCommentsRequest.getContent())
+                .content(createCommentsRequest.getContent())
+                .parent(parent.get())
                 .build();
-        return reviewComments;
+    }
+
+    private ListenComments saveChildComments(CreateCommentsRequest createCommentsRequest, User user, ListenTogether listenTogether) {
+        Optional<ListenComments> parent = listenCommentRepository.findById(createCommentsRequest.getParentIdx());
+
+        return ListenComments.builder()
+                .user(user)
+                .listenTogether(listenTogether)
+                .isDelete(false)
+                .content(createCommentsRequest.getContent())
+                .parent(parent.get())
+                .build();
+    }
+
+    private ReviewComments saveParentComments(CreateCommentsRequest createCommentsRequest, User user, Review review) {
+        return ReviewComments.builder()
+                .user(user)
+                .review(review)
+                .isDelete(false)
+                .content(createCommentsRequest.getContent())
+                .build();
+    }
+    private ListenComments saveParentComments(CreateCommentsRequest createCommentsRequest, User user, ListenTogether listenTogether) {
+        return ListenComments.builder()
+                .user(user)
+                .listenTogether(listenTogether)
+                .isDelete(false)
+                .content(createCommentsRequest.getContent())
+                .build();
     }
 
     public List<ReviewCommentResponse> getReviewComments(Long reviewIdx) {
@@ -92,31 +117,28 @@ public class CommentsService {
         return childReviewComments;
     }
 
-    public void listenCommentSave(Long listenIdx, CommentsDto.CreateListenCommentsRequest createListenCommentsRequest) {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
-        ListenTogether listenTogether = listenTogetherRepository.findByListenIdx(listenIdx);
+    public List<ListenCommentResponse> getListenComments(Long listenIdx) {
+        List<ListenComments> listenComments = listenCommentRepository.findAllByListenTogether_ListenIdxOrderByCreatedAtAsc(listenIdx);
 
-        ListenComments listenComments = ListenComments.builder()
-                .user(user)
-                .listenTogether(listenTogether)
-                .ref(createListenCommentsRequest.getRef())
-                .refOrder(createListenCommentsRequest.getRefOrder())
-                .childSum(createListenCommentsRequest.getChildSum())
-                .content(createListenCommentsRequest.getContent())
-                .build();
-
-        listenCommentRepository.save(listenComments);
+        List<ListenCommentResponse> listenCommentResponse = new ArrayList<>();
+        for (int i = 0; i < listenComments.size(); i++) {
+            List<ChildListenComment> childListenComments = getChildListenComments(listenComments.get(i));
+            if (childListenComments == null) continue;
+            listenCommentResponse.add(ListenCommentResponse.from(listenComments.get(i), childListenComments));
+        }
+        return listenCommentResponse;
     }
 
-    public List<ListenCommentResponse> getListenComments(Long listenIdx) {
-        ListenTogether listenTogether = listenTogetherRepository.findByListenIdx(listenIdx);
-        List<ListenComments> listenComments = listenTogether.getListenComments();
-        List<ListenCommentResponse> listenCommentResponseList = new ArrayList<>();
-
-        for (ListenComments listenComment : listenComments) {
-            listenCommentResponseList.add(ListenCommentResponse.from(listenComment));
+    @Nullable
+    private List<ChildListenComment> getChildListenComments(ListenComments listenComments) {
+        List<ChildListenComment> childListenComments = new ArrayList<>();
+        List<ListenComments> childs = listenComments.getChild();
+        if (listenComments.getParent() != null)
+            return null;
+        for (int j = 0; j < childs.size(); j++) {
+            childListenComments.add(ChildListenComment.from(childs.get(j)));
         }
-        return listenCommentResponseList;
+        return childListenComments;
     }
 
 

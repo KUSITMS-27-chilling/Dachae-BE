@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -16,19 +15,11 @@ public abstract class CommentsDto {
     @Getter
     @RequiredArgsConstructor
     @ApiModel(description = "댓글 생성을 위한 요청 객체")
-    public static class CreateReviewCommentsRequest {
+    public static class CreateCommentsRequest {
         private final String content;
         private final Long parentIdx;
     }
-    @Getter
-    @RequiredArgsConstructor
-    @ApiModel(description = "댓글 생성을 위한 요청 객체")
-    public static class CreateListenCommentsRequest {
-        private final int ref;
-        private final int refOrder;
-        private final String content;
-        private final int childSum;
-    }
+
 
     @Getter
     @Builder
@@ -57,12 +48,38 @@ public abstract class CommentsDto {
     @Getter
     @Builder
     @RequiredArgsConstructor
+    @ApiModel(description = "같이들어요 댓글조회를 위한 응답 객체")
+    public static class ListenCommentResponse {
+        private final String profile;
+        private final String nickName;
+        private final String content;
+        private final String createAt;
+        private final Long parentIdx;
+        private final List<ChildListenComment> childs;
+        public static ListenCommentResponse from(ListenComments listenComments, List<ChildListenComment> childs) {
+            User user = listenComments.getUser();
+            return ListenCommentResponse.builder()
+                    .profile(user.getProfile())
+                    .nickName(user.getNickName())
+                    .content(listenComments.getContent())
+                    .createAt(listenComments.getCreatedAt()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
+                    .parentIdx(listenComments.getListenCommentIdx())
+                    .childs(childs)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
     public static class ChildReviewComment {
         private final String profile;
         private final String nickName;
         private final String content;
         private final Long parentIdx;
         private final String createAt;
+
         public static ChildReviewComment from(ReviewComments reviewComments) {
             User user = reviewComments.getUser();
             return ChildReviewComment.builder()
@@ -75,26 +92,25 @@ public abstract class CommentsDto {
                     .build();
         }
     }
-
     @Getter
     @Builder
     @RequiredArgsConstructor
-    @ApiModel(description = "같이들어요 댓글조회를 위한 응답 객체")
-    public static class ListenCommentResponse {
+    public static class ChildListenComment {
         private final String profile;
         private final String nickName;
         private final String content;
         private final Long parentIdx;
-        private final LocalDateTime createAt;
+        private final String createAt;
 
-        public static ListenCommentResponse from(ListenComments listenComments) {
+        public static ChildListenComment from(ListenComments listenComments) {
             User user = listenComments.getUser();
-            return ListenCommentResponse.builder()
+            return ChildListenComment.builder()
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .content(listenComments.getContent())
-                    .parentIdx(listenComments.getParentIdx())
-                    .createAt(listenComments.getCreatedAt())
+                    .parentIdx(listenComments.getParent().getListenCommentIdx())
+                    .createAt(listenComments.getCreatedAt()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
                     .build();
         }
     }
