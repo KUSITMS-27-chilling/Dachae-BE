@@ -44,13 +44,15 @@ public class User {
     private String favField;
 
     @OneToMany(mappedBy = "user")
-    List<ListenTogether> listenTogethers = new ArrayList<>();
+    private List<ListenTogether> listenTogethers = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    List<Review> reviews = new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    List<Participants> participants = new ArrayList<>();
+    private List<Participants> participants = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    List<FreeBoard> freeBoards = new ArrayList<>();
+    private List<FreeBoard> freeBoards = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<LectureMessage> lectureMessages = new ArrayList<>();
 
     public void updateLoginAt(LocalDate now) {
         this.loginAt = now;

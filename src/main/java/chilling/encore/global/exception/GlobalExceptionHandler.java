@@ -98,7 +98,6 @@ public class GlobalExceptionHandler {
     }
 
     private void sendSlackAlertErrorLog(Exception e, String errorCode, String stackTrace, HttpServletRequest request) {
-        log.info("e : {} - code : {} - stackTrace : {} - request : {}", e, errorCode, stackTrace, request);
         try {
             slackClient.send(webHookUrl, Payload.builder()
                     .text("서버 에러 발생!! 백엔드팀 확인 요망")
