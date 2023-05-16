@@ -1,10 +1,13 @@
 package chilling.encore.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -25,13 +28,18 @@ public class FreeBoardComments {
 
     @Column(columnDefinition = "TEXT")
     private String content;
-    private int ref;
-    private int refOrder;
-    private int step;
-
-    private Long parentIdx;
-    private int childSum;
     private boolean isDelete;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parentIdx")
+    private FreeBoardComments parent;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FreeBoardComments> child;
 }
