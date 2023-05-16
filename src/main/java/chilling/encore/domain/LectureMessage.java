@@ -9,14 +9,18 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
-public class Acceptors {
+public class LectureMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long acceptorIdx;
-    @ManyToOne(fetch = FetchType.LAZY)
+    private Long lectureMessageIdx;
+    @ManyToOne
+    @JoinColumn(name = "lectureIdx")
+    private Lecture lecture;
+    @ManyToOne
     @JoinColumn(name = "userIdx")
     private User user;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "suggestIdx")
-    private Suggest suggest;
+    @Column(columnDefinition = "text")
+    private String content;
+    private String email;
+    private String tel;
 }
