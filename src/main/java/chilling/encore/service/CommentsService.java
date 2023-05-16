@@ -3,10 +3,7 @@ package chilling.encore.service;
 import chilling.encore.domain.*;
 import chilling.encore.dto.CommentsDto.*;
 import chilling.encore.global.config.security.util.SecurityUtils;
-import chilling.encore.repository.springDataJpa.ListenCommentRepository;
-import chilling.encore.repository.springDataJpa.ListenTogetherRepository;
-import chilling.encore.repository.springDataJpa.ReviewCommentRepository;
-import chilling.encore.repository.springDataJpa.ReviewRepository;
+import chilling.encore.repository.springDataJpa.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +21,8 @@ public class CommentsService {
     private final ReviewRepository reviewRepository;
     private final ListenCommentRepository listenCommentRepository;
     private final ListenTogetherRepository listenTogetherRepository;
+    private final FreeBoardRepository freeBoardRepository;
+    private final FreeBoardCommentRepository freeBoardCommentRepository;
 
     public void reviewCommentSave(Long reviewIdx, CreateCommentsRequest createCommentsRequest) {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
@@ -51,6 +50,19 @@ public class CommentsService {
 
         listenCommentRepository.save(listenComments);
     }
+    public void freeCommentSave(Long freeBoardIdx, CreateCommentsRequest createCommentsRequest) {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardIdx).orElseThrow();
+
+        FreeBoardComments freeBoardComments;
+        if (createCommentsRequest.getParentIdx() == null) {
+            freeBoardComments = saveParentComments(createCommentsRequest, user, freeBoard);
+        } else {
+            freeBoardComments = saveChildComments(createCommentsRequest, user, freeBoard);
+        }
+
+        freeBoardCommentRepository.save(freeBoardComments);
+    }
 
     private ReviewComments saveChildComments(CreateCommentsRequest createCommentsRequest, User user, Review review) {
         Optional<ReviewComments> parent = reviewCommentRepository.findById(createCommentsRequest.getParentIdx());
@@ -75,6 +87,17 @@ public class CommentsService {
                 .parent(parent.get())
                 .build();
     }
+    private FreeBoardComments saveChildComments(CreateCommentsRequest createCommentsRequest, User user, FreeBoard freeBoard) {
+        Optional<FreeBoardComments> parent = freeBoardCommentRepository.findById(createCommentsRequest.getParentIdx());
+
+        return FreeBoardComments.builder()
+                .user(user)
+                .freeBoard(freeBoard)
+                .isDelete(false)
+                .content(createCommentsRequest.getContent())
+                .parent(parent.get())
+                .build();
+    }
 
     private ReviewComments saveParentComments(CreateCommentsRequest createCommentsRequest, User user, Review review) {
         return ReviewComments.builder()
@@ -88,6 +111,14 @@ public class CommentsService {
         return ListenComments.builder()
                 .user(user)
                 .listenTogether(listenTogether)
+                .isDelete(false)
+                .content(createCommentsRequest.getContent())
+                .build();
+    }
+    private FreeBoardComments saveParentComments(CreateCommentsRequest createCommentsRequest, User user, FreeBoard freeBoard) {
+        return FreeBoardComments.builder()
+                .user(user)
+                .freeBoard(freeBoard)
                 .isDelete(false)
                 .content(createCommentsRequest.getContent())
                 .build();
@@ -139,6 +170,30 @@ public class CommentsService {
             childListenComments.add(ChildListenComment.from(childs.get(j)));
         }
         return childListenComments;
+    }
+
+    public List<FreeCommentResponse> getFreeComments(Long freeBoardIdx) {
+        List<FreeBoardComments> freeBoardComments = freeBoardCommentRepository.findAllByFreeBoard_FreeBoardIdxOrderByCreatedAtAsc(freeBoardIdx);
+
+        List<FreeCommentResponse> freeCommentResponse = new ArrayList<>();
+        for (int i = 0; i < freeBoardComments.size(); i++) {
+            List<ChildFreeComment> childFreeComments = getChildFreeComments(freeBoardComments.get(i));
+            if (childFreeComments == null) continue;
+            freeCommentResponse.add(FreeCommentResponse.from(freeBoardComments.get(i), childFreeComments));
+        }
+        return freeCommentResponse;
+    }
+
+    @Nullable
+    private List<ChildFreeComment> getChildFreeComments(FreeBoardComments freeBoardComments) {
+        List<ChildFreeComment> childFreeComments = new ArrayList<>();
+        List<FreeBoardComments> childs = freeBoardComments.getChild();
+        if (freeBoardComments.getParent() != null)
+            return null;
+        for (int j = 0; j < childs.size(); j++) {
+            childFreeComments.add(ChildFreeComment.from(childs.get(j)));
+        }
+        return childFreeComments;
     }
 
 

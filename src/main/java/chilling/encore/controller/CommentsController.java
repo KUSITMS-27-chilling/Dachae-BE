@@ -55,4 +55,20 @@ public class CommentsController {
         List<ListenCommentResponse> listenComments = commentsService.getListenComments(listenIdx);
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_LISTEN_COMMENT_SUCCESS_MESSAGE.getMessage(), listenComments));
     }
+
+    @PostMapping("/free/{freeBoardIdx}/comments")
+    @ApiOperation(value = "자유게시판 댓글 작성")
+    public ResponseEntity<ResponseDto> freeCommentSave(
+            @PathVariable Long freeBoardIdx,
+            @RequestBody CreateCommentsRequest createCommentsRequest) {
+        commentsService.freeCommentSave(freeBoardIdx, createCommentsRequest);
+        return ResponseEntity.ok(ResponseDto.create(CREATE_SUCCESS_CODE.getCode(), CREATE_FREE_COMMENT_SUCCESS_MESSAGE.getMessage()));
+    }
+
+    @GetMapping("/free/{freeBoardIdx}/comments")
+    @ApiOperation(value = "자유게시판 댓글 조회")
+    public ResponseEntity<ResponseDto<List<FreeCommentResponse>>> getFreeComment(@PathVariable Long freeBoardIdx) {
+        List<FreeCommentResponse> freeComments = commentsService.getFreeComments(freeBoardIdx);
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_FREE_COMMENT_SUCCESS_MESSAGE.getMessage(), freeComments));
+    }
 }

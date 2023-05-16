@@ -1,5 +1,6 @@
 package chilling.encore.dto;
 
+import chilling.encore.domain.FreeBoardComments;
 import chilling.encore.domain.ListenComments;
 import chilling.encore.domain.ReviewComments;
 import chilling.encore.domain.User;
@@ -73,6 +74,31 @@ public abstract class CommentsDto {
     @Getter
     @Builder
     @RequiredArgsConstructor
+    @ApiModel(description = "자유게시판 댓글 조회를 위한 응답 객체")
+    public static class FreeCommentResponse {
+        private final String profile;
+        private final String nickName;
+        private final String content;
+        private final String createAt;
+        private final Long parentIdx;
+        private final List<ChildFreeComment> childs;
+        public static FreeCommentResponse from(FreeBoardComments freeBoardComments, List<ChildFreeComment> childs) {
+            User user = freeBoardComments.getUser();
+            return FreeCommentResponse.builder()
+                    .profile(user.getProfile())
+                    .nickName(user.getNickName())
+                    .content(freeBoardComments.getContent())
+                    .createAt(freeBoardComments.getCreatedAt()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
+                    .parentIdx(freeBoardComments.getFreeBoardCommentIdx())
+                    .childs(childs)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
     public static class ChildReviewComment {
         private final String profile;
         private final String nickName;
@@ -110,6 +136,29 @@ public abstract class CommentsDto {
                     .content(listenComments.getContent())
                     .parentIdx(listenComments.getParent().getListenCommentIdx())
                     .createAt(listenComments.getCreatedAt()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class ChildFreeComment {
+        private final String profile;
+        private final String nickName;
+        private final String content;
+        private final Long parentIdx;
+        private final String createAt;
+
+        public static ChildFreeComment from(FreeBoardComments freeBoardComments) {
+            User user = freeBoardComments.getUser();
+            return ChildFreeComment.builder()
+                    .profile(user.getProfile())
+                    .nickName(user.getNickName())
+                    .content(freeBoardComments.getContent())
+                    .parentIdx(freeBoardComments.getParent().getFreeBoardCommentIdx())
+                    .createAt(freeBoardComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
                     .build();
         }
