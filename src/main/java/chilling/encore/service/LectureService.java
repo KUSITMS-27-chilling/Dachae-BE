@@ -1,12 +1,9 @@
 package chilling.encore.service;
 
-import chilling.encore.domain.Center;
-import chilling.encore.domain.Lecture;
-import chilling.encore.domain.LectureMessage;
-import chilling.encore.domain.User;
+import chilling.encore.domain.*;
+import chilling.encore.domain.TeacherInfo;
 import chilling.encore.dto.LectureDto;
-import chilling.encore.dto.LectureDto.LectureInfo;
-import chilling.encore.dto.LectureDto.LecturePage;
+import chilling.encore.dto.LectureDto.*;
 import chilling.encore.dto.responseMessage.LectureConstants;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
@@ -24,8 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import static chilling.encore.dto.responseMessage.LectureConstants.LectureCategory.*;
 
 @Service
 @Transactional
@@ -102,5 +97,30 @@ public class LectureService {
         Pageable pageable = PageRequest.of(page - 1, 10);
         Page<LectureInfo> lectureInfos = lectureRepository.findTop10LectureWithCategoryAndRegion(category, regions, pageable);
         return LecturePage.from(lectureInfos.getTotalPages(), lectureInfos.getContent());
+    }
+
+    public LectureDetailsTeacher getTeacherInfo(Long lectureIdx) {
+        TeacherInfo teacherInfo = lectureRepository.findById(lectureIdx)
+                                        .orElseThrow().getTeacherInfo();
+        List<String> careers = new ArrayList<>();
+        List<String> certificates = new ArrayList<>();
+        if (teacherInfo.getCareer() != null)
+            careers = List.of(teacherInfo.getCareer().split(","));
+        if (teacherInfo.getCertificate() != null)
+            certificates = List.of(teacherInfo.getCertificate().split(","));
+        return LectureDetailsTeacher.from(teacherInfo.getProfile(), careers, certificates);
+    }
+
+    public LectureImages getImages(Long lectureIdx) {
+        Lecture lecture = lectureRepository.findById(lectureIdx).orElseThrow();
+        List<String> images = new ArrayList<>();
+        if (lecture.getImage() != null)
+            images = List.of(lecture.getImage().split(","));
+        return LectureImages.builder().images(images).build();
+    }
+
+    public LectureBasicInfo getLectureBasicInfo(Long lectureIdx) {
+        Lecture lecture = lectureRepository.findById(lectureIdx).orElseThrow();
+        return LectureBasicInfo.from(lecture);
     }
 }
