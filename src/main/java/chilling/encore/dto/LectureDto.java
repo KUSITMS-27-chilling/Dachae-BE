@@ -1,6 +1,7 @@
 package chilling.encore.dto;
 
 import chilling.encore.domain.Lecture;
+import chilling.encore.domain.TeacherInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,45 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public abstract class LectureDto {
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class LectureBasicInfo {
+        private final int price;
+        private final int goalNum;
+        private final String proceed;
+
+        public static LectureBasicInfo from(Lecture lecture) {
+            return LectureBasicInfo.builder()
+                    .price(lecture.getPrice())
+                    .goalNum(lecture.getGoalNum())
+                    .proceed(lecture.getProceed())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class LectureImages {
+        private final List<String> images;
+    }
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class LectureDetailsTeacher {
+        private final String profile;
+        private final List<String> careers;
+        private final List<String> certificates;
+
+        public static LectureDetailsTeacher from(String profile, List<String> careers, List<String> certificates) {
+            return LectureDetailsTeacher.builder()
+                    .profile(profile)
+                    .careers(careers)
+                    .certificates(certificates)
+                    .build();
+        }
+    }
     @Getter
     @Builder
     @RequiredArgsConstructor
