@@ -40,7 +40,7 @@ public class FreeBoardController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), POPULAR_SELECT_SUCCESS.getMessage(), popular));
     }
     
-    @PostMapping("/save")
+    @PostMapping("/posts")
     @ApiOperation(value = "자유게시판 글 작성", notes = "로그인X의 경우 접근 불가")
     public ResponseEntity<ResponseDto> save(@RequestBody CreateFreeBoardRequest createFreeBoardRequest) {
         freeBoardService.save(createFreeBoardRequest);

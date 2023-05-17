@@ -40,7 +40,7 @@ public class ReviewController {
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), POPULAR_REVIEW_SUCCESS_MESSAGE.getMessage(), popularReviews));
     }
 
-    @PostMapping("/save")
+    @PostMapping("/posts")
     @ApiOperation(value = "수강 후기 글 작성", notes = "programIdx 함께 넘겨주세요")
     public ResponseEntity<ResponseDto> save(@RequestBody CreateReviewRequest createReviewRequest) {
         reviewService.save(createReviewRequest);
