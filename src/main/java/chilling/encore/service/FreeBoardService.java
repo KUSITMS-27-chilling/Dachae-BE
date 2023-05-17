@@ -5,10 +5,9 @@ import chilling.encore.domain.FreeBoard;
 import chilling.encore.domain.ListenTogether;
 import chilling.encore.domain.User;
 import chilling.encore.dto.FreeBoardDto;
-import chilling.encore.dto.FreeBoardDto.AllFreeBoards;
-import chilling.encore.dto.FreeBoardDto.CreateFreeBoardRequest;
-import chilling.encore.dto.FreeBoardDto.PopularFreeBoards;
-import chilling.encore.dto.FreeBoardDto.SelectFreeBoard;
+import chilling.encore.dto.FreeBoardDto.*;
+import chilling.encore.exception.FreeException;
+import chilling.encore.exception.FreeException.NoSuchIdxException;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.repository.springDataJpa.FreeBoardRepository;
@@ -78,5 +77,10 @@ public class FreeBoardService {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         FreeBoard freeBoard = CreateFreeBoardRequest.to(createFreeBoardRequest, user);
         freeBoardRepository.save(freeBoard);
+    }
+
+    public FreeBoardDetail getDetail(Long freeBoardIdx) {
+        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardIdx).orElseThrow(() -> new NoSuchIdxException());
+        return FreeBoardDetail.from(freeBoard);
     }
 }

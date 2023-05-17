@@ -14,4 +14,18 @@ public class ReviewConstants {
         MY_REVIEW_SUCCESS_MESSAGE("나의 수강후기 조회에 성공했습니다");
         private final String message;
     }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum ReviewFailMessage {
+        NO_SUCH_IDX_MESSAGE("[ERROR] 게시글 번호가 잘못되었습니다.");
+        private final String message;
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum ReviewFailCode {
+        NO_SUCH_IDX_MESSAGE("rv001");
+        private final String code;
+    }
 }

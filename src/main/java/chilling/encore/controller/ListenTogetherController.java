@@ -1,6 +1,5 @@
 package chilling.encore.controller;
 
-import chilling.encore.dto.ListenTogetherDto;
 import chilling.encore.dto.ListenTogetherDto.*;
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.ListenTogetherService;
@@ -12,12 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.NoSuchElementException;
-
-import static chilling.encore.dto.responseMessage.ListenTogetherConstants.ListenTogetherFailMessage.SAVE_FAIL_MESSAGE;
 import static chilling.encore.dto.responseMessage.ListenTogetherConstants.ListenTogetherSuccessMessage.*;
-import static chilling.encore.global.dto.ResponseCode.globalFailCode.AUTHORIZATION_FAIL_CODE;
-import static chilling.encore.global.dto.ResponseCode.globalFailCode.SERVER_ERROR;
 import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.CREATE_SUCCESS_CODE;
 import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
 
