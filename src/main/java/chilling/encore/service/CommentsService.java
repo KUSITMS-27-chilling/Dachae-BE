@@ -23,6 +23,7 @@ public class CommentsService {
     private final ListenTogetherRepository listenTogetherRepository;
     private final FreeBoardRepository freeBoardRepository;
     private final FreeBoardCommentRepository freeBoardCommentRepository;
+    private int cnt;
 
     public void reviewCommentSave(Long reviewIdx, CreateCommentsRequest createCommentsRequest) {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
@@ -124,16 +125,20 @@ public class CommentsService {
                 .build();
     }
 
-    public List<ReviewCommentResponse> getReviewComments(Long reviewIdx) {
+    public ReviewCommentResponse getReviewComments(Long reviewIdx) {
         List<ReviewComments> reviewComments = reviewCommentRepository.findAllByReview_ReviewIdxOrderByCreatedAtAsc(reviewIdx);
-
-        List<ReviewCommentResponse> reviewCommentResponses = new ArrayList<>();
+        cnt = 0;
+        List<SelectReviewComment> selectReviewComment = new ArrayList<>();
         for (int i = 0; i < reviewComments.size(); i++) {
             List<ChildReviewComment> childReviewComments = getChildReviewComments(reviewComments.get(i));
             if (childReviewComments == null) continue;
-            reviewCommentResponses.add(ReviewCommentResponse.from(reviewComments.get(i), childReviewComments));
+            selectReviewComment.add(SelectReviewComment.from(reviewComments.get(i), childReviewComments));
         }
-        return reviewCommentResponses;
+        cnt += selectReviewComment.size();
+        return ReviewCommentResponse.builder()
+                .cnt(cnt)
+                .reviewCommentList(selectReviewComment)
+                .build();
     }
 
     @Nullable
@@ -145,19 +150,23 @@ public class CommentsService {
         for (int j = 0; j < childs.size(); j++) {
             childReviewComments.add(ChildReviewComment.from(childs.get(j)));
         }
+        cnt += childReviewComments.size();
         return childReviewComments;
     }
 
-    public List<ListenCommentResponse> getListenComments(Long listenIdx) {
+    public ListenCommentResponse getListenComments(Long listenIdx) {
         List<ListenComments> listenComments = listenCommentRepository.findAllByListenTogether_ListenIdxOrderByCreatedAtAsc(listenIdx);
-
-        List<ListenCommentResponse> listenCommentResponse = new ArrayList<>();
+        cnt = 0;
+        List<SelectListenComment> selectListenComment = new ArrayList<>();
         for (int i = 0; i < listenComments.size(); i++) {
             List<ChildListenComment> childListenComments = getChildListenComments(listenComments.get(i));
             if (childListenComments == null) continue;
-            listenCommentResponse.add(ListenCommentResponse.from(listenComments.get(i), childListenComments));
+            selectListenComment.add(SelectListenComment.from(listenComments.get(i), childListenComments));
         }
-        return listenCommentResponse;
+        cnt += selectListenComment.size();
+        return ListenCommentResponse.builder()
+                .cnt(cnt)
+                .listenCommentList(selectListenComment).build();
     }
 
     @Nullable
@@ -169,19 +178,24 @@ public class CommentsService {
         for (int j = 0; j < childs.size(); j++) {
             childListenComments.add(ChildListenComment.from(childs.get(j)));
         }
+        cnt += childListenComments.size();
         return childListenComments;
     }
 
-    public List<FreeCommentResponse> getFreeComments(Long freeBoardIdx) {
+    public FreeCommentResponse getFreeComments(Long freeBoardIdx) {
         List<FreeBoardComments> freeBoardComments = freeBoardCommentRepository.findAllByFreeBoard_FreeBoardIdxOrderByCreatedAtAsc(freeBoardIdx);
-
-        List<FreeCommentResponse> freeCommentResponse = new ArrayList<>();
+        cnt = 0;
+        List<SelectFreeComment> selectFreeComment = new ArrayList<>();
         for (int i = 0; i < freeBoardComments.size(); i++) {
             List<ChildFreeComment> childFreeComments = getChildFreeComments(freeBoardComments.get(i));
             if (childFreeComments == null) continue;
-            freeCommentResponse.add(FreeCommentResponse.from(freeBoardComments.get(i), childFreeComments));
+            selectFreeComment.add(SelectFreeComment.from(freeBoardComments.get(i), childFreeComments));
         }
-        return freeCommentResponse;
+        cnt += selectFreeComment.size();
+        return FreeCommentResponse.builder()
+                .cnt(cnt)
+                .freeCommentList(selectFreeComment)
+                .build();
     }
 
     @Nullable
@@ -193,8 +207,7 @@ public class CommentsService {
         for (int j = 0; j < childs.size(); j++) {
             childFreeComments.add(ChildFreeComment.from(childs.get(j)));
         }
+        cnt += childFreeComments.size();
         return childFreeComments;
     }
-
-
 }
