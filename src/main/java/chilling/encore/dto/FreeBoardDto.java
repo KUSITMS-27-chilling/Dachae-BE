@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class FreeBoardDto {
@@ -63,6 +64,37 @@ public abstract class FreeBoardDto {
                     .content(freeBoard.getContent())
                     .hit(freeBoard.getHit())
                     .comments(freeBoard.getFreeBoardComments().size())
+                    .build();
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    @Builder
+    public static class FreeBoardDetail {
+        private final String profile;
+        private final String nickName;
+        private final int grade;
+        private final List<String> favFields;
+        private final String createdAt;
+        private final String title;
+        private final String content;
+
+        public static FreeBoardDetail from(FreeBoard freeBoard) {
+            User user = freeBoard.getUser();
+            List<String> favField = new ArrayList<>();
+            if (user.getFavField() != null)
+                favField = List.of(user.getFavField().split(","));
+
+            return FreeBoardDetail.builder()
+                    .profile(user.getProfile())
+                    .nickName(user.getNickName())
+                    .grade(user.getGrade()/10 + 1)
+                    .favFields(favField)
+                    .createdAt(freeBoard.getCreatedAt()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
+                    .title(freeBoard.getTitle())
+                    .content(freeBoard.getContent())
                     .build();
         }
     }
