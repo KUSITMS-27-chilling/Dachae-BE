@@ -19,7 +19,15 @@ public class ListenTogetherConstants {
     @Getter
     @RequiredArgsConstructor
     public enum ListenTogetherFailMessage {
-        SAVE_FAIL_MESSAGE("같이 들어요 생성에 실패했습니다.");
+        NO_SUCH_IDX_MESSAGE("[ERROR] 게시글 번호가 잘못되었습니다."),
+        SAVE_FAIL_MESSAGE("[ERROR] 같이 들어요 생성에 실패했습니다.");
         private final String message;
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum ListenTogetherFailCode {
+        NO_SUCH_IDX_CODE("li001");
+        private final String code;
     }
 }

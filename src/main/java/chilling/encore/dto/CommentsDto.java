@@ -21,21 +21,47 @@ public abstract class CommentsDto {
         private final Long parentIdx;
     }
 
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    @ApiModel(description = "수강후기 댓글 조회를 위한 응답 객체")
+    public static class ReviewCommentResponse {
+        private final int cnt;
+        private final List<SelectReviewComment> reviewCommentList;
+    }
 
     @Getter
     @Builder
     @RequiredArgsConstructor
-    @ApiModel(description = "수강후기 댓글조회를 위한 응답 객체")
-    public static class ReviewCommentResponse {
+    @ApiModel(description = "같이들어요 댓글조회를 위한 응답 객체")
+    public static class ListenCommentResponse {
+        private final int cnt;
+        private final List<SelectListenComment> listenCommentList;
+
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    @ApiModel(description = "자유게시판 댓글조회를 위한 응답 객체")
+    public static class FreeCommentResponse {
+        private final int cnt;
+        private final List<SelectFreeComment> freeCommentList;
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class SelectReviewComment {
         private final String profile;
         private final String nickName;
         private final String content;
         private final String createAt;
         private final Long parentIdx;
         private final List<ChildReviewComment> childs;
-        public static ReviewCommentResponse from(ReviewComments reviewComments, List<ChildReviewComment> childs) {
+        public static SelectReviewComment from(ReviewComments reviewComments, List<ChildReviewComment> childs) {
             User user = reviewComments.getUser();
-            return ReviewCommentResponse.builder()
+            return SelectReviewComment.builder()
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .content(reviewComments.getContent())
@@ -49,17 +75,16 @@ public abstract class CommentsDto {
     @Getter
     @Builder
     @RequiredArgsConstructor
-    @ApiModel(description = "같이들어요 댓글조회를 위한 응답 객체")
-    public static class ListenCommentResponse {
+    public static class SelectListenComment {
         private final String profile;
         private final String nickName;
         private final String content;
         private final String createAt;
         private final Long parentIdx;
         private final List<ChildListenComment> childs;
-        public static ListenCommentResponse from(ListenComments listenComments, List<ChildListenComment> childs) {
+        public static SelectListenComment from(ListenComments listenComments, List<ChildListenComment> childs) {
             User user = listenComments.getUser();
-            return ListenCommentResponse.builder()
+            return SelectListenComment.builder()
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .content(listenComments.getContent())
@@ -74,17 +99,16 @@ public abstract class CommentsDto {
     @Getter
     @Builder
     @RequiredArgsConstructor
-    @ApiModel(description = "자유게시판 댓글 조회를 위한 응답 객체")
-    public static class FreeCommentResponse {
+    public static class SelectFreeComment {
         private final String profile;
         private final String nickName;
         private final String content;
         private final String createAt;
         private final Long parentIdx;
         private final List<ChildFreeComment> childs;
-        public static FreeCommentResponse from(FreeBoardComments freeBoardComments, List<ChildFreeComment> childs) {
+        public static SelectFreeComment from(FreeBoardComments freeBoardComments, List<ChildFreeComment> childs) {
             User user = freeBoardComments.getUser();
-            return FreeCommentResponse.builder()
+            return SelectFreeComment.builder()
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .content(freeBoardComments.getContent())

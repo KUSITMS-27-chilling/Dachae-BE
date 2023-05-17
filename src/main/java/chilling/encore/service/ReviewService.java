@@ -8,6 +8,8 @@ import chilling.encore.dto.ReviewDto;
 import chilling.encore.dto.ReviewDto.PopularReview;
 import chilling.encore.dto.ReviewDto.ReviewPage;
 import chilling.encore.dto.ReviewDto.SelectReview;
+import chilling.encore.exception.ReviewException;
+import chilling.encore.exception.ReviewException.NoSuchIdxException;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.repository.springDataJpa.ProgramRepository;
@@ -57,7 +59,7 @@ public class ReviewService {
     }
 
     public SelectReview getReview(Long reviewIdx) {
-        Review review = reviewRepository.findByReviewIdx(reviewIdx);
+        Review review = reviewRepository.findById(reviewIdx).orElseThrow(() -> new NoSuchIdxException());
         return SelectReview.from(review);
     }
 
