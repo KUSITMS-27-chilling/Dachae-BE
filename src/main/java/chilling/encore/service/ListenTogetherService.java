@@ -3,8 +3,12 @@ package chilling.encore.service;
 
 import chilling.encore.domain.*;
 import chilling.encore.dto.ListenTogetherDto.*;
+import chilling.encore.exception.ListenException.NoSuchIdxException;
 import chilling.encore.global.config.security.util.SecurityUtils;
-import chilling.encore.repository.springDataJpa.*;
+import chilling.encore.repository.springDataJpa.CenterRepository;
+import chilling.encore.repository.springDataJpa.ListenTogetherRepository;
+import chilling.encore.repository.springDataJpa.ProgramRepository;
+import chilling.encore.repository.springDataJpa.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,7 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +34,8 @@ public class ListenTogetherService {
     private final int LISTEN_TOGETHER_PAGE_SIZE = 8;
 
     public ListenTogetherDetail getListenTogetherDetail(Long listenIdx) {
-        ListenTogether listenTogether = listenTogetherRepository.findById(listenIdx).orElseThrow();
+        ListenTogether listenTogether = listenTogetherRepository.findById(listenIdx)
+                .orElseThrow(() -> new NoSuchIdxException());
         listenTogether.upHit();
         List<Participants> participants = listenTogether.getParticipants();
         List<ParticipantsInfo> participantsInfos = new ArrayList<>();
