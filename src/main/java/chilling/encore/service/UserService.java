@@ -7,6 +7,8 @@ import chilling.encore.dto.AlaramDto.AlarmResponse;
 import chilling.encore.dto.UserDto.UserLoginRequest;
 import chilling.encore.dto.UserDto.UserLoginResponse;
 import chilling.encore.dto.UserDto.UserSignUpRequest;
+import chilling.encore.exception.CenterException;
+import chilling.encore.exception.CenterException.NoSuchRegionException;
 import chilling.encore.global.config.security.jwt.JwtTokenProvider;
 import chilling.encore.global.config.security.jwt.TokenInfoResponse;
 import chilling.encore.global.config.redis.RedisRepository;
@@ -45,7 +47,7 @@ public class UserService {
 
     //회원가입
     public User signUp(UserSignUpRequest userSignUpRequest) {
-        Center center = centerRepository.findByRegion(userSignUpRequest.getRegion());
+        Center center = centerRepository.findByRegion(userSignUpRequest.getRegion()).orElseThrow(() -> new NoSuchRegionException());
         center.plusFavCount();
 
         User user = User.builder()
@@ -67,7 +69,7 @@ public class UserService {
 
     //Oauth2 회원가입
     public User oauth2signUp(Oauth2SignUpRequest oauth2SignUpRequest) {
-        Center center = centerRepository.findByRegion(oauth2SignUpRequest.getRegion());
+        Center center = centerRepository.findByRegion(oauth2SignUpRequest.getRegion()).orElseThrow(() -> new NoSuchRegionException());
         center.plusFavCount();
 
         String id = oauth2SignUpRequest.getProvider() + oauth2SignUpRequest.getId();

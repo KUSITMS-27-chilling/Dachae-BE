@@ -4,6 +4,8 @@ package chilling.encore.service;
 import chilling.encore.domain.*;
 import chilling.encore.dto.ProgramDto;
 import chilling.encore.dto.ProgramDto.*;
+import chilling.encore.exception.CenterException;
+import chilling.encore.exception.CenterException.NoSuchRegionException;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.repository.springDataJpa.ProgramRepository;
@@ -88,13 +90,13 @@ public class ProgramService {
     private Map<String, ProgramMainResponse> getProgramDatas(String region, String favRegion) {
         String[] favRegions;
         List<Center> favCenters = new ArrayList<>();
-        favCenters.add(centerRepository.findByRegion(region));
+        favCenters.add(centerRepository.findByRegion(region).orElseThrow(() -> new NoSuchRegionException()));
 
         if (favRegion != null) {
             favRegions = favRegion.split(",");
 
             for (int i = 0; i < favRegions.length; i++) {
-                Center center = centerRepository.findByRegion(favRegions[i]);
+                Center center = centerRepository.findByRegion(favRegions[i]).orElseThrow(() -> new NoSuchRegionException());
                 favCenters.add(center);
             }
         }
