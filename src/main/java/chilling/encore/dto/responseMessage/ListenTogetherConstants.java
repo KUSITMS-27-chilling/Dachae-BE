@@ -27,7 +27,7 @@ public class ListenTogetherConstants {
     @Getter
     @RequiredArgsConstructor
     public enum ListenTogetherFailCode {
-        NO_SUCH_IDX_MESSAGE("li001");
+        NO_SUCH_IDX_CODE("li001");
         private final String code;
     }
 }

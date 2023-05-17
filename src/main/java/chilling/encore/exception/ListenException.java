@@ -11,7 +11,7 @@ public abstract class ListenException extends ApplicationException {
 
     public static class NoSuchIdxException extends ListenException {
         public NoSuchIdxException() {
-            super(ListenTogetherConstants.ListenTogetherFailMessage.NO_SUCH_IDX_MESSAGE.getMessage(), ListenTogetherConstants.ListenTogetherFailCode.NO_SUCH_IDX_MESSAGE.getCode(), HttpStatus.INTERNAL_SERVER_ERROR);
+            super(ListenTogetherConstants.ListenTogetherFailMessage.NO_SUCH_IDX_MESSAGE.getMessage(), ListenTogetherConstants.ListenTogetherFailCode.NO_SUCH_IDX_CODE.getCode(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
