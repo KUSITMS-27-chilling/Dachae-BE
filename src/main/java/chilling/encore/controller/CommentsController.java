@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 import static chilling.encore.dto.CommentsDto.*;
 import static chilling.encore.dto.responseMessage.CommentsConstants.CommentsSuccessMessage.*;
 import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.CREATE_SUCCESS_CODE;
@@ -33,6 +31,13 @@ public class CommentsController {
         return ResponseEntity.ok(ResponseDto.create(CREATE_SUCCESS_CODE.getCode(), CREATE_REVIEW_COMMENT_SUCCESS_MESSAGE.getMessage()));
     }
 
+    @GetMapping("/review/{reviewIdx}/comments")
+    @ApiOperation(value = "수강후기 댓글 조회")
+    public ResponseEntity<ResponseDto<ReviewCommentResponse>> getReviewComment(@PathVariable Long reviewIdx) {
+        ReviewCommentResponse reviewComments = commentsService.getReviewComments(reviewIdx);
+        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_REVIEW_COMMENT_SUCCESS_MESSAGE.getMessage(), reviewComments));
+    }
+
     @PostMapping("/listen/{listenIdx}/comments")
     @ApiOperation(value = "같이들어요 댓글 작성")
     public ResponseEntity<ResponseDto> listenCommentSave(
@@ -42,17 +47,10 @@ public class CommentsController {
         return ResponseEntity.ok(ResponseDto.create(CREATE_SUCCESS_CODE.getCode(), CREATE_LISTEN_COMMENT_SUCCESS_MESSAGE.getMessage()));
     }
 
-    @GetMapping("/review/{reviewIdx}/comments")
-    @ApiOperation(value = "수강후기 댓글 조회")
-    public ResponseEntity<ResponseDto<List<ReviewCommentResponse>>> getReviewComment(@PathVariable Long reviewIdx) {
-        List<ReviewCommentResponse> reviewComments = commentsService.getReviewComments(reviewIdx);
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_REVIEW_COMMENT_SUCCESS_MESSAGE.getMessage(), reviewComments));
-    }
-    
     @GetMapping("/listen/{listenIdx}/comments")
     @ApiOperation(value = "같이들어요 댓글 조회")
-    public ResponseEntity<ResponseDto<List<ListenCommentResponse>>> getListenComment(@PathVariable Long listenIdx) {
-        List<ListenCommentResponse> listenComments = commentsService.getListenComments(listenIdx);
+    public ResponseEntity<ResponseDto<ListenCommentResponse>> getListenComment(@PathVariable Long listenIdx) {
+        ListenCommentResponse listenComments = commentsService.getListenComments(listenIdx);
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_LISTEN_COMMENT_SUCCESS_MESSAGE.getMessage(), listenComments));
     }
 
@@ -67,8 +65,8 @@ public class CommentsController {
 
     @GetMapping("/free/{freeBoardIdx}/comments")
     @ApiOperation(value = "자유게시판 댓글 조회")
-    public ResponseEntity<ResponseDto<List<FreeCommentResponse>>> getFreeComment(@PathVariable Long freeBoardIdx) {
-        List<FreeCommentResponse> freeComments = commentsService.getFreeComments(freeBoardIdx);
+    public ResponseEntity<ResponseDto<FreeCommentResponse>> getFreeComment(@PathVariable Long freeBoardIdx) {
+        FreeCommentResponse freeComments = commentsService.getFreeComments(freeBoardIdx);
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_FREE_COMMENT_SUCCESS_MESSAGE.getMessage(), freeComments));
     }
 }
