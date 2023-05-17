@@ -40,7 +40,7 @@ public class ListenTogetherController {
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_SUCCESS_MESSAGE.getMessage(), listenTogetherPage));
     }
 
-    @PostMapping("/save")
+    @PostMapping("/posts")
     @ApiOperation(value = "같이할래요 글 작성", notes = "programIdx 함께 넘겨주세요")
     public ResponseEntity<ResponseDto> save(@RequestBody CreateListenTogetherRequest createListenTogetherRequest) {
         listenTogetherService.save(createListenTogetherRequest);

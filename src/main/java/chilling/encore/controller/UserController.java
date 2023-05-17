@@ -67,7 +67,7 @@ public class UserController {
         );
     }
 
-    @PostMapping("/sendMail")
+    @PostMapping("/email")
     @ApiOperation(value = "이메일 인증 전송", notes = "이메일 인증을 전송합니다.")
     public ResponseEntity<ResponseDto<String>> sendMail(String email) {
         try {
@@ -108,21 +108,21 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_REGION_SUCCESS.getMessage(), favCenter));
     }
 
-    @PutMapping("/edit/regions")
+    @PutMapping("/regions")
     @ApiOperation(value = "유저 관심 지역 수정", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto> editFavRegion(@RequestBody EditFavRegion editFavRegion) {
         userService.editFavRegion(editFavRegion);
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_REGION_SUCCESS.getMessage()));
     }
 
-    @PutMapping("/edit/nickName")
+    @PutMapping("/nickName")
     @ApiOperation(value = "유저 닉네임 수정", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto> editNickName(@RequestBody EditNickName editNickName) {
         userService.editNickName(editNickName);
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_NICKNAME_SUCCESS.getMessage()));
     }
 
-    @PutMapping("/edit/favField")
+    @PutMapping("/favField")
     @ApiOperation(value = "유저 활동 분야 수정", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto> editFavField(@RequestBody EditFavField editFavField) {
         userService.editFavField(editFavField);
@@ -143,7 +143,7 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_INFO_SUCCESS.getMessage(), userParticipant));
     }
 
-    @GetMapping("/write")
+    @GetMapping("/myPosts")
     @ApiOperation(value = "마이페이지 유저의 작성글 조회", notes = "전체 ~ 각각")
     public ResponseEntity<ResponseDto<UserDto.GetTotalWrite>> getTotalWrite() {
         UserDto.GetTotalWrite total = userService.getTotalWrite();
