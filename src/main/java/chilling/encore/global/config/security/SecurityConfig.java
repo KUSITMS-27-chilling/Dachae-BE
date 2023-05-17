@@ -8,6 +8,7 @@ import chilling.encore.global.config.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -44,19 +45,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/alarm").authenticated()
-                .antMatchers("/free/save").authenticated()
                 .antMatchers("/listen/mine").authenticated()
-                .antMatchers("/listen/save").authenticated()
                 .antMatchers("/listen/participant").authenticated()
-                .antMatchers("/program/new/**").authenticated()
                 .antMatchers("/review/mine").authenticated()
-                .antMatchers("/review/save").authenticated()
-                .antMatchers("/user/edit/**").authenticated()
                 .antMatchers("/user/favRegions").authenticated()
                 .antMatchers("/user/grade").authenticated()
                 .antMatchers("/user/participants").authenticated()
                 .antMatchers("/user/userInfo").authenticated()
-                .antMatchers("/user/write").authenticated()
+                .antMatchers("/user/myPosts").authenticated()
+                .antMatchers("/lecture/my").authenticated()
+                .antMatchers(HttpMethod.PUT, "/user/**").authenticated()
+                .antMatchers(HttpMethod.PUT, "/free/**").authenticated()
+                .antMatchers(HttpMethod.PUT, "/listen/**").authenticated()
+                .antMatchers(HttpMethod.PUT, "/review/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/free/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/listen/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/review/**").authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
