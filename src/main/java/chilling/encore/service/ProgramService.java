@@ -4,6 +4,8 @@ package chilling.encore.service;
 import chilling.encore.domain.*;
 import chilling.encore.dto.ProgramDto;
 import chilling.encore.dto.ProgramDto.*;
+import chilling.encore.exception.CenterException;
+import chilling.encore.exception.CenterException.NoSuchRegionException;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.repository.springDataJpa.ProgramRepository;
@@ -33,7 +35,8 @@ public class ProgramService {
     private final LocalDate now = LocalDate.now();
 
     public AllProgramInCenter getAllProgram(String region) {
-        List<Program> allPrograms = programRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndLearningCenter_Region(now, now, region);
+        List<Program> allPrograms = programRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndLearningCenter_Region(now, now, region)
+                .orElseThrow(() -> new NoSuchRegionException());
         List<GetProgramTitle> programTitles = new ArrayList<>();
         for (int i = 0; i < allPrograms.size(); i++)
             programTitles.add(GetProgramTitle.from(allPrograms.get(i)));
@@ -55,7 +58,7 @@ public class ProgramService {
                 now,
                 region,
                 pageable
-        );
+        ).orElseThrow(() -> new NoSuchRegionException());
         return fullPrograms;
     }
 
@@ -88,13 +91,13 @@ public class ProgramService {
     private Map<String, ProgramMainResponse> getProgramDatas(String region, String favRegion) {
         String[] favRegions;
         List<Center> favCenters = new ArrayList<>();
-        favCenters.add(centerRepository.findByRegion(region));
+        favCenters.add(centerRepository.findByRegion(region).orElseThrow(() -> new NoSuchRegionException()));
 
         if (favRegion != null) {
             favRegions = favRegion.split(",");
 
             for (int i = 0; i < favRegions.length; i++) {
-                Center center = centerRepository.findByRegion(favRegions[i]);
+                Center center = centerRepository.findByRegion(favRegions[i]).orElseThrow(() -> new NoSuchRegionException());
                 favCenters.add(center);
             }
         }
@@ -112,7 +115,8 @@ public class ProgramService {
             String region = favCenters.get(i).getRegion();
 
             LocalDate now = LocalDate.now();
-            List<Program> top3Program = programRepository.findTop3ByStartDateLessThanEqualAndEndDateGreaterThanEqualAndLearningCenter_RegionOrderByStartDateDesc(now, now, region);
+            List<Program> top3Program = programRepository.findTop3ByStartDateLessThanEqualAndEndDateGreaterThanEqualAndLearningCenter_RegionOrderByStartDateDesc(now, now, region)
+                    .orElseThrow(() -> new NoSuchRegionException());
 
             for (int j = 0; j < top3Program.size(); j++) {
                 log.info("topProgram = {}" + top3Program.get(j).getProgramName());
@@ -139,7 +143,8 @@ public class ProgramService {
     private NewProgramsResponse getNewProgramsResponse(String region) {
         LocalDate thisMonth = LocalDate.parse(now.format(DateTimeFormatter.ofPattern("yyyy-MM")) + "-01");
         LocalDate nextMonth = LocalDate.parse(now.plusMonths(1L).format(DateTimeFormatter.ofPattern("yyyy-MM")) + "-01");
-        List<Program> programs = programRepository.findTop10ByStartDateBetweenAndEndDateGreaterThanEqualAndLearningCenter_RegionOrderByStartDateDesc(thisMonth, nextMonth, now, region);
+        List<Program> programs = programRepository.findTop10ByStartDateBetweenAndEndDateGreaterThanEqualAndLearningCenter_RegionOrderByStartDateDesc(thisMonth, nextMonth, now, region)
+                .orElseThrow(() -> new NoSuchRegionException());
         List<ProgramDto.NewProgram> newPrograms = new ArrayList<>();
         for (int i = 0; i < programs.size(); i++) {
             newPrograms.add(ProgramDto.NewProgram.from(programs.get(i)));

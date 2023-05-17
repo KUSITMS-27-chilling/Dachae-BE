@@ -14,14 +14,4 @@ public abstract class ResponseCode {
         private final int code;
     }
 
-    @Getter
-    @RequiredArgsConstructor
-    public enum globalFailCode {
-        AUTHORIZATION_FAIL_CODE(403),
-        BAD_REQUEST(400),
-        SERVER_ERROR(500);
-        private final int code;
-    }
-
-
 }

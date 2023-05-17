@@ -26,13 +26,21 @@ public class UserConstants {
     @Getter
     @RequiredArgsConstructor
     public enum UserFailMessage {
-        NOT_FOUND_USER("아이디 혹은 비밀번호가 틀렸습니다."),
-        AUTHORIZATION_FAIL("회원 권한이 없습니다.");
+        NOT_FOUND_USER("[ERROR] 아이디 혹은 비밀번호가 틀렸습니다."),
+        AUTHORIZATION_FAIL("[ERROR] 회원 권한이 없습니다.");
         private final String message;
     }
 
     @Getter
+    @RequiredArgsConstructor
+    public enum UserFailCode {
+        NOT_FOUND_USER("ua001"),
+        AUTHORIZATION_FAIL("ua002");
+        private final String code;
+    }
+
+    @Getter
     public enum Role {
-        ROLE_USER, ROLE_ADMIN
+        ROLE_USER, ROLE_ADMIN, ROLE_TEACHER
     }
 }
