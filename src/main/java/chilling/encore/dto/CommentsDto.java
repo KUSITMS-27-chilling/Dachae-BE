@@ -56,6 +56,7 @@ public abstract class CommentsDto {
         private final String profile;
         private final String nickName;
         private final String content;
+        private final boolean isDelete;
         private final String createAt;
         private final Long parentIdx;
         private final List<ChildReviewComment> childs;
@@ -65,6 +66,7 @@ public abstract class CommentsDto {
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .content(reviewComments.getContent())
+                    .isDelete(reviewComments.isDelete())
                     .createAt(reviewComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
                     .parentIdx(reviewComments.getReviewCommentIdx())
@@ -79,6 +81,7 @@ public abstract class CommentsDto {
         private final String profile;
         private final String nickName;
         private final String content;
+        private final boolean isDelete;
         private final String createAt;
         private final Long parentIdx;
         private final List<ChildListenComment> childs;
@@ -88,6 +91,7 @@ public abstract class CommentsDto {
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .content(listenComments.getContent())
+                    .isDelete(listenComments.isDelete())
                     .createAt(listenComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
                     .parentIdx(listenComments.getListenCommentIdx())
@@ -103,6 +107,7 @@ public abstract class CommentsDto {
         private final String profile;
         private final String nickName;
         private final String content;
+        private final boolean isDelete;
         private final String createAt;
         private final Long parentIdx;
         private final List<ChildFreeComment> childs;
@@ -112,6 +117,7 @@ public abstract class CommentsDto {
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .content(freeBoardComments.getContent())
+                    .isDelete(freeBoardComments.isDelete())
                     .createAt(freeBoardComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
                     .parentIdx(freeBoardComments.getFreeBoardCommentIdx())
@@ -127,6 +133,7 @@ public abstract class CommentsDto {
         private final String profile;
         private final String nickName;
         private final String content;
+        private final boolean isDelete;
         private final Long parentIdx;
         private final String createAt;
 
@@ -136,6 +143,7 @@ public abstract class CommentsDto {
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .content(reviewComments.getContent())
+                    .isDelete(reviewComments.isDelete())
                     .parentIdx(reviewComments.getParent().getReviewCommentIdx())
                     .createAt(reviewComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
@@ -149,6 +157,7 @@ public abstract class CommentsDto {
         private final String profile;
         private final String nickName;
         private final String content;
+        private final boolean isDelete;
         private final Long parentIdx;
         private final String createAt;
 
@@ -158,6 +167,7 @@ public abstract class CommentsDto {
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .content(listenComments.getContent())
+                    .isDelete(listenComments.isDelete())
                     .parentIdx(listenComments.getParent().getListenCommentIdx())
                     .createAt(listenComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
@@ -172,6 +182,7 @@ public abstract class CommentsDto {
         private final String profile;
         private final String nickName;
         private final String content;
+        private final boolean isDelete;
         private final Long parentIdx;
         private final String createAt;
 
@@ -181,6 +192,7 @@ public abstract class CommentsDto {
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .content(freeBoardComments.getContent())
+                    .isDelete(freeBoardComments.isDelete())
                     .parentIdx(freeBoardComments.getParent().getFreeBoardCommentIdx())
                     .createAt(freeBoardComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
