@@ -34,6 +34,7 @@ public class Review {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Column(columnDefinition = "TEXT")
     private String image;
     private int hit;
     @CreationTimestamp
