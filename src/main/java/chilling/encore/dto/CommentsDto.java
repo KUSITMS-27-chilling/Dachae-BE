@@ -19,6 +19,7 @@ public abstract class CommentsDto {
     public static class CreateCommentsRequest {
         private final String content;
         private final Long parentIdx;
+        private final String mention;
     }
 
     @Getter
@@ -60,7 +61,9 @@ public abstract class CommentsDto {
         private final String createAt;
         private final Long parentIdx;
         private final List<ChildReviewComment> childs;
-        public static SelectReviewComment from(ReviewComments reviewComments, List<ChildReviewComment> childs) {
+        private final boolean isMine;
+
+        public static SelectReviewComment from(ReviewComments reviewComments, boolean isMine, List<ChildReviewComment> childs) {
             User user = reviewComments.getUser();
             return SelectReviewComment.builder()
                     .profile(user.getProfile())
@@ -70,6 +73,7 @@ public abstract class CommentsDto {
                     .createAt(reviewComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
                     .parentIdx(reviewComments.getReviewCommentIdx())
+                    .isMine(isMine)
                     .childs(childs)
                     .build();
         }
@@ -85,7 +89,8 @@ public abstract class CommentsDto {
         private final String createAt;
         private final Long parentIdx;
         private final List<ChildListenComment> childs;
-        public static SelectListenComment from(ListenComments listenComments, List<ChildListenComment> childs) {
+        private final boolean isMine;
+        public static SelectListenComment from(ListenComments listenComments, boolean isMine, List<ChildListenComment> childs) {
             User user = listenComments.getUser();
             return SelectListenComment.builder()
                     .profile(user.getProfile())
@@ -95,6 +100,7 @@ public abstract class CommentsDto {
                     .createAt(listenComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
                     .parentIdx(listenComments.getListenCommentIdx())
+                    .isMine(isMine)
                     .childs(childs)
                     .build();
         }
@@ -111,7 +117,9 @@ public abstract class CommentsDto {
         private final String createAt;
         private final Long parentIdx;
         private final List<ChildFreeComment> childs;
-        public static SelectFreeComment from(FreeBoardComments freeBoardComments, List<ChildFreeComment> childs) {
+        private final boolean isMine;
+
+        public static SelectFreeComment from(FreeBoardComments freeBoardComments, boolean isMine, List<ChildFreeComment> childs) {
             User user = freeBoardComments.getUser();
             return SelectFreeComment.builder()
                     .profile(user.getProfile())
@@ -121,6 +129,7 @@ public abstract class CommentsDto {
                     .createAt(freeBoardComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
                     .parentIdx(freeBoardComments.getFreeBoardCommentIdx())
+                    .isMine(isMine)
                     .childs(childs)
                     .build();
         }
@@ -136,8 +145,9 @@ public abstract class CommentsDto {
         private final boolean isDelete;
         private final Long parentIdx;
         private final String createAt;
+        private final boolean isMine;
 
-        public static ChildReviewComment from(ReviewComments reviewComments) {
+        public static ChildReviewComment from(ReviewComments reviewComments, boolean isMine) {
             User user = reviewComments.getUser();
             return ChildReviewComment.builder()
                     .profile(user.getProfile())
@@ -147,6 +157,7 @@ public abstract class CommentsDto {
                     .parentIdx(reviewComments.getParent().getReviewCommentIdx())
                     .createAt(reviewComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
+                    .isMine(isMine)
                     .build();
         }
     }
@@ -160,8 +171,9 @@ public abstract class CommentsDto {
         private final boolean isDelete;
         private final Long parentIdx;
         private final String createAt;
+        private final boolean isMine;
 
-        public static ChildListenComment from(ListenComments listenComments) {
+        public static ChildListenComment from(ListenComments listenComments, boolean isMine) {
             User user = listenComments.getUser();
             return ChildListenComment.builder()
                     .profile(user.getProfile())
@@ -171,6 +183,7 @@ public abstract class CommentsDto {
                     .parentIdx(listenComments.getParent().getListenCommentIdx())
                     .createAt(listenComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
+                    .isMine(isMine)
                     .build();
         }
     }
@@ -185,8 +198,9 @@ public abstract class CommentsDto {
         private final boolean isDelete;
         private final Long parentIdx;
         private final String createAt;
+        private final boolean isMine;
 
-        public static ChildFreeComment from(FreeBoardComments freeBoardComments) {
+        public static ChildFreeComment from(FreeBoardComments freeBoardComments, boolean isMine) {
             User user = freeBoardComments.getUser();
             return ChildFreeComment.builder()
                     .profile(user.getProfile())
@@ -196,6 +210,7 @@ public abstract class CommentsDto {
                     .parentIdx(freeBoardComments.getParent().getFreeBoardCommentIdx())
                     .createAt(freeBoardComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
+                    .isMine(isMine)
                     .build();
         }
     }
