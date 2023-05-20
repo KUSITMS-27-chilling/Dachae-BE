@@ -62,10 +62,11 @@ public abstract class UserDto {
 
     @Getter
     @Builder
+    @RequiredArgsConstructor
     @ApiModel(description = "로그인을 위한 응답객체")
     public static class UserLoginResponse {
-        private String accessToken;
-        private String refreshToken;
+        private final String accessToken;
+        private final String refreshToken;
 
         public static UserLoginResponse from(TokenInfoResponse tokenInfoResponse) {
             return UserLoginResponse.builder()
