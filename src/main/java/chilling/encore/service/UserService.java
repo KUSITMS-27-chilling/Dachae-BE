@@ -237,21 +237,21 @@ public class UserService {
     }
 
     private List<AlaramDto.NewAlarm> getNewAlarms(List<String> notifications, Iterator<String> notificationIdIterator) {
-        List<AlaramDto.NewAlarm> newAlarms = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            String[] splitDatas = notifications.get(i).split(":");
-            String boardType = splitDatas[0];
-            String title = splitDatas[2];
-            String nickName = splitDatas[3];
-            String content = splitDatas[4];
-            if (boardType.equals("Listen")) {
-                newAlarms.add(AlaramDto.NewAlarm.from(notificationIdIterator.next(), Long.parseLong(splitDatas[1]),
-                        null, title, nickName, content));
-                continue;
-            }
-            newAlarms.add(AlaramDto.NewAlarm.from(notificationIdIterator.next(), null, Long.parseLong(splitDatas[1]),
-                    title, nickName, content));
-        }
-        return newAlarms;
+//        List<AlaramDto.NewAlarm> newAlarms = new ArrayList<>();
+//        for (int i = 0; i < 3; i++) {
+//            String[] splitDatas = notifications.get(i).split(":");
+//            String boardType = splitDatas[0];
+//            String title = splitDatas[2];
+//            String nickName = splitDatas[3];
+//            String content = splitDatas[4];
+//            if (boardType.equals("Listen")) {
+//                newAlarms.add(AlaramDto.NewAlarm.from(notificationIdIterator.next(), Long.parseLong(splitDatas[1]),
+//                        null, title, nickName, content));
+//                continue;
+//            }
+//            newAlarms.add(AlaramDto.NewAlarm.from(notificationIdIterator.next(), null, Long.parseLong(splitDatas[1]),
+//                    title, nickName, content));
+//        }
+        return null;
     }
 }

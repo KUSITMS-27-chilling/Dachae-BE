@@ -14,18 +14,25 @@ public abstract class AlaramDto {
         private String notificationId;
         private Long listenCommentsIdx;
         private Long reviewCommentIdx;
+        private Long freeBoardCommentIdx;
+        private String mention;
         private String title;
         private String nickName;
         private String content;
+        private String createdAt;
 
-        public static NewAlarm from(String notificationId, Long listenCommentsIdx, Long reviewCommentIdx, String title, String nickName, String content) {
+        public static NewAlarm from(String notificationId, Long freeBoardCommentIdx, Long listenCommentsIdx, Long reviewCommentIdx,
+                                    String mention, String title, String nickName, String content, String createdAt) {
             return NewAlarm.builder()
                     .notificationId(notificationId)
+                    .freeBoardCommentIdx(freeBoardCommentIdx)
                     .listenCommentsIdx(listenCommentsIdx)
                     .reviewCommentIdx(reviewCommentIdx)
+                    .mention(mention)
                     .title(title)
                     .nickName(nickName)
                     .content(content)
+                    .createdAt(createdAt)
                     .build();
         }
     }

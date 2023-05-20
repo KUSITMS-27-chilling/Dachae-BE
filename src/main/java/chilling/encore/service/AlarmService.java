@@ -40,13 +40,24 @@ public class AlarmService {
             String title = splitDatas[2];
             String nickName = splitDatas[3];
             String content = splitDatas[4];
+            /**
+             * 알람 관련해서 진행 중
+             * 태그(mention), 언제 알람이 발생했는지 필요(createdAt)
+             */
+            String mention = splitDatas[5];
+            String createdAt = splitDatas[6];
+
             if (boardType.equals("Listen")) {
-                newAlarms.add(NewAlarm.from(notificationIdIterator.next(), Long.parseLong(splitDatas[1]),
-                        null, title, nickName, content));
+                newAlarms.add(NewAlarm.from(notificationIdIterator.next(), null, Long.parseLong(splitDatas[1]), null,
+                        mention, title, nickName, content, createdAt));
+                continue;
+            } else if (boardType.equals("Review")) {
+                newAlarms.add(NewAlarm.from(notificationIdIterator.next(), null, null, Long.parseLong(splitDatas[1]),
+                        mention, title, nickName, content, createdAt));
                 continue;
             }
-            newAlarms.add(NewAlarm.from(notificationIdIterator.next(), null, Long.parseLong(splitDatas[1]),
-                    title, nickName, content));
+            newAlarms.add(NewAlarm.from(notificationIdIterator.next(), Long.parseLong(splitDatas[1]), null, null,
+                    mention, title, nickName, content, createdAt));
         }
         return newAlarms;
     }

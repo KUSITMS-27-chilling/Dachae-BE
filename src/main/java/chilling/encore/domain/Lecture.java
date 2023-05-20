@@ -25,6 +25,7 @@ public class Lecture {
     private int goalNum;
     @Column(columnDefinition = "TEXT")
     private String proceed;
+    @Column(columnDefinition = "TEXT")
     private String image;
     private String region;
     private LocalDate createdAt;
