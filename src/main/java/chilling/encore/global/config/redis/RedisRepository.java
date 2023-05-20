@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -45,12 +46,11 @@ public class RedisRepository {
         return Optional.ofNullable(isBlackList);
     }
 
-    public void addNotification(String userIdx, String notificationId, String title, String boardType, String boardIdx, String nickName, String content, LocalDateTime now) {
+    public void addNotification(String userIdx, String notificationId, String title, String boardType, String boardIdx, String nickName, String content, String mention, LocalDateTime now) {
         ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
 
         // 알림 내용을 문자열로 구성하여 저장
-        String notification = boardType + ":" + boardIdx + ":" + title + ":" + nickName + ":" + content;
-
+        String notification = boardType + ":" + boardIdx + ":" + title + ":" + nickName + ":" + content + ":" + mention + ":" + now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm"));
         // 알림을 개별 해시 필드로 추가
         hashOps.put("userIdx:" + userIdx + ":notifications", notificationId, notification);
 
