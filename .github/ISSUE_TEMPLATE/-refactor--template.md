@@ -1,7 +1,7 @@
 ---
 name: "[REFACTOR] template"
 about: Suggest an idea for this project
-title: ''
+title: "[REFACTOR] template"
 labels: refactor
 assignees: ''
 
