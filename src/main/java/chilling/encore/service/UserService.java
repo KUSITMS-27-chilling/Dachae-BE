@@ -9,6 +9,7 @@ import chilling.encore.dto.UserDto.UserLoginResponse;
 import chilling.encore.dto.UserDto.UserSignUpRequest;
 import chilling.encore.exception.CenterException;
 import chilling.encore.exception.CenterException.NoSuchRegionException;
+import chilling.encore.exception.UserException;
 import chilling.encore.global.config.security.jwt.JwtTokenProvider;
 import chilling.encore.global.config.security.jwt.TokenInfoResponse;
 import chilling.encore.global.config.redis.RedisRepository;
@@ -96,7 +97,7 @@ public class UserService {
             TokenInfoResponse tokenInfoResponse = validateLogin(userLoginRequest);
 
             String id = userLoginRequest.getId();
-            User user = userRepository.findByUserId(id).orElseThrow();
+            User user = userRepository.findByUserId(id).orElseThrow(() -> new UserException.NoSuchRegionException());
             LocalDate now = LocalDate.now();
             user.updateLoginAt(now);
 
@@ -132,7 +133,7 @@ public class UserService {
     }
 
     public User validateUserId(String id) {
-        User user = userRepository.findByUserId(id).orElseThrow();
+        User user = userRepository.findByUserId(id).orElseThrow(() -> new UserException.NoSuchRegionException());
         return user;
     }
 

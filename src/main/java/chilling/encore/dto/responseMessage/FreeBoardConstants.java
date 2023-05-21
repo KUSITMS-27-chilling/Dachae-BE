@@ -24,7 +24,7 @@ public class FreeBoardConstants {
     @Getter
     @RequiredArgsConstructor
     public enum FreeBoardFailCode {
-        NO_SUCH_IDX_MESSAGE("fr001");
+        NO_SUCH_IDX_CODE("fr001");
         private final String code;
     }
 }

@@ -15,7 +15,7 @@ public abstract class FreeException extends ApplicationException {
 
     public static class NoSuchIdxException extends FreeException{
         public NoSuchIdxException() {
-            super(FreeBoardFailMessage.NO_SUCH_IDX_MESSAGE.getMessage(), FreeBoardFailCode.NO_SUCH_IDX_MESSAGE.getCode(), INTERNAL_SERVER_ERROR);
+            super(FreeBoardFailMessage.NO_SUCH_IDX_MESSAGE.getMessage(), FreeBoardFailCode.NO_SUCH_IDX_CODE.getCode(), INTERNAL_SERVER_ERROR);
         }
     }
 }

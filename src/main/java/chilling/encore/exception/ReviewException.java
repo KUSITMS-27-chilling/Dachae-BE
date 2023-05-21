@@ -13,7 +13,7 @@ public abstract class ReviewException extends ApplicationException {
 
     public static class NoSuchIdxException extends ReviewException{
         public NoSuchIdxException() {
-            super(ReviewFailMessage.NO_SUCH_IDX_MESSAGE.getMessage(), ReviewFailCode.NO_SUCH_IDX_MESSAGE.getCode(), HttpStatus.INTERNAL_SERVER_ERROR);
+            super(ReviewFailMessage.NO_SUCH_IDX_MESSAGE.getMessage(), ReviewFailCode.NO_SUCH_IDX_CODE.getCode(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

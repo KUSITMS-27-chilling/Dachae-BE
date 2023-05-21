@@ -27,6 +27,7 @@ public class UserConstants {
     @RequiredArgsConstructor
     public enum UserFailMessage {
         NOT_FOUND_USER("[ERROR] 아이디 혹은 비밀번호가 틀렸습니다."),
+        NO_SUCH_IDX_MESSAGE("[ERROR] 해당 유저가 존재하지 않습니다."),
         AUTHORIZATION_FAIL("[ERROR] 회원 권한이 없습니다.");
         private final String message;
     }
@@ -35,7 +36,8 @@ public class UserConstants {
     @RequiredArgsConstructor
     public enum UserFailCode {
         NOT_FOUND_USER("ua001"),
-        AUTHORIZATION_FAIL("ua002");
+        NO_SUCH_IDX_CODE("ua002"),
+        AUTHORIZATION_FAIL("ua003");
         private final String code;
     }
 
