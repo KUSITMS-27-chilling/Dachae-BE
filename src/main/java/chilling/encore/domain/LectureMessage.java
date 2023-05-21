@@ -1,8 +1,12 @@
 package chilling.encore.domain;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @AllArgsConstructor
@@ -23,4 +27,8 @@ public class LectureMessage {
     private String content;
     private String email;
     private String tel;
+    @ColumnDefault("false")
+    private boolean isRead;
+    @CreationTimestamp
+    private LocalDate createdAt;
 }
