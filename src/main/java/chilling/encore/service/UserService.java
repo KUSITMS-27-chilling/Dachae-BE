@@ -45,6 +45,7 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisRepository redisRepository;
+    private final String USER_PLUS = "LearningInfo";
 
     //회원가입
     public User signUp(UserSignUpRequest userSignUpRequest) {
@@ -225,8 +226,8 @@ public class UserService {
 
     public List<LearningInfo> getLearningInfo() {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
-        Set<String> learningInfoIds = redisRepository.getLearningInfoIds(String.valueOf(user.getUserIdx()), 0, -1);
-        List<String> learningInfos = redisRepository.getLearningInfos(String.valueOf(user.getUserIdx()), learningInfoIds);
+        Set<String> learningInfoIds = redisRepository.getLearningInfoIds(String.valueOf(user.getUserIdx()) + USER_PLUS, 0, -1);
+        List<String> learningInfos = redisRepository.getLearningInfos(String.valueOf(user.getUserIdx()) + USER_PLUS, learningInfoIds);
         Iterator<String> learningInfoIdIterator = learningInfoIds.iterator();
 
         List<LearningInfo> learningInfosResult = new ArrayList<>();

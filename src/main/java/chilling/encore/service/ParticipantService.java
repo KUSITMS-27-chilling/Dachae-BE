@@ -33,6 +33,7 @@ public class ParticipantService {
     private final UserRepository userRepository;
     private final ListenTogetherRepository listenTogetherRepository;
     private final RedisRepository redisRepository;
+    private final String USER_PLUS = "LearningInfo";
 
     public void upParticipants(ParticipantDto.ParticipantRequest participantRequest) {
         User user = userRepository.findById(
@@ -61,10 +62,8 @@ public class ParticipantService {
 
     private void addLearningInfo(User user, ListenTogether listenTogether) {
         String isFin = "false";
-        if (listenTogether.getGoalNum() >= listenTogether.getParticipants().size())
-            isFin = "true";
         redisRepository.addLearningInfo(
-                listenTogether.getUser().getUserIdx().toString(),
+                listenTogether.getUser().getUserIdx().toString() + USER_PLUS,
                 UUID.randomUUID().toString(),
                 listenTogether.getTitle(),
                 isFin,
@@ -72,5 +71,17 @@ public class ParticipantService {
                 user.getNickName(),
                 LocalDateTime.now()
         );
+        if (listenTogether.getGoalNum() - 1 == listenTogether.getParticipants().size()) {
+            isFin = "true";
+            redisRepository.addLearningInfo(
+                    listenTogether.getUser().getUserIdx().toString() + USER_PLUS,
+                    UUID.randomUUID().toString(),
+                    listenTogether.getTitle(),
+                    isFin,
+                    listenTogether.getListenIdx().toString(),
+                    null,
+                    LocalDateTime.now()
+            );
+        }
     }
 }
