@@ -3,6 +3,7 @@ package chilling.encore.service;
 import chilling.encore.domain.*;
 import chilling.encore.dto.CommentsDto.*;
 import chilling.encore.exception.ReviewException.NoSuchIdxException;
+import chilling.encore.exception.UserException;
 import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.*;
@@ -63,7 +64,7 @@ public class ReviewCommentService {
             String reviewUserIdx = review.getUser().getUserIdx().toString();
             String mention = createCommentsRequest.getMention();
             String mentionUserIdx = userRepository.findByNickName(mention)
-                    .orElseThrow().getUserIdx()
+                    .orElseThrow(() -> new UserException.NoSuchRegionException()).getUserIdx()
                     .toString(); //태그된 사람의 Idx
 
             validMention(reviewIdx, createCommentsRequest, user, review, reviewUserIdx, mention, mentionUserIdx);

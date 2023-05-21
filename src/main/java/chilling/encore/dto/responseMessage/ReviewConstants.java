@@ -25,7 +25,7 @@ public class ReviewConstants {
     @Getter
     @RequiredArgsConstructor
     public enum ReviewFailCode {
-        NO_SUCH_IDX_MESSAGE("rv001");
+        NO_SUCH_IDX_CODE("rv001");
         private final String code;
     }
 }
