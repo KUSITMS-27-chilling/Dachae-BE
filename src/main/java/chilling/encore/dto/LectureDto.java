@@ -16,13 +16,19 @@ public abstract class LectureDto {
     public static class LectureBasicInfo {
         private final int price;
         private final int goalNum;
-        private final String proceed;
+        private final List<String> lectureObjective;
+        private final List<String> lectureContent;
+        private final List<String> lectureMethod;
+        private final List<String> lectureRequired;
 
-        public static LectureBasicInfo from(Lecture lecture) {
+        public static LectureBasicInfo from(Lecture lecture, List<String>[] proceeds) {
             return LectureBasicInfo.builder()
                     .price(lecture.getPrice())
                     .goalNum(lecture.getGoalNum())
-                    .proceed(lecture.getProceed())
+                    .lectureObjective(proceeds[0])
+                    .lectureContent(proceeds[1])
+                    .lectureMethod(proceeds[2])
+                    .lectureRequired(proceeds[3])
                     .build();
         }
     }
