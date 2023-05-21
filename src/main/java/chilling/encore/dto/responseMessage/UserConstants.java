@@ -15,6 +15,7 @@ public class UserConstants {
         EMAIL_SEND_SUCCESS("EMAIL 인증번호 전송에 성공했습니다."),
         CHECK_DUP("중복확인 조회에 성공했습니다."),
         SELECT_GRADE_SUCCESS("회원 등급 조회에 성공했습니다."),
+        SELECT_LEARNING_INFO_SUCCESS("배움 소식 조회에 성공했습니다."),
         SELECT_INFO_SUCCESS("회원 정보 조회에 성공했습니다."),
         SELECT_REGION_SUCCESS("관심 지역 조회에 성공했습니다."),
         EDIT_NICKNAME_SUCCESS("닉네임 수정에 성공했습니다."),
