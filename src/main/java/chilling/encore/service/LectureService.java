@@ -1,10 +1,9 @@
 package chilling.encore.service;
 
 import chilling.encore.domain.*;
-import chilling.encore.domain.TeacherInfo;
-import chilling.encore.dto.LectureDto;
 import chilling.encore.dto.LectureDto.*;
-import chilling.encore.dto.responseMessage.LectureConstants;
+import chilling.encore.exception.LectureException;
+import chilling.encore.exception.LectureException.NoSuchIdxException;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.repository.springDataJpa.LectureRepository;
@@ -101,7 +100,7 @@ public class LectureService {
 
     public LectureDetailsTeacher getTeacherInfo(Long lectureIdx) {
         TeacherInfo teacherInfo = lectureRepository.findById(lectureIdx)
-                                        .orElseThrow().getTeacherInfo();
+                                        .orElseThrow(() -> new NoSuchIdxException()).getTeacherInfo();
         List<String> careers = new ArrayList<>();
         List<String> certificates = new ArrayList<>();
         if (teacherInfo.getCareer() != null)
@@ -112,7 +111,7 @@ public class LectureService {
     }
 
     public LectureImages getImages(Long lectureIdx) {
-        Lecture lecture = lectureRepository.findById(lectureIdx).orElseThrow();
+        Lecture lecture = lectureRepository.findById(lectureIdx).orElseThrow(() -> new NoSuchIdxException());
         List<String> images = new ArrayList<>();
         if (lecture.getImage() != null)
             images = List.of(lecture.getImage().split(","));
@@ -120,7 +119,7 @@ public class LectureService {
     }
 
     public LectureBasicInfo getLectureBasicInfo(Long lectureIdx) {
-        Lecture lecture = lectureRepository.findById(lectureIdx).orElseThrow();
+        Lecture lecture = lectureRepository.findById(lectureIdx).orElseThrow(() -> new NoSuchIdxException());
         return LectureBasicInfo.from(lecture, getProceeds(lecture));
     }
 

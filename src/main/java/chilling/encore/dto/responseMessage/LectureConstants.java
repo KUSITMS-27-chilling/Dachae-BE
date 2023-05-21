@@ -16,4 +16,18 @@ public class LectureConstants {
 
         private final String message;
     }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum LectureFailMessage {
+        NO_SUCH_IDX_MESSAGE("[ERROR] 동네 강의 번호가 잘못되었습니다.");
+        private final String message;
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum LectureFailCode {
+        NO_SUCH_IDX_CODE("lc001");
+        private final String code;
+    }
 }
