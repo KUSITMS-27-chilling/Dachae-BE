@@ -11,6 +11,7 @@ import chilling.encore.exception.FreeException.NoSuchIdxException;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.repository.springDataJpa.FreeBoardRepository;
+import chilling.encore.repository.springDataJpa.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ import java.util.List;
 public class FreeBoardService {
     private final FreeBoardRepository freeBoardRepository;
     private final CenterRepository centerRepository;
+    private final UserRepository userRepository;
     private final int FREE_BOARD_PAGE_SIZE = 8;
 
     public AllFreeBoards getFreeBoardPage(Integer page, String region, String orderBy) {
@@ -66,7 +68,7 @@ public class FreeBoardService {
 
     private void loginPopular(List<String> regions) {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
-        regions.add(user.getRegion());
+
         String[] favRegions = user.getFavRegion().split(",");
         for (int i = 0; i < favRegions.length; i++) {
             regions.add(favRegions[i]);
@@ -74,7 +76,10 @@ public class FreeBoardService {
     }
 
     public void save(CreateFreeBoardRequest createFreeBoardRequest) {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = userRepository.findById(SecurityUtils.getLoggedInUser()
+                .orElseThrow(() -> new ClassCastException("NotLogin"))
+                .getUserIdx()).get();
+        user.updateGrade();
         FreeBoard freeBoard = CreateFreeBoardRequest.to(createFreeBoardRequest, user);
         freeBoardRepository.save(freeBoard);
     }
