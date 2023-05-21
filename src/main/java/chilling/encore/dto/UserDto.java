@@ -83,7 +83,7 @@ public abstract class UserDto {
         private String profile;
         private String nickName;
         private int grade;
-        private List<String> favFiled;
+        private List<String> favField;
 
         public static UserGrade from(User user) {
             List<String> favField = new ArrayList<>();
@@ -93,7 +93,7 @@ public abstract class UserDto {
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
                     .grade(user.getGrade())
-                    .favFiled(favField)
+                    .favField(favField)
                     .build();
         }
     }
