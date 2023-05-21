@@ -8,6 +8,7 @@ import chilling.encore.dto.ReviewDto;
 import chilling.encore.dto.ReviewDto.PopularReview;
 import chilling.encore.dto.ReviewDto.ReviewPage;
 import chilling.encore.dto.ReviewDto.SelectReview;
+import chilling.encore.exception.ProgramException;
 import chilling.encore.exception.ReviewException;
 import chilling.encore.exception.ReviewException.NoSuchIdxException;
 import chilling.encore.global.config.security.util.SecurityUtils;
@@ -129,7 +130,7 @@ public class ReviewService {
         User user = userRepository.findById(SecurityUtils.getLoggedInUser()
                 .orElseThrow(() -> new ClassCastException("NotLogin"))
                 .getUserIdx()).get();
-        Program program = programRepository.findById(createReviewRequest.getProgramIdx()).orElseThrow();
+        Program program = programRepository.findById(createReviewRequest.getProgramIdx()).orElseThrow(() -> new ProgramException.NoSuchIdxException());
 
         Review review = Review.builder()
                 .title(createReviewRequest.getTitle())
