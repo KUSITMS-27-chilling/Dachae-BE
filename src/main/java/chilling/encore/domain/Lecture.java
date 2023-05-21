@@ -24,7 +24,13 @@ public class Lecture {
     private int price;
     private int goalNum;
     @Column(columnDefinition = "TEXT")
-    private String proceed;
+    private String lectureObjective;
+    @Column(columnDefinition = "TEXT")
+    private String lectureContent;
+    @Column(columnDefinition = "TEXT")
+    private String lectureMethod;
+    @Column(columnDefinition = "TEXT")
+    private String lectureRequired;
     @Column(columnDefinition = "TEXT")
     private String image;
     private String region;
