@@ -126,7 +126,9 @@ public class ReviewService {
     }
 
     public void save(ReviewDto.CreateReviewRequest createReviewRequest) {
-        User securityUser = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = userRepository.findById(SecurityUtils.getLoggedInUser()
+                .orElseThrow(() -> new ClassCastException("NotLogin"))
+                .getUserIdx()).get();
         Program program = programRepository.findById(createReviewRequest.getProgramIdx()).orElseThrow();
 
         Review review = Review.builder()
@@ -136,10 +138,8 @@ public class ReviewService {
                 .image(createReviewRequest.getImage())
                 .hit(0)
                 .program(program)
-                .user(securityUser).build();
+                .user(user).build();
         reviewRepository.save(review);
-
-        User user = userRepository.findById(securityUser.getUserIdx()).orElseThrow();
         user.updateGrade();
     }
 

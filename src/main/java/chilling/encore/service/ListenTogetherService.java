@@ -98,20 +98,19 @@ public class ListenTogetherService {
     }
 
     public void save(CreateListenTogetherRequest createListenTogetherReq) {
-        User securityUser = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = userRepository.findById(SecurityUtils.getLoggedInUser()
+                .orElseThrow(() -> new ClassCastException("NotLogin"))
+                .getUserIdx()).get();
         Program program = programRepository.findById(createListenTogetherReq.getProgramIdx()).orElseThrow();
-
         ListenTogether listenTogether = ListenTogether.builder()
                 .goalNum(createListenTogetherReq.getGoalNum())
                 .title(createListenTogetherReq.getTitle())
                 .content(createListenTogetherReq.getContent())
                 .hit(0)
                 .program(program)
-                .user(securityUser)
+                .user(user)
                 .build();
         listenTogetherRepository.save(listenTogether);
-
-        User user = userRepository.findById(securityUser.getUserIdx()).orElseThrow();
         user.updateGrade();
         return;
     }
