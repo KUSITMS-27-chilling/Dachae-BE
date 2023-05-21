@@ -4,6 +4,8 @@ import chilling.encore.domain.ListenTogether;
 import chilling.encore.domain.Participants;
 import chilling.encore.domain.User;
 import chilling.encore.dto.ParticipantDto;
+import chilling.encore.exception.ListenException;
+import chilling.encore.exception.ListenException.NoSuchIdxException;
 import chilling.encore.exception.ParticipantException;
 import chilling.encore.exception.ParticipantException.DuplicateParticipationException;
 import chilling.encore.exception.ParticipantException.FullParticipantException;
@@ -32,7 +34,7 @@ public class ParticipantService {
                 SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"))
                         .getUserIdx()).orElseThrow();
         log.info("listenTogetherIdx = {}", participantRequest.getListenTogetherIdx());
-        ListenTogether listenTogether = listenTogetherRepository.findById(participantRequest.getListenTogetherIdx()).orElseThrow();
+        ListenTogether listenTogether = listenTogetherRepository.findById(participantRequest.getListenTogetherIdx()).orElseThrow(() -> new NoSuchIdxException());
         validate(user, listenTogether);
 
         Participants participants = Participants.builder()
