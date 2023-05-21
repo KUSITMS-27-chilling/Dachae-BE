@@ -121,6 +121,27 @@ public class LectureService {
 
     public LectureBasicInfo getLectureBasicInfo(Long lectureIdx) {
         Lecture lecture = lectureRepository.findById(lectureIdx).orElseThrow();
-        return LectureBasicInfo.from(lecture);
+        return LectureBasicInfo.from(lecture, getProceeds(lecture));
+    }
+
+    private List<String>[] getProceeds(Lecture lecture) {
+        List<String> lectureObjectives = new ArrayList<>();
+        List<String> lectureContents = new ArrayList<>();
+        List<String> lectureMethods = new ArrayList<>();
+        List<String> lectureRequireds = new ArrayList<>();
+
+        String lectureObjective = lecture.getLectureObjective();
+        if (lectureObjective != null)
+            lectureObjectives = List.of(lectureObjective.split(","));
+        String lectureContent = lecture.getLectureContent();
+        if (lectureContent != null)
+            lectureContents = List.of(lectureContent.split(","));
+        String lectureMethod = lecture.getLectureMethod();
+        if (lectureMethod != null)
+            lectureMethods = List.of(lectureMethod.split(","));
+        String lectureRequired = lecture.getLectureRequired();
+        if (lectureRequired != null)
+            lectureRequireds = List.of(lectureRequired.split(","));
+        return new List[]{lectureObjectives, lectureContents, lectureMethods, lectureRequireds};
     }
 }
