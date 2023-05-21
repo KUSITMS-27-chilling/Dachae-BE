@@ -45,6 +45,7 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisRepository redisRepository;
+    private final String USER_PLUS = "LearningInfo";
 
     //회원가입
     public User signUp(UserSignUpRequest userSignUpRequest) {
@@ -223,36 +224,23 @@ public class UserService {
         return GetTotalWrite.from(allTotal, listenTotal, reviewTotal, freeTotal);
     }
 
-    /**
-     * 배움 소식 결정 되면 다시 진행
-     */
-
-    public AlarmResponse getAlarm() {
+    public List<LearningInfo> getLearningInfo() {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
-        Set<String> notificationIds = redisRepository.getNotificationIds(String.valueOf(user.getUserIdx()), 0, -1);
-        List<String> notifications = redisRepository.getNotifications(String.valueOf(user.getUserIdx()), notificationIds);
-        Iterator<String> notificationIdIterator = notificationIds.iterator();
-        List<AlaramDto.NewAlarm> newAlarms = getNewAlarms(notifications, notificationIdIterator);
+        Set<String> learningInfoIds = redisRepository.getLearningInfoIds(String.valueOf(user.getUserIdx()) + USER_PLUS, 0, -1);
+        List<String> learningInfos = redisRepository.getLearningInfos(String.valueOf(user.getUserIdx()) + USER_PLUS, learningInfoIds);
+        Iterator<String> learningInfoIdIterator = learningInfoIds.iterator();
 
-        return AlarmResponse.from(newAlarms);
-    }
+        List<LearningInfo> learningInfosResult = new ArrayList<>();
+        for (int i = learningInfoIds.size() - 1; i >= 0; i--) {
+            String[] splitData = learningInfos.get(i).split(":");
+            String isFin = splitData[0];
+            String listenIdx = splitData[1];
+            String title = splitData[2];
+            String nickName = splitData[3];
 
-    private List<AlaramDto.NewAlarm> getNewAlarms(List<String> notifications, Iterator<String> notificationIdIterator) {
-//        List<AlaramDto.NewAlarm> newAlarms = new ArrayList<>();
-//        for (int i = 0; i < 3; i++) {
-//            String[] splitDatas = notifications.get(i).split(":");
-//            String boardType = splitDatas[0];
-//            String title = splitDatas[2];
-//            String nickName = splitDatas[3];
-//            String content = splitDatas[4];
-//            if (boardType.equals("Listen")) {
-//                newAlarms.add(AlaramDto.NewAlarm.from(notificationIdIterator.next(), Long.parseLong(splitDatas[1]),
-//                        null, title, nickName, content));
-//                continue;
-//            }
-//            newAlarms.add(AlaramDto.NewAlarm.from(notificationIdIterator.next(), null, Long.parseLong(splitDatas[1]),
-//                    title, nickName, content));
-//        }
-        return null;
+            LearningInfo learningInfo = LearningInfo.from(learningInfoIdIterator.next(), isFin, listenIdx, title, nickName);
+            learningInfosResult.add(learningInfo);
+        }
+        return learningInfosResult;
     }
 }

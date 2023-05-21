@@ -203,4 +203,23 @@ public abstract class UserDto {
                     .build();
         }
     }
+
+    @Getter
+    @Builder
+    public static class LearningInfo {
+        private String learningInfoIdx;
+        private String isFin;
+        private String listenIdx;
+        private String title;
+        private String nickName;
+        public static LearningInfo from(String learningInfoIdx, String isFin, String listenIdx, String title, String nickName) {
+            return LearningInfo.builder()
+                    .learningInfoIdx(learningInfoIdx)
+                    .isFin(isFin)
+                    .listenIdx(listenIdx)
+                    .title(title)
+                    .nickName(nickName)
+                    .build();
+        }
+    }
 }

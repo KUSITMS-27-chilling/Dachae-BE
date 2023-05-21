@@ -34,7 +34,7 @@ public class AlarmService {
 
     private List<NewAlarm> getNewAlarms(List<String> notifications, Iterator<String> notificationIdIterator) {
         List<NewAlarm> newAlarms = new ArrayList<>();
-        for (int i = 0; i < notifications.size(); i++) {
+        for (int i = notifications.size() - 1; i >= 0; i--) {
             String[] splitDatas = notifications.get(i).split(":");
             String boardType = splitDatas[0];
             String title = splitDatas[2];
