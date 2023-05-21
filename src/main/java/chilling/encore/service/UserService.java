@@ -231,7 +231,7 @@ public class UserService {
         Iterator<String> learningInfoIdIterator = learningInfoIds.iterator();
 
         List<LearningInfo> learningInfosResult = new ArrayList<>();
-        for (int i = 0; i < learningInfoIds.size(); i++) {
+        for (int i = learningInfoIds.size() - 1; i >= 0; i--) {
             String[] splitData = learningInfos.get(i).split(":");
             String isFin = splitData[0];
             String listenIdx = splitData[1];

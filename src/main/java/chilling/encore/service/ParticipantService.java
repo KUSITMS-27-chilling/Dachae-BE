@@ -71,6 +71,7 @@ public class ParticipantService {
                 user.getNickName(),
                 LocalDateTime.now()
         );
+
         if (listenTogether.getGoalNum() - 1 == listenTogether.getParticipants().size()) {
             isFin = "true";
             redisRepository.addLearningInfo(
