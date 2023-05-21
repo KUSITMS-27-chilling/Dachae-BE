@@ -4,6 +4,7 @@ package chilling.encore.service;
 import chilling.encore.domain.*;
 import chilling.encore.dto.ListenTogetherDto.*;
 import chilling.encore.exception.ListenException.NoSuchIdxException;
+import chilling.encore.exception.ProgramException;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.repository.springDataJpa.ListenTogetherRepository;
@@ -101,7 +102,7 @@ public class ListenTogetherService {
         User user = userRepository.findById(SecurityUtils.getLoggedInUser()
                 .orElseThrow(() -> new ClassCastException("NotLogin"))
                 .getUserIdx()).get();
-        Program program = programRepository.findById(createListenTogetherReq.getProgramIdx()).orElseThrow();
+        Program program = programRepository.findById(createListenTogetherReq.getProgramIdx()).orElseThrow(() -> new ProgramException.NoSuchIdxException());
         ListenTogether listenTogether = ListenTogether.builder()
                 .goalNum(createListenTogetherReq.getGoalNum())
                 .title(createListenTogetherReq.getTitle())
