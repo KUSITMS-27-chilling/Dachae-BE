@@ -11,8 +11,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static chilling.encore.dto.responseMessage.UserConstants.SuccessMessage.*;
 import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.CREATE_SUCCESS_CODE;
@@ -33,14 +36,14 @@ public class UserController {
     @ApiOperation(value = "회원가입", notes = "회원가입 완료합니다.")
     public ResponseEntity<ResponseDto<User>> signUp(@RequestBody UserSignUpRequest userSignUpRequest) {
         userService.signUp(userSignUpRequest);
-        return ResponseEntity.ok(ResponseDto.create(CREATE_SUCCESS_CODE.getCode(), SIGNUP_SUCCESS.getMessage()));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), SIGNUP_SUCCESS.getMessage()));
     }
 
     @PostMapping("/signup/oauth2")
     @ApiOperation(value = "oauth2 회원 가입", notes = "oauth2 추가 정보 받은 이후 회원가입 진행")
     public ResponseEntity<ResponseDto> signUp(@RequestBody Oauth2SignUpRequest oauth2SignUpRequest) {
         User user = userService.oauth2signUp(oauth2SignUpRequest);
-        return ResponseEntity.ok(ResponseDto.create(CREATE_SUCCESS_CODE.getCode(), SIGNUP_SUCCESS.getMessage()));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), SIGNUP_SUCCESS.getMessage()));
     }
 
     @GetMapping("/checkIdDup")
@@ -48,7 +51,7 @@ public class UserController {
     public ResponseEntity<ResponseDto<Boolean>> checkId(String id) {
         return ResponseEntity.ok(
                 ResponseDto.create(
-                        SELECT_SUCCESS_CODE.getCode(),
+                        HttpStatus.OK.value(),
                         CHECK_DUP.getMessage(),
                         userService.checkIdDup(id)
                 )
@@ -60,7 +63,7 @@ public class UserController {
     public ResponseEntity<ResponseDto<Boolean>> checkNick(String nickName) {
         return ResponseEntity.ok(
                 ResponseDto.create(
-                        SELECT_SUCCESS_CODE.getCode(),
+                        HttpStatus.OK.value(),
                         CHECK_DUP.getMessage(),
                         userService.checkNick(nickName)
                 )
@@ -73,7 +76,7 @@ public class UserController {
         try {
             log.info("email = {}", email);
             String s = emailService.sendSimpleMessage(email);
-            return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EMAIL_SEND_SUCCESS.getMessage(), s));
+            return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), EMAIL_SEND_SUCCESS.getMessage(), s));
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
@@ -84,69 +87,76 @@ public class UserController {
     @ApiOperation(value = "로그인", notes = "로그인 진행")
     public ResponseEntity<ResponseDto<UserLoginResponse>> login(@RequestBody UserLoginRequest userLoginRequest) {
         UserLoginResponse loginResponse = userService.login(userLoginRequest);
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), LOGIN_SUCCESS.getMessage(), loginResponse));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LOGIN_SUCCESS.getMessage(), loginResponse));
     }
 
     @GetMapping("/grade")
     @ApiOperation(value = "회원 등급 조회", notes = "등급과 관심 분야")
     public ResponseEntity<ResponseDto<UserGrade>> selectGrade() {
         UserGrade grade = userService.getGrade();
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_GRADE_SUCCESS.getMessage(), grade));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_GRADE_SUCCESS.getMessage(), grade));
+    }
+
+    @GetMapping("/learningInfo")
+    @ApiOperation(value = "배움 정보 조회", notes = "토큰 필수")
+    public ResponseEntity<ResponseDto<List<LearningInfo>>> selectLearningInfo() {
+        List<LearningInfo> learningInfos = userService.getLearningInfo();
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_LEARNING_INFO_SUCCESS.getMessage(), learningInfos));
     }
 
     @GetMapping("/regions")
     @ApiOperation(value = "유저 관심 지역 조회", notes = "로그인 하지 않은 경우 인기 지역 조회")
     public ResponseEntity<ResponseDto<UserFavRegion>> selectFavRegion() {
         UserFavRegion favCenter = userService.getFavCenter();
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_REGION_SUCCESS.getMessage(), favCenter));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_REGION_SUCCESS.getMessage(), favCenter));
     }
 
     @GetMapping("/favRegions")
     @ApiOperation(value = "거주지 이외의 관심지역 조회 (관심지역 수정시 사용)", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto<UserFavRegion>> selectOnlyFavRegion() {
         UserFavRegion favCenter = userService.onlyFavRegion();
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_REGION_SUCCESS.getMessage(), favCenter));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_REGION_SUCCESS.getMessage(), favCenter));
     }
 
     @PutMapping("/regions")
     @ApiOperation(value = "유저 관심 지역 수정", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto> editFavRegion(@RequestBody EditFavRegion editFavRegion) {
         userService.editFavRegion(editFavRegion);
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_REGION_SUCCESS.getMessage()));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), EDIT_REGION_SUCCESS.getMessage()));
     }
 
     @PutMapping("/nickName")
     @ApiOperation(value = "유저 닉네임 수정", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto> editNickName(@RequestBody EditNickName editNickName) {
         userService.editNickName(editNickName);
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_NICKNAME_SUCCESS.getMessage()));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), EDIT_NICKNAME_SUCCESS.getMessage()));
     }
 
     @PutMapping("/favField")
     @ApiOperation(value = "유저 활동 분야 수정", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto> editFavField(@RequestBody EditFavField editFavField) {
         userService.editFavField(editFavField);
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), EDIT_FAV_FIELD_SUCCESS.getMessage()));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), EDIT_FAV_FIELD_SUCCESS.getMessage()));
     }
 
     @GetMapping("/userInfo")
     @ApiOperation(value = "마이페이지에서 유저 정보 조회", notes = "프로필, 닉네임, 유저 등급 등등")
     public ResponseEntity<ResponseDto<UserInfo>> getUserInfo() {
         UserInfo userInfo = userService.getUserInfo();
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_INFO_SUCCESS.getMessage(), userInfo));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_INFO_SUCCESS.getMessage(), userInfo));
     }
 
     @GetMapping("/participants")
     @ApiOperation(value = "마이페이지 유저가 참여한 회수 조회")
     public ResponseEntity<ResponseDto<GetTotalParticipants>> getUserParticipant() {
         GetTotalParticipants userParticipant = userService.getUserParticipant();
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_INFO_SUCCESS.getMessage(), userParticipant));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_INFO_SUCCESS.getMessage(), userParticipant));
     }
 
     @GetMapping("/myPosts")
     @ApiOperation(value = "마이페이지 유저의 작성글 조회", notes = "전체 ~ 각각")
     public ResponseEntity<ResponseDto<UserDto.GetTotalWrite>> getTotalWrite() {
         UserDto.GetTotalWrite total = userService.getTotalWrite();
-        return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_INFO_SUCCESS.getMessage(), total));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_INFO_SUCCESS.getMessage(), total));
     }
 }

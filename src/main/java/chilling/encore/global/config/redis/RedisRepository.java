@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -70,6 +71,34 @@ public class RedisRepository {
     }
 
     public void removeNotification(String userIdx, String notificationId) {
+        hashOps.delete("userIdx:" + userIdx + ":notifications", notificationId);
+        redisTemplate.opsForZSet().remove("userIdx:" + userIdx + ":notifications:sorted", notificationId);
+    }
+
+    public void addLearningInfo(String userIdx, String notificationId, String title, String isFin, String listenIdx, String nickName, LocalDateTime now) {
+        ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
+
+        // 배움 소식 내용을 문자열로 구성하여 저장
+        String notification = isFin + ":" + listenIdx + ":" + title + ":" + nickName;
+        // 배움 소식을 개별 해시 필드로 추가
+        hashOps.put("userIdx:" + userIdx + ":notifications", notificationId, notification);
+
+        // 알림 Sorted Set에는 알림의 점수만 저장
+        ZoneOffset offset = ZoneOffset.of("+09:00");
+        zSetOps.add("userIdx:" + userIdx + ":notifications:sorted", notificationId, now.toEpochSecond(offset));
+    }
+
+    public Set<String> getLearningInfoIds(String userIdx, long start, long end) {
+        ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
+
+        return zSetOps.range("userIdx:" + userIdx + ":notifications:sorted", start, end);
+    }
+
+    public List<String> getLearningInfos(String userIdx, Set<String> notificationIds) {
+        return hashOps.multiGet("userIdx:" + userIdx + ":notifications", notificationIds);
+    }
+
+    public void removeLearningInfo(String userIdx, String notificationId) {
         hashOps.delete("userIdx:" + userIdx + ":notifications", notificationId);
         redisTemplate.opsForZSet().remove("userIdx:" + userIdx + ":notifications:sorted", notificationId);
     }

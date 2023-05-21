@@ -10,6 +10,7 @@ import chilling.encore.exception.ParticipantException;
 import chilling.encore.exception.ParticipantException.DuplicateParticipationException;
 import chilling.encore.exception.ParticipantException.FullParticipantException;
 import chilling.encore.exception.ParticipantException.MyListenTogetherException;
+import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.ListenTogetherRepository;
 import chilling.encore.repository.springDataJpa.ParticipantsRepository;
@@ -20,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -28,6 +32,7 @@ public class ParticipantService {
     private final ParticipantsRepository participantsRepository;
     private final UserRepository userRepository;
     private final ListenTogetherRepository listenTogetherRepository;
+    private final RedisRepository redisRepository;
 
     public void upParticipants(ParticipantDto.ParticipantRequest participantRequest) {
         User user = userRepository.findById(
@@ -42,6 +47,7 @@ public class ParticipantService {
                 .user(user)
                 .build();
         participantsRepository.save(participants);
+        addLearningInfo(user, listenTogether);
     }
 
     private void validate(User user, ListenTogether listenTogether) {
@@ -51,5 +57,20 @@ public class ParticipantService {
             throw new DuplicateParticipationException();
         if (listenTogether.getUser().getUserIdx() == user.getUserIdx())
             throw new MyListenTogetherException();
+    }
+
+    private void addLearningInfo(User user, ListenTogether listenTogether) {
+        String isFin = "false";
+        if (listenTogether.getGoalNum() >= listenTogether.getParticipants().size())
+            isFin = "true";
+        redisRepository.addLearningInfo(
+                listenTogether.getUser().getUserIdx().toString(),
+                UUID.randomUUID().toString(),
+                listenTogether.getTitle(),
+                isFin,
+                listenTogether.getListenIdx().toString(),
+                user.getNickName(),
+                LocalDateTime.now()
+        );
     }
 }
