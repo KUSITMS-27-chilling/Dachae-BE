@@ -98,7 +98,7 @@ public class UserService {
             TokenInfoResponse tokenInfoResponse = validateLogin(userLoginRequest);
 
             String id = userLoginRequest.getId();
-            User user = userRepository.findByUserId(id).orElseThrow(() -> new UserException.NoSuchRegionException());
+            User user = userRepository.findByUserId(id).orElseThrow(() -> new UserException.NoSuchIdxException());
             LocalDate now = LocalDate.now();
             user.updateLoginAt(now);
 
@@ -134,7 +134,7 @@ public class UserService {
     }
 
     public User validateUserId(String id) {
-        User user = userRepository.findByUserId(id).orElseThrow(() -> new UserException.NoSuchRegionException());
+        User user = userRepository.findByUserId(id).orElseThrow(() -> new UserException.NoSuchIdxException());
         return user;
     }
 

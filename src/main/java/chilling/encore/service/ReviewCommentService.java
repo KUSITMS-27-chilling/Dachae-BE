@@ -30,7 +30,7 @@ public class ReviewCommentService {
     private final UserRepository userRepository;
 
     private int cnt;
-    private final String REVIEW = "Review";
+    private final String REVIEW = "review";
     /**
      * 게시글의 주인과 댓글 작성자가 같을 경우 알림X
      * 대댓글에 태그당한 사람과 게시글 주인이 같을 경우
@@ -64,7 +64,7 @@ public class ReviewCommentService {
             String reviewUserIdx = review.getUser().getUserIdx().toString();
             String mention = createCommentsRequest.getMention();
             String mentionUserIdx = userRepository.findByNickName(mention)
-                    .orElseThrow(() -> new UserException.NoSuchRegionException()).getUserIdx()
+                    .orElseThrow(() -> new UserException.NoSuchIdxException()).getUserIdx()
                     .toString(); //태그된 사람의 Idx
 
             validMention(reviewIdx, createCommentsRequest, user, review, reviewUserIdx, mention, mentionUserIdx);
@@ -72,7 +72,7 @@ public class ReviewCommentService {
             if (Long.parseLong(reviewUserIdx) == user.getUserIdx())
                 return true;
 
-            addCommentToRedis(reviewIdx, createCommentsRequest, user, review, reviewUserIdx, REVIEW, mention);
+            addCommentToRedis(reviewIdx.toString(), createCommentsRequest, user, review, reviewUserIdx, null);
 
             saveComments(createCommentsRequest, user, review);
             return true;
@@ -86,7 +86,7 @@ public class ReviewCommentService {
             // 태그된 사용자 != 게시글 작성자
             if (Long.parseLong(mentionUserIdx) != user.getUserIdx()) {
                 //댓글 작성자 != 태그된 사용자
-                addCommentToRedis(reviewIdx, createCommentsRequest, user, review, reviewUserIdx, REVIEW, mention);
+                addCommentToRedis(reviewIdx.toString(), createCommentsRequest, user, review, mentionUserIdx, mention);
             }
         }
     }
@@ -95,19 +95,19 @@ public class ReviewCommentService {
         Review review = reviewRepository.findById(reviewIdx).orElseThrow(() -> new NoSuchIdxException());
         String reviewUserIdx = review.getUser().getUserIdx().toString();
         if (user.getUserIdx() != Long.parseLong(reviewUserIdx)) {
-            addCommentToRedis(reviewIdx, createCommentsRequest, user, review, reviewUserIdx, REVIEW, null);
+            addCommentToRedis(reviewIdx.toString(), createCommentsRequest, user, review, reviewUserIdx, null);
         }
 
         saveComments(createCommentsRequest, user, review);
     }
 
-    private void addCommentToRedis(Long reviewIdx, CreateCommentsRequest createCommentsRequest, User user, Review review, String reviewUserIdx, String boardType, String mention) {
+    private void addCommentToRedis(String reviewIdx, CreateCommentsRequest createCommentsRequest, User user, Review review, String reviewUserIdx, String mention) {
         redisRepository.addNotification(
                 reviewUserIdx,
                 UUID.randomUUID().toString(),
                 review.getTitle(),
-                boardType,
-                reviewIdx.toString(),
+                REVIEW,
+                reviewIdx,
                 user.getNickName(),
                 createCommentsRequest.getContent(),
                 mention,
