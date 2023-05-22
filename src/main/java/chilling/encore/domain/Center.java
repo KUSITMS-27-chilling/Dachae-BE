@@ -16,7 +16,7 @@ public class Center {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long regionIdx;
-
+    private String url;
     private String region;
     private int favCount;
     private String tell;
