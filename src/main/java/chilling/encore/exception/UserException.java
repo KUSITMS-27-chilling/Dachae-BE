@@ -11,9 +11,9 @@ public abstract class UserException extends ApplicationException {
         super(message, errorCode, httpStatus);
     }
 
-    public static class NoSuchIdxException extends UserException {
+    public static class NoSuchRegionException extends UserException {
 
-        public NoSuchIdxException() {
+        public NoSuchRegionException() {
             super(NO_SUCH_IDX_MESSAGE.getMessage(), NO_SUCH_IDX_CODE.getCode(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

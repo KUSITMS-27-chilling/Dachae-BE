@@ -43,7 +43,7 @@ public class ProgramController {
         return ResponseEntity.ok(ResponseDto.create(SELECT_SUCCESS_CODE.getCode(), SELECT_PROGRAM_SUCCESS.getMessage(), centerPrograms));
     }
 
-    @GetMapping(value = {"/{region}/page", "/{region}/page/{page}"})
+    @GetMapping(value = {"/page/{region}", "/page/{region}/{page}"})
     @ApiOperation(value = "상세보기 각 센터 프로그램 조회", notes = "6개씩")
     public ResponseEntity<ResponseDto<PagingPrograms>> getDetailsPrograms(@PathVariable String region, @PathVariable @Nullable Integer page) {
         if (page == null)

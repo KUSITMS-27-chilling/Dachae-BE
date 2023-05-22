@@ -5,8 +5,8 @@ import chilling.encore.domain.User;
 import chilling.encore.dto.UserDto;
 import chilling.encore.dto.UserDto.*;
 import chilling.encore.global.config.email.EmailService;
-import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.UserService;
+import chilling.encore.global.dto.ResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static chilling.encore.dto.responseMessage.UserConstants.SuccessMessage.*;
+import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.CREATE_SUCCESS_CODE;
+import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
 
 @RequiredArgsConstructor
 @RestController
@@ -44,7 +46,7 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), SIGNUP_SUCCESS.getMessage()));
     }
 
-    @GetMapping("/id/duplicate")
+    @GetMapping("/checkIdDup")
     @ApiOperation(value = "아이디 중복체크", notes = "아이디 중복체크를 합니다.")
     public ResponseEntity<ResponseDto<Boolean>> checkId(String id) {
         return ResponseEntity.ok(
@@ -56,7 +58,7 @@ public class UserController {
         );
     }
 
-    @GetMapping("/nick/duplicate")
+    @GetMapping("/checkNickDup")
     @ApiOperation(value = "닉네임 중복체크", notes = "닉네임 중복체크를 합니다.")
     public ResponseEntity<ResponseDto<Boolean>> checkNick(String nickName) {
         return ResponseEntity.ok(
@@ -95,7 +97,7 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_GRADE_SUCCESS.getMessage(), grade));
     }
 
-    @GetMapping("/learning-info")
+    @GetMapping("/learningInfo")
     @ApiOperation(value = "배움 정보 조회", notes = "토큰 필수")
     public ResponseEntity<ResponseDto<List<LearningInfo>>> selectLearningInfo() {
         List<LearningInfo> learningInfos = userService.getLearningInfo();
@@ -109,7 +111,7 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_REGION_SUCCESS.getMessage(), favCenter));
     }
 
-    @GetMapping("/fav-regions")
+    @GetMapping("/favRegions")
     @ApiOperation(value = "거주지 이외의 관심지역 조회 (관심지역 수정시 사용)", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto<UserFavRegion>> selectOnlyFavRegion() {
         UserFavRegion favCenter = userService.onlyFavRegion();
@@ -123,21 +125,21 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), EDIT_REGION_SUCCESS.getMessage()));
     }
 
-    @PutMapping("/nick")
+    @PutMapping("/nickName")
     @ApiOperation(value = "유저 닉네임 수정", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto> editNickName(@RequestBody EditNickName editNickName) {
         userService.editNickName(editNickName);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), EDIT_NICKNAME_SUCCESS.getMessage()));
     }
 
-    @PutMapping("/fav-field")
+    @PutMapping("/favField")
     @ApiOperation(value = "유저 활동 분야 수정", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto> editFavField(@RequestBody EditFavField editFavField) {
         userService.editFavField(editFavField);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), EDIT_FAV_FIELD_SUCCESS.getMessage()));
     }
 
-    @GetMapping("/info")
+    @GetMapping("/userInfo")
     @ApiOperation(value = "마이페이지에서 유저 정보 조회", notes = "프로필, 닉네임, 유저 등급 등등")
     public ResponseEntity<ResponseDto<UserInfo>> getUserInfo() {
         UserInfo userInfo = userService.getUserInfo();
@@ -151,7 +153,7 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_INFO_SUCCESS.getMessage(), userParticipant));
     }
 
-    @GetMapping("/my-post")
+    @GetMapping("/myPosts")
     @ApiOperation(value = "마이페이지 유저의 작성글 조회", notes = "전체 ~ 각각")
     public ResponseEntity<ResponseDto<UserDto.GetTotalWrite>> getTotalWrite() {
         UserDto.GetTotalWrite total = userService.getTotalWrite();

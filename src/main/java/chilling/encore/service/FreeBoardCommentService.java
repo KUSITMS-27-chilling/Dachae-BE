@@ -8,7 +8,6 @@ import chilling.encore.dto.CommentsDto.FreeCommentResponse;
 import chilling.encore.exception.FreeException;
 import chilling.encore.exception.FreeException.NoSuchIdxException;
 import chilling.encore.exception.ListenException;
-import chilling.encore.exception.UserException;
 import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.FreeBoardCommentRepository;
@@ -36,7 +35,7 @@ public class FreeBoardCommentService {
     private final RedisRepository redisRepository;
     private final UserRepository userRepository;
 
-    private final String FREE = "free";
+    private final String LISTEN = "Listen";
     private int cnt;
 
     public void freeCommentSave(Long freeIdx, CreateCommentsRequest createCommentsRequest) {
@@ -53,7 +52,7 @@ public class FreeBoardCommentService {
             String freeUserIdx = freeBoard.getUser().getUserIdx().toString();
             String mention = createCommentsRequest.getMention();
             String mentionUserIdx = userRepository.findByNickName(mention)
-                    .orElseThrow(() -> new UserException.NoSuchIdxException()).getUserIdx()
+                    .orElseThrow().getUserIdx()
                     .toString(); //태그된 사람의 Idx
 
             validMention(freeIdx, createCommentsRequest, user, freeBoard, freeUserIdx, mention, mentionUserIdx);
@@ -61,7 +60,7 @@ public class FreeBoardCommentService {
             if (Long.parseLong(freeUserIdx) == user.getUserIdx())
                 return true;
 
-            addCommentToRedis(freeIdx.toString(), createCommentsRequest, user, freeBoard, freeUserIdx, null);
+            addCommentToRedis(freeIdx, createCommentsRequest, user, freeBoard, freeUserIdx, LISTEN, mention);
 
             saveComments(createCommentsRequest, user, freeBoard);
             return true;
@@ -75,7 +74,7 @@ public class FreeBoardCommentService {
             // 태그된 사용자 != 게시글 작성자
             if (Long.parseLong(mentionUserIdx) != user.getUserIdx()) {
                 //댓글 작성자 != 태그된 사용자
-                addCommentToRedis(freeIdx.toString(), createCommentsRequest, user, freeBoard, mentionUserIdx, mention);
+                addCommentToRedis(freeIdx, createCommentsRequest, user, freeBoard, freeUserIdx, LISTEN, mention);
             }
         }
     }
@@ -84,19 +83,19 @@ public class FreeBoardCommentService {
         FreeBoard freeBoard = freeBoardRepository.findById(freeIdx).orElseThrow(() -> new NoSuchIdxException());
         String freeUserIdx = freeBoard.getUser().getUserIdx().toString();
         if (user.getUserIdx() != Long.parseLong(freeUserIdx)) {
-            addCommentToRedis(freeIdx.toString(), createCommentsRequest, user, freeBoard, freeUserIdx, null);
+            addCommentToRedis(freeIdx, createCommentsRequest, user, freeBoard, freeUserIdx, LISTEN, null);
         }
 
         saveComments(createCommentsRequest, user, freeBoard);
     }
 
-    private void addCommentToRedis(String freeIdx, CreateCommentsRequest createCommentsRequest, User user, FreeBoard freeBoard, String freeUserIdx, String mention) {
+    private void addCommentToRedis(Long freeIdx, CreateCommentsRequest createCommentsRequest, User user, FreeBoard freeBoard, String freeUserIdx, String boardType, String mention) {
         redisRepository.addNotification(
                 freeUserIdx,
                 UUID.randomUUID().toString(),
                 freeBoard.getTitle(),
-                FREE,
-                freeIdx,
+                boardType,
+                freeIdx.toString(),
                 user.getNickName(),
                 createCommentsRequest.getContent(),
                 mention,
