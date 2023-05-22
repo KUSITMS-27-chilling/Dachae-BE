@@ -1,7 +1,5 @@
 package chilling.encore.controller;
 
-import chilling.encore.domain.Lecture;
-import chilling.encore.dto.LectureDto;
 import chilling.encore.dto.LectureDto.*;
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.LectureService;
@@ -29,7 +27,7 @@ import static chilling.encore.dto.responseMessage.LectureConstants.LectureSucces
 public class LectureController {
     private final LectureService lectureService;
 
-    @GetMapping("/my")
+    @GetMapping("/mine")
     @ApiOperation(value = "사용자가 신청한 우동강 목록", notes = "토큰 필요")
     public ResponseEntity<ResponseDto<List<LectureInfo>>> getMyParticipate() {
         List<LectureInfo> participateLectures = lectureService.getParticipateLecture();
@@ -50,21 +48,21 @@ public class LectureController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_SUCCESS_MESSAGE.getMessage(), lecturePageInfos));
     }
 
-    @GetMapping("/detail/images/{lectureIdx}")
+    @GetMapping("/{lectureIdx}/image")
     @ApiOperation(value = "상세에서 맨 위 사진", notes = "토큰 필수 X")
     public ResponseEntity<ResponseDto<LectureImages>> getLectureImages(@PathVariable Long lectureIdx) {
         LectureImages images = lectureService.getImages(lectureIdx);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_DETAIL_IMAGES.getMessage(), images));
     }
 
-    @GetMapping("/detail/teacherInfo/{lectureIdx}")
+    @GetMapping("/lecture/{lectureIdx}/teacher")
     @ApiOperation(value = "상세에서 강사 정보", notes = "토큰 필수 X")
     public ResponseEntity<ResponseDto<LectureDetailsTeacher>> getDetailTeacherInfo(@PathVariable Long lectureIdx) {
         LectureDetailsTeacher detailsTeacherInfo = lectureService.getTeacherInfo(lectureIdx);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_DETAIL_TEACHER.getMessage(), detailsTeacherInfo));
     }
 
-    @GetMapping("/detail/basicInfo/{lectureIdx}")
+    @GetMapping("/{lectureIdx}/info")
     @ApiOperation(value = "상세에서 수업 기본 정보", notes = "토큰 필수 X")
     public ResponseEntity<ResponseDto<LectureBasicInfo>> getBasicInfo(@PathVariable Long lectureIdx) {
         LectureBasicInfo lectureBasicInfo = lectureService.getLectureBasicInfo(lectureIdx);

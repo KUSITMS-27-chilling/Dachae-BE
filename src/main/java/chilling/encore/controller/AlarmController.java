@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static chilling.encore.dto.responseMessage.AlarmConstants.SuccessMessage.SELECT_ALARM_SUCCESS;
-import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_SUCCESS_CODE;
 
 @RestController
 @RequiredArgsConstructor
