@@ -5,7 +5,6 @@ import chilling.encore.dto.CommentsDto;
 import chilling.encore.dto.CommentsDto.CreateCommentsRequest;
 import chilling.encore.exception.ListenException.NoSuchIdxException;
 import chilling.encore.exception.ReviewException;
-import chilling.encore.exception.UserException;
 import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.ListenCommentRepository;
@@ -32,7 +31,7 @@ public class ListenCommentService {
     private final ListenTogetherRepository listenTogetherRepository;
     private final RedisRepository redisRepository;
     private final UserRepository userRepository;
-    private final String LISTEN = "listen";
+    private final String LISTEN = "Listen";
     private int cnt;
 
     public void listenCommentSave(Long listenIdx, CreateCommentsRequest createCommentsRequest) {
@@ -49,7 +48,7 @@ public class ListenCommentService {
             String listenUserIdx = listenTogether.getUser().getUserIdx().toString();
             String mention = createCommentsRequest.getMention();
             String mentionUserIdx = userRepository.findByNickName(mention)
-                    .orElseThrow(() -> new UserException.NoSuchIdxException()).getUserIdx()
+                    .orElseThrow().getUserIdx()
                     .toString(); //태그된 사람의 Idx
 
             validMention(listenIdx, createCommentsRequest, user, listenTogether, listenUserIdx, mention, mentionUserIdx);
@@ -57,7 +56,7 @@ public class ListenCommentService {
             if (Long.parseLong(listenUserIdx) == user.getUserIdx())
                 return true;
 
-            addCommentToRedis(listenIdx.toString(), createCommentsRequest, user, listenTogether, listenUserIdx, null);
+            addCommentToRedis(listenIdx, createCommentsRequest, user, listenTogether, listenUserIdx, LISTEN, mention);
 
             saveComments(createCommentsRequest, user, listenTogether);
             return true;
@@ -71,7 +70,7 @@ public class ListenCommentService {
             // 태그된 사용자 != 게시글 작성자
             if (Long.parseLong(mentionUserIdx) != user.getUserIdx()) {
                 //댓글 작성자 != 태그된 사용자
-                addCommentToRedis(listenIdx.toString(), createCommentsRequest, user, listenTogether, mentionUserIdx, mention);
+                addCommentToRedis(listenIdx, createCommentsRequest, user, listenTogether, listenUserIdx, LISTEN, mention);
             }
         }
     }
@@ -80,19 +79,19 @@ public class ListenCommentService {
         ListenTogether listenTogether = listenTogetherRepository.findById(listenIdx).orElseThrow(() -> new NoSuchIdxException());
         String listenUserIdx = listenTogether.getUser().getUserIdx().toString();
         if (user.getUserIdx() != Long.parseLong(listenUserIdx)) {
-            addCommentToRedis(listenIdx.toString(), createCommentsRequest, user, listenTogether, listenUserIdx, null);
+            addCommentToRedis(listenIdx, createCommentsRequest, user, listenTogether, listenUserIdx, LISTEN, null);
         }
 
         saveComments(createCommentsRequest, user, listenTogether);
     }
 
-    private void addCommentToRedis(String listenIdx, CreateCommentsRequest createCommentsRequest, User user, ListenTogether listenTogether, String listenUserIdx, String mention) {
+    private void addCommentToRedis(Long listenIdx, CreateCommentsRequest createCommentsRequest, User user, ListenTogether listenTogether, String listenUserIdx, String boardType, String mention) {
         redisRepository.addNotification(
                 listenUserIdx,
                 UUID.randomUUID().toString(),
                 listenTogether.getTitle(),
-                LISTEN,
-                listenIdx,
+                boardType,
+                listenIdx.toString(),
                 user.getNickName(),
                 createCommentsRequest.getContent(),
                 mention,
