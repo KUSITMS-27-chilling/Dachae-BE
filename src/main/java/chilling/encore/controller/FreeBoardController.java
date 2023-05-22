@@ -1,11 +1,9 @@
 package chilling.encore.controller;
 
-import chilling.encore.dto.FreeBoardDto;
 import chilling.encore.dto.FreeBoardDto.AllFreeBoards;
 import chilling.encore.dto.FreeBoardDto.CreateFreeBoardRequest;
 import chilling.encore.dto.FreeBoardDto.FreeBoardDetail;
 import chilling.encore.dto.FreeBoardDto.PopularFreeBoards;
-import chilling.encore.dto.responseMessage.FreeBoardConstants;
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.FreeBoardService;
 import io.swagger.annotations.Api;
@@ -34,7 +32,7 @@ public class FreeBoardController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), FREE_SELECT_SUCCESS.getMessage(), freeBoardPage));
     }
 
-    @GetMapping("/popular")
+    @GetMapping("/top")
     @ApiOperation(value = "자유게시판 인기글 조회", notes = "로그인X의 경우 인기지역 조회")
     public ResponseEntity<ResponseDto<PopularFreeBoards>> getPopular() {
         PopularFreeBoards popular = freeBoardService.getPopular();
@@ -48,7 +46,7 @@ public class FreeBoardController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), FREE_DETAIL_SUCCESS.getMessage(), detail));
     }
     
-    @PostMapping("/posts")
+    @PostMapping("/post")
     @ApiOperation(value = "자유게시판 글 작성", notes = "로그인X의 경우 접근 불가")
     public ResponseEntity<ResponseDto> save(@RequestBody CreateFreeBoardRequest createFreeBoardRequest) {
         freeBoardService.save(createFreeBoardRequest);
