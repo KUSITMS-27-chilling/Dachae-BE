@@ -12,20 +12,22 @@ public abstract class AlaramDto {
     @Builder
     public static class NewAlarm {
         private String notificationId;
-        private String boardType;
-        private String boardIdx;
+        private Long listenCommentsIdx;
+        private Long reviewCommentIdx;
+        private Long freeBoardCommentIdx;
         private String mention;
         private String title;
         private String nickName;
         private String content;
         private String createdAt;
 
-        public static NewAlarm from(String notificationId, String boardType, String boardIdx,
+        public static NewAlarm from(String notificationId, Long freeBoardCommentIdx, Long listenCommentsIdx, Long reviewCommentIdx,
                                     String mention, String title, String nickName, String content, String createdAt) {
             return NewAlarm.builder()
                     .notificationId(notificationId)
-                    .boardType(boardType)
-                    .boardIdx(boardIdx)
+                    .freeBoardCommentIdx(freeBoardCommentIdx)
+                    .listenCommentsIdx(listenCommentsIdx)
+                    .reviewCommentIdx(reviewCommentIdx)
                     .mention(mention)
                     .title(title)
                     .nickName(nickName)
