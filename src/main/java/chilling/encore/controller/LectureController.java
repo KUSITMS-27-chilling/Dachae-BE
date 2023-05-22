@@ -55,7 +55,7 @@ public class LectureController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_DETAIL_IMAGES.getMessage(), images));
     }
 
-    @GetMapping("/lecture/{lectureIdx}/teacher")
+    @GetMapping("/{lectureIdx}/teacher")
     @ApiOperation(value = "상세에서 강사 정보", notes = "토큰 필수 X")
     public ResponseEntity<ResponseDto<LectureDetailsTeacher>> getDetailTeacherInfo(@PathVariable Long lectureIdx) {
         LectureDetailsTeacher detailsTeacherInfo = lectureService.getTeacherInfo(lectureIdx);
