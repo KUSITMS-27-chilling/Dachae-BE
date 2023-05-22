@@ -17,7 +17,7 @@ import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_S
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@Api(tags = "FreeBoarComment API")
+@Api(tags = "Comments API")
 public class FreeBoardCommentController {
     private final FreeBoardCommentService freeBoardCommentService;
 
