@@ -1,9 +1,6 @@
 package chilling.encore.controller;
 
-import chilling.encore.dto.CenterDto;
 import chilling.encore.dto.CenterDto.CenterInfo;
-import chilling.encore.dto.responseMessage.CenterConstants;
-import chilling.encore.global.dto.ResponseCode;
 import chilling.encore.global.dto.ResponseDto;
 import chilling.encore.service.CenterService;
 import io.swagger.annotations.Api;
@@ -27,7 +24,7 @@ import static chilling.encore.global.dto.ResponseCode.globalSuccessCode.SELECT_S
 public class CenterController {
     private final CenterService centerService;
 
-    @GetMapping("/info/{region}")
+    @GetMapping("/{region}/info")
     @ApiOperation(value = "센서 관심수 전화번호 조회")
     public ResponseEntity<ResponseDto<CenterInfo>> getCenterInfo(@PathVariable String region) {
         CenterInfo centerInfo = centerService.getCenterInfo(region);
