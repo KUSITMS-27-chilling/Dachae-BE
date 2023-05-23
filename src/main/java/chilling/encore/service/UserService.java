@@ -16,8 +16,10 @@ import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.repository.springDataJpa.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -27,6 +29,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -45,6 +49,7 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisRepository redisRepository;
+    private final JwtTokenProvider tokenProvider;
     private final String USER_PLUS = "LearningInfo";
 
     //회원가입
@@ -230,6 +235,11 @@ public class UserService {
         List<String> learningInfos = redisRepository.getLearningInfos(String.valueOf(user.getUserIdx()) + USER_PLUS, learningInfoIds);
         Iterator<String> learningInfoIdIterator = learningInfoIds.iterator();
 
+        return getLearningInfos(learningInfoIds, learningInfos, learningInfoIdIterator);
+    }
+
+    @NotNull
+    private List<LearningInfo> getLearningInfos(Set<String> learningInfoIds, List<String> learningInfos, Iterator<String> learningInfoIdIterator) {
         List<LearningInfo> learningInfosResult = new ArrayList<>();
         for (int i = learningInfoIds.size() - 1; i >= 0; i--) {
             String[] splitData = learningInfos.get(i).split(":");
@@ -242,5 +252,17 @@ public class UserService {
             learningInfosResult.add(learningInfo);
         }
         return learningInfosResult;
+    }
+
+    public void logout(String authorization) {
+        String token = authorization.substring(7);
+        String userIdx = tokenProvider.getUserIdx(token);
+        try {
+            Long expiration = tokenProvider.getExpiration(token);
+            redisRepository.setValues("blackList:" + token, token, Duration.ofSeconds(expiration)); //Access Token 남은 시간동안 블랙리스트
+        } catch (ExpiredJwtException e) {
+        } finally {
+            redisRepository.deleteValues(String.valueOf(userIdx));
+        }
     }
 }

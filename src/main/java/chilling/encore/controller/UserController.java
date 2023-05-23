@@ -15,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static chilling.encore.dto.responseMessage.UserConstants.SuccessMessage.*;
@@ -156,5 +159,12 @@ public class UserController {
     public ResponseEntity<ResponseDto<UserDto.GetTotalWrite>> getTotalWrite() {
         UserDto.GetTotalWrite total = userService.getTotalWrite();
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_INFO_SUCCESS.getMessage(), total));
+    }
+
+    @PostMapping("/logout")
+    @ApiOperation(value = "로그아웃", notes = "accessToken 혹은 refreshToken 필요")
+    public ResponseEntity<ResponseDto> logout(@RequestHeader("Authorization") String authorization) {
+        userService.logout(authorization);
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(),""));
     }
 }

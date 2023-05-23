@@ -61,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/free/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/listen/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/review/**").authenticated()
+                .antMatchers("/user/logout").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
