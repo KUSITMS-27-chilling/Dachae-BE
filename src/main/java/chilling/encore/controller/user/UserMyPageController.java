@@ -22,7 +22,7 @@ import static chilling.encore.dto.responseMessage.UserConstants.SuccessMessage.S
 public class UserMyPageController {
     private final UserMyPageService userMyPageService;
 
-    @PutMapping("/regions")
+    @PutMapping("/fav-regions")
     @ApiOperation(value = "유저 관심 지역 수정", notes = "로그인 하지 않은 경우 요청 X")
     public ResponseEntity<ResponseDto> editFavRegion(@RequestBody UserDto.EditFavRegion editFavRegion) {
         userMyPageService.editFavRegion(editFavRegion);
