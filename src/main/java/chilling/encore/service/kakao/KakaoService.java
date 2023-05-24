@@ -9,7 +9,7 @@ import chilling.encore.global.config.security.jwt.Oauth2PrincipalDetails;
 import chilling.encore.dto.oauth.Oauth2SignUpResponse;
 import chilling.encore.dto.oauth.KakaoResponseInfo;
 import chilling.encore.repository.springDataJpa.UserRepository;
-import chilling.encore.service.Oauth2Service;
+import chilling.encore.service.oauth2.Oauth2Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
