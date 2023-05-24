@@ -32,6 +32,7 @@ jobs:
         restore-keys: |
               ${{ runner.os }}-gradle-
               
+    - uses: actions/checkout@v2
     - run: |
           mkdir ./src/main/resources
           cd ./src/main/resources
@@ -60,7 +61,7 @@ jobs:
     - name: Docker build and push
       run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker-compose build encore
+          docker-compose build ${{ secrets.PROJECT_NAME }} .
           docker tag encore:latest ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
           docker push ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
 
@@ -75,5 +76,5 @@ jobs:
             docker rmi $(docker images -q)
             docker pull ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
             docker tag ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7} encore:latest
-            docker-compose down encore
-            docker-compose up -d encore
+            docker-compose down
+            docker-compose up -d
