@@ -165,6 +165,13 @@ public class UserController {
     @ApiOperation(value = "로그아웃", notes = "accessToken 혹은 refreshToken 필요")
     public ResponseEntity<ResponseDto> logout(@RequestHeader("Authorization") String authorization) {
         userService.logout(authorization);
-        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(),""));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(),LOGOUT_SUCCESS.getMessage()));
+    }
+    
+    @PostMapping("/re-issue")
+    @ApiOperation(value = "토큰 재발급", notes = "refreshToken 보내줘야 함")
+    public ResponseEntity<ResponseDto<UserLoginResponse>> reIssueToken() {
+        UserLoginResponse userLoginResponse = userService.reIssueToken();
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), REISSUE_SUCCESS.getMessage(), userLoginResponse));
     }
 }

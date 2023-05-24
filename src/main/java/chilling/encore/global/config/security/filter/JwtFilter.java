@@ -37,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt) && tokenProvider.checkBlackList(jwt)) {
                     //jwt를 가지고 있는가, 올바른가, 블랙리스트에 등록되어있는건 아닌가
-                    if (requestURI.contains("/user/reIssueToken")) {
+                    if (requestURI.contains("/user/re-issue")) {
                         log.info("Token 재발급 진행시 유효성 검사");
                         checkRefreshTokenAndReIssueAccessToken(jwt);
                     }
