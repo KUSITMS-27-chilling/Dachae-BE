@@ -10,6 +10,7 @@ import chilling.encore.dto.UserDto.UserSignUpRequest;
 import chilling.encore.exception.CenterException;
 import chilling.encore.exception.CenterException.NoSuchRegionException;
 import chilling.encore.exception.UserException;
+import chilling.encore.exception.UserException.NoSuchIdxException;
 import chilling.encore.global.config.security.jwt.JwtTokenProvider;
 import chilling.encore.global.config.security.jwt.TokenInfoResponse;
 import chilling.encore.global.config.redis.RedisRepository;
@@ -103,7 +104,7 @@ public class UserService {
             TokenInfoResponse tokenInfoResponse = validateLogin(userLoginRequest);
 
             String id = userLoginRequest.getId();
-            User user = userRepository.findByUserId(id).orElseThrow(() -> new UserException.NoSuchIdxException());
+            User user = userRepository.findByUserId(id).orElseThrow(() -> new NoSuchIdxException());
             LocalDate now = LocalDate.now();
             user.updateLoginAt(now);
 
@@ -139,7 +140,7 @@ public class UserService {
     }
 
     public User validateUserId(String id) {
-        User user = userRepository.findByUserId(id).orElseThrow(() -> new UserException.NoSuchIdxException());
+        User user = userRepository.findByUserId(id).orElseThrow(() -> new NoSuchIdxException());
         return user;
     }
 
@@ -264,5 +265,15 @@ public class UserService {
         } finally {
             redisRepository.deleteValues(String.valueOf(userIdx));
         }
+    }
+
+    public UserLoginResponse reIssueToken() {
+        Long userIdx = SecurityUtils.getLoggedInUser()
+                .orElseThrow(() -> new NoSuchIdxException()).getUserIdx();
+        String refreshToken = redisRepository.getValues(userIdx.toString()).orElseThrow();
+        Authentication authentication = tokenProvider.getAuthentication(refreshToken);
+        TokenInfoResponse tokenInfoResponse = tokenProvider.createToken(authentication);
+        log.info("재발급 & 저장!");
+        return UserLoginResponse.from(tokenInfoResponse);
     }
 }
