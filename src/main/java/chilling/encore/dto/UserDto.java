@@ -142,13 +142,15 @@ public abstract class UserDto {
         private int allTotal;
         private int listenTotal;
         private int reviewTotal;
+        private int lectureTotal;
         private int freeTotal;
 
-        public static GetTotalWrite from(int allTotal, int listenTotal, int reviewTotal, int freeTotal) {
+        public static GetTotalWrite from(int allTotal, int listenTotal, int reviewTotal, int lectureTotal, int freeTotal) {
             return GetTotalWrite.builder()
                     .allTotal(allTotal)
                     .listenTotal(listenTotal)
                     .reviewTotal(reviewTotal)
+                    .lectureTotal(lectureTotal)
                     .freeTotal(freeTotal)
                     .build();
         }
@@ -160,13 +162,12 @@ public abstract class UserDto {
     @Builder
     public static class GetTotalParticipants {
         private int participantTotal;
+        private int applyLectureTotal;
 
-        /**
-         * 강사 부분은 이후에 채워야함
-         */
-        public static GetTotalParticipants from(int participantTotal) {
+        public static GetTotalParticipants from(int participantTotal, int applyLectureTotal) {
             return GetTotalParticipants.builder()
                     .participantTotal(participantTotal)
+                    .applyLectureTotal(applyLectureTotal)
                     .build();
         }
     }

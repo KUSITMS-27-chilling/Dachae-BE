@@ -52,6 +52,8 @@ public class User {
     private List<FreeBoard> freeBoards = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private List<LectureMessage> lectureMessages = new ArrayList<>();
+    @OneToOne(mappedBy = "user")
+    private TeacherInfo teacherInfo = new TeacherInfo();
 
     public void updateLoginAt(LocalDate now) {
         this.loginAt = now;
