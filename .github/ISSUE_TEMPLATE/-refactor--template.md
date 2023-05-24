@@ -1,14 +1,13 @@
 ---
-name: "[FEAT] template"
+name: "[REFACTOR] template"
 about: Suggest an idea for this project
-title: "[FEAT] template"
-labels: feat, fix
+title: "[REFACTOR] template"
+labels: refactor
 assignees: ''
 
 ---
 
 ## Description
-
 
 ## Todo
 
