@@ -9,6 +9,8 @@ import chilling.encore.dto.UserDto.UserLoginResponse;
 import chilling.encore.dto.UserDto.UserSignUpRequest;
 import chilling.encore.exception.CenterException;
 import chilling.encore.exception.CenterException.NoSuchRegionException;
+import chilling.encore.exception.RedisException;
+import chilling.encore.exception.RedisException.NoSuchRefreshToken;
 import chilling.encore.exception.UserException;
 import chilling.encore.exception.UserException.NoSuchIdxException;
 import chilling.encore.global.config.security.jwt.JwtTokenProvider;
@@ -215,7 +217,9 @@ public class UserService {
                 SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"))
                         .getUserIdx()).orElseThrow();
         int participantsTotal = user.getParticipants().size();
-        return GetTotalParticipants.from(participantsTotal);
+        int applyLectureTotal = user.getLectureMessages().size();
+
+        return GetTotalParticipants.from(participantsTotal, applyLectureTotal);
     }
 
     public GetTotalWrite getTotalWrite() {
@@ -224,16 +228,17 @@ public class UserService {
                         .getUserIdx()).orElseThrow();
         int listenTotal = user.getListenTogethers().size();
         int reviewTotal = user.getReviews().size();
+        int lectureTotal = user.getTeacherInfo().getLectures().size();
         int freeTotal = user.getFreeBoards().size();
         int allTotal = listenTotal + reviewTotal;
 
-        return GetTotalWrite.from(allTotal, listenTotal, reviewTotal, freeTotal);
+        return GetTotalWrite.from(allTotal, listenTotal, reviewTotal, lectureTotal, freeTotal);
     }
 
     public List<LearningInfo> getLearningInfo() {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
-        Set<String> learningInfoIds = redisRepository.getLearningInfoIds(String.valueOf(user.getUserIdx()) + USER_PLUS, 0, -1);
-        List<String> learningInfos = redisRepository.getLearningInfos(String.valueOf(user.getUserIdx()) + USER_PLUS, learningInfoIds);
+        Set<String> learningInfoIds = redisRepository.getLearningInfoIds(user.getUserIdx() + USER_PLUS, 0, -1);
+        List<String> learningInfos = redisRepository.getLearningInfos(user.getUserIdx() + USER_PLUS, learningInfoIds);
         Iterator<String> learningInfoIdIterator = learningInfoIds.iterator();
 
         return getLearningInfos(learningInfoIds, learningInfos, learningInfoIdIterator);
@@ -270,7 +275,7 @@ public class UserService {
     public UserLoginResponse reIssueToken() {
         Long userIdx = SecurityUtils.getLoggedInUser()
                 .orElseThrow(() -> new NoSuchIdxException()).getUserIdx();
-        String refreshToken = redisRepository.getValues(userIdx.toString()).orElseThrow();
+        String refreshToken = redisRepository.getValues(userIdx.toString()).orElseThrow(() -> new NoSuchRefreshToken());
         Authentication authentication = tokenProvider.getAuthentication(refreshToken);
         TokenInfoResponse tokenInfoResponse = tokenProvider.createToken(authentication);
         log.info("재발급 & 저장!");

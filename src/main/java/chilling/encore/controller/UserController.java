@@ -156,8 +156,8 @@ public class UserController {
 
     @GetMapping("/my-post")
     @ApiOperation(value = "마이페이지 유저의 작성글 조회", notes = "전체 ~ 각각")
-    public ResponseEntity<ResponseDto<UserDto.GetTotalWrite>> getTotalWrite() {
-        UserDto.GetTotalWrite total = userService.getTotalWrite();
+    public ResponseEntity<ResponseDto<GetTotalWrite>> getTotalWrite() {
+        GetTotalWrite total = userService.getTotalWrite();
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_INFO_SUCCESS.getMessage(), total));
     }
 
