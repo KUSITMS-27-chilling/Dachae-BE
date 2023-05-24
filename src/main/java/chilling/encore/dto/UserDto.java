@@ -115,6 +115,14 @@ public abstract class UserDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    public static class UserRegion {
+        private String region;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class EditFavRegion {
         private String favRegion;
     }
