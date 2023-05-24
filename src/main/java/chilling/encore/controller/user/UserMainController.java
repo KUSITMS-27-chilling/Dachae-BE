@@ -39,10 +39,17 @@ public class UserMainController {
     }
 
     @GetMapping("/regions")
-    @ApiOperation(value = "유저 관심 지역 조회", notes = "로그인 하지 않은 경우 인기 지역 조회")
+    @ApiOperation(value = "유저 지역 모두 조회", notes = "로그인 하지 않은 경우 인기 지역 조회")
     public ResponseEntity<ResponseDto<UserFavRegion>> selectFavRegion() {
         UserFavRegion favCenter = userMainService.getFavCenter();
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_REGION_SUCCESS.getMessage(), favCenter));
+    }
+
+    @GetMapping("/region")
+    @ApiOperation(value = "유저 거주지 조회", notes = "유저의 거주지 확인 -> 토큰 필수")
+    public ResponseEntity<ResponseDto<UserRegion>> selectRegion() {
+        UserRegion region = userMainService.getRegion();
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_REGION_SUCCESS.getMessage(), region));
     }
 
     @GetMapping("/fav-regions")

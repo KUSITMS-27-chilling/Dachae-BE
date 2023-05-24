@@ -48,6 +48,13 @@ public class UserMainService {
         }
     }
 
+    public UserRegion getRegion() {
+        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new NoSuchIdxException());
+        String region = user.getRegion();
+        return UserRegion.builder()
+                .region(region).build();
+    }
+
     private UserFavRegion getLoginRegion(List<String> centers) {
         User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         String region = user.getRegion();
