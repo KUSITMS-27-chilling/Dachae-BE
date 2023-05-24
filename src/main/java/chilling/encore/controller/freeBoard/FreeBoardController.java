@@ -25,7 +25,7 @@ import static chilling.encore.dto.responseMessage.FreeBoardConstants.SuccessMess
 public class FreeBoardController {
     private final FreeBoardService freeBoardService;
 
-    @GetMapping(value = {"/page/{region}/{page}/{orderBy}", "/page/{region}"})
+    @GetMapping(value = {"/{region}/page/{page}/{orderBy}", "/{region}/page"})
     @ApiOperation(value = "자유게시판 페이지 조회", notes = "첫 진입시 page, orderBy 조건 필요 없음, /page/{region} : 첫 진입시 region = all (전체 지역 조회)")
     public ResponseEntity<ResponseDto<AllFreeBoards>> getFreeBoar(@PathVariable String region, @PathVariable @Nullable Integer page, @PathVariable @Nullable String orderBy) {
         AllFreeBoards freeBoardPage = freeBoardService.getFreeBoardPage(page, region, orderBy);
