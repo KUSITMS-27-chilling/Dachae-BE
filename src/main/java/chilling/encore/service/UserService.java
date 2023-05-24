@@ -217,7 +217,9 @@ public class UserService {
                 SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"))
                         .getUserIdx()).orElseThrow();
         int participantsTotal = user.getParticipants().size();
-        return GetTotalParticipants.from(participantsTotal);
+        int applyLectureTotal = user.getLectureMessages().size();
+
+        return GetTotalParticipants.from(participantsTotal, applyLectureTotal);
     }
 
     public GetTotalWrite getTotalWrite() {
@@ -226,10 +228,11 @@ public class UserService {
                         .getUserIdx()).orElseThrow();
         int listenTotal = user.getListenTogethers().size();
         int reviewTotal = user.getReviews().size();
+        int lectureTotal = user.getTeacherInfo().getLectures().size();
         int freeTotal = user.getFreeBoards().size();
         int allTotal = listenTotal + reviewTotal;
 
-        return GetTotalWrite.from(allTotal, listenTotal, reviewTotal, freeTotal);
+        return GetTotalWrite.from(allTotal, listenTotal, reviewTotal, lectureTotal, freeTotal);
     }
 
     public List<LearningInfo> getLearningInfo() {
