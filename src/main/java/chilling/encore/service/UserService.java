@@ -228,7 +228,12 @@ public class UserService {
                         .getUserIdx()).orElseThrow();
         int listenTotal = user.getListenTogethers().size();
         int reviewTotal = user.getReviews().size();
-        int lectureTotal = user.getTeacherInfo().getLectures().size();
+        int lectureTotal;
+        try {
+            lectureTotal = user.getTeacherInfo().getLectures().size();
+        } catch (NullPointerException e) {
+            lectureTotal = 0;
+        }
         int freeTotal = user.getFreeBoards().size();
         int allTotal = listenTotal + reviewTotal;
 
