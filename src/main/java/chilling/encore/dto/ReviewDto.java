@@ -129,11 +129,13 @@ public abstract class ReviewDto {
         private Long reviewIdx;
         private String title;
         private LocalDateTime updatedAt;
+        private LocalDateTime createdAt;
 
         public static SelectMyReview from(Review review) {
             return SelectMyReview.builder()
                     .reviewIdx(review.getReviewIdx())
                     .title(review.getTitle())
+                    .createdAt(review.getCreatedAt())
                     .updatedAt(review.getUpdatedAt())
                     .build();
         }

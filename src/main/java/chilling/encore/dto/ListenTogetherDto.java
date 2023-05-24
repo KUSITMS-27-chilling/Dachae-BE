@@ -90,10 +90,14 @@ public abstract class ListenTogetherDto {
     public static class MyListenTogether {
         private final Long listenIdx;
         private final String title;
+        private final LocalDateTime createdAt;
+        private final LocalDateTime updatedAt;
         public static MyListenTogether from(ListenTogether listenTogether) {
             return MyListenTogether.builder()
                     .listenIdx(listenTogether.getListenIdx())
                     .title(listenTogether.getTitle())
+                    .createdAt(listenTogether.getCreatedAt())
+                    .updatedAt(listenTogether.getUpdatedAt())
                     .build();
         }
     }
