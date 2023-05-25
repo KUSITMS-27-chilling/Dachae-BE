@@ -74,6 +74,8 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         envs: GITHUB_SHA
         script: |
+          docker stop encore || true
+          docker rm encore || true
           docker pull ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
           docker tag ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7} encore:latest
           docker-compose down
