@@ -69,14 +69,12 @@ jobs:
     - name: Deploy
       uses: appleboy/ssh-action@master
       with:
-          host: ${{ secrets.EC2_SERVER_HOST }}
-          username: ec2-user
-          key: ${{ secrets.PRIVATE_KEY }}
-          envs: GITHUB_SHA
-          script: |
-            docker rmi $(docker images -q)
-            docker pull ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
-            docker tag ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7} ${{ secrets.PROJECT_NAME }}
-            docker stop ${{ secrets.PROJECT_NAME }}
-            docker rm ${{ secrets.PROJECT_NAME }}
-            docker run -d --name ${{ secrets.PROJECT_NAME }} -p 80:8080 ${{ secrets.PROJECT_NAME }}
+        host: ${{ secrets.EC2_SERVER_HOST }}
+        username: ec2-user
+        key: ${{ secrets.PRIVATE_KEY }}
+        envs: GITHUB_SHA
+        script: |
+          docker pull ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
+          docker tag ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7} encore:latest
+          docker-compose down
+          docker-compose up -d
