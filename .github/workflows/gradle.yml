@@ -80,3 +80,4 @@ jobs:
           docker tag ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7} encore:latest
           docker-compose down
           docker-compose up -d
+
