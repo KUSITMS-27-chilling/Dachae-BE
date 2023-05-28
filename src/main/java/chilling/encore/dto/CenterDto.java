@@ -10,11 +10,13 @@ public abstract class CenterDto {
     @Builder
     @ApiModel(description = "센터 정보")
     public static class CenterInfo {
+        private String url;
         private int favCount;
         private String tell;
 
         public static CenterInfo from(Center center) {
             return CenterInfo.builder()
+                    .url(center.getUrl())
                     .favCount(center.getFavCount())
                     .tell(center.getTell())
                     .build();

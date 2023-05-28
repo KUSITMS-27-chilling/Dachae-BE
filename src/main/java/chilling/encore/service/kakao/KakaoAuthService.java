@@ -1,6 +1,6 @@
 package chilling.encore.service.kakao;
 
-import chilling.encore.service.Oauth2AuthService;
+import chilling.encore.service.oauth2.Oauth2AuthService;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

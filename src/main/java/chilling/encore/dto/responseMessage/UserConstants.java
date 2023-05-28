@@ -20,7 +20,9 @@ public class UserConstants {
         SELECT_REGION_SUCCESS("관심 지역 조회에 성공했습니다."),
         EDIT_NICKNAME_SUCCESS("닉네임 수정에 성공했습니다."),
         EDIT_FAV_FIELD_SUCCESS("활동 분야 수정에 성공했습니다."),
-        EDIT_REGION_SUCCESS("관심 지역 수정에 성공했습니다.");
+        EDIT_REGION_SUCCESS("관심 지역 수정에 성공했습니다."),
+        LOGOUT_SUCCESS("로그아웃에 성공했습니다."),
+        REISSUE_SUCCESS("토큰 재발급에 성공했습니다.");
         private final String message;
     }
 

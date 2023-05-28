@@ -41,6 +41,7 @@ public abstract class ReviewDto {
         private final Long reviewIdx;
         private final String profile;
         private final String nickName;
+        private final int grade;
         private final String createdAt;
         private final String title;
         private final String content;
@@ -67,6 +68,7 @@ public abstract class ReviewDto {
                     .reviewIdx(review.getReviewIdx())
                     .profile(user.getProfile())
                     .nickName(user.getNickName())
+                    .grade(user.getGrade())
                     .createdAt(review.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")))
                     .title(review.getTitle())
@@ -129,11 +131,13 @@ public abstract class ReviewDto {
         private Long reviewIdx;
         private String title;
         private LocalDateTime updatedAt;
+        private LocalDateTime createdAt;
 
         public static SelectMyReview from(Review review) {
             return SelectMyReview.builder()
                     .reviewIdx(review.getReviewIdx())
                     .title(review.getTitle())
+                    .createdAt(review.getCreatedAt())
                     .updatedAt(review.getUpdatedAt())
                     .build();
         }
