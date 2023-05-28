@@ -67,7 +67,7 @@ jobs:
           docker push ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
 
       - name: Copy Nginx blue config to EC2
-        uses: appleboy/scp-action@v3
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_SERVER_HOST }}
           username: ec2-user
@@ -75,7 +75,7 @@ jobs:
           source: ./nginx.blue.conf
 
       - name: Copy Nginx green config to EC2
-        uses: appleboy/scp-action@v3
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_SERVER_HOST }}
           username: ec2-user
@@ -83,7 +83,7 @@ jobs:
           source: ./nginx.green.conf
 
       - name: Copy docker-compose blue to EC2
-        uses: appleboy/scp-action@v3
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_SERVER_HOST }}
           username: ec2-user
@@ -91,7 +91,7 @@ jobs:
           source: ./docker-compose.blue.yml
 
       - name: Copy docker-compose green to EC2
-        uses: appleboy/scp-action@v3
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_SERVER_HOST }}
           username: ec2-user
@@ -99,7 +99,7 @@ jobs:
           source: ./docker-compose.green.yml
 
       - name: Copy deploy script to EC2
-        uses: appleboy/scp-action@v3
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_SERVER_HOST }}
           username: ec2-user
