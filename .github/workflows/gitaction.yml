@@ -107,7 +107,7 @@ jobs:
           source: ./deploy.sh
 
       - name: Deploy
-        uses: appleboy/ssh-action@0.1.10
+        uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_SERVER_HOST }}
           username: ec2-user
