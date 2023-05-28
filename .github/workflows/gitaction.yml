@@ -73,6 +73,7 @@ jobs:
           username: ${{ secrets.EC2_SERVER_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: ./nginx.blue.conf
+          debug: true
 
       - name: Copy Nginx green config to EC2
         uses: appleboy/scp-action@v0.1.4
@@ -81,6 +82,7 @@ jobs:
           username: ${{ secrets.EC2_SERVER_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: ./nginx.green.conf
+          debug: true
 
       - name: Copy docker-compose blue to EC2
         uses: appleboy/scp-action@v0.1.4
@@ -89,6 +91,7 @@ jobs:
           username: ${{ secrets.EC2_SERVER_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: ./docker-compose.blue.yml
+          debug: true
 
       - name: Copy docker-compose green to EC2
         uses: appleboy/scp-action@v0.1.4
@@ -97,6 +100,7 @@ jobs:
           username: ${{ secrets.EC2_SERVER_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: ./docker-compose.green.yml
+          debug: true
 
       - name: Copy deploy script to EC2
         uses: appleboy/scp-action@v0.1.4
@@ -105,6 +109,7 @@ jobs:
           username: ${{ secrets.EC2_SERVER_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: ./deploy.sh
+          debug: true
 
       - name: Deploy
         uses: appleboy/ssh-action@v0.1.10
@@ -116,3 +121,4 @@ jobs:
           script: |
             chmod +x deploy.sh
             ./deploy.sh
+          debug: true
