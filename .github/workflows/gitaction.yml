@@ -70,7 +70,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_SERVER_HOST }}
-          username: ec2-user
+          username: ${{ secrets.EC2_SERVER_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: ./nginx.blue.conf
 
@@ -78,7 +78,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_SERVER_HOST }}
-          username: ec2-user
+          username: ${{ secrets.EC2_SERVER_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: ./nginx.green.conf
 
@@ -86,7 +86,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_SERVER_HOST }}
-          username: "ec2-user"
+          username: ${{ secrets.EC2_SERVER_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: ./docker-compose.blue.yml
 
@@ -94,7 +94,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_SERVER_HOST }}
-          username: "ec2-user"
+          username: ${{ secrets.EC2_SERVER_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: ./docker-compose.green.yml
 
@@ -102,7 +102,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_SERVER_HOST }}
-          username: "ec2-user"
+          username: ${{ secrets.EC2_SERVER_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: ./deploy.sh
 
@@ -110,7 +110,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_SERVER_HOST }}
-          username: "ec2-user"
+          username: ${{ secrets.EC2_SERVER_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: |
