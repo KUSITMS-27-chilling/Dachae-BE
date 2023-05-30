@@ -18,12 +18,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
@@ -58,11 +52,23 @@ jobs:
         run: ./gradlew build
         working-directory: ${{ env.working-directory }}
 
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push Docker image
+        run: |
+          docker build -t ywj9811/encore:latest .
+          docker push ywj9811/encore:latest
+
       - name: Cleanup Gradle Cache
         if: ${{ always() }}
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties
+
       - name: Deploy
         uses: appleboy/ssh-action@v0.1.10
         with:
