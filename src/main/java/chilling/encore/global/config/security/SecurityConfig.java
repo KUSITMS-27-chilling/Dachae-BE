@@ -93,4 +93,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        source.registerCorsConfiguration("/**", configuration);
 //        return source;
 //    }
+    //nginx에 cors 추가
 }
