@@ -129,18 +129,17 @@ public class LectureService {
         List<String> lectureMethods = new ArrayList<>();
         List<String> lectureRequireds = new ArrayList<>();
 
-        String lectureObjective = lecture.getLectureObjective();
-        if (lectureObjective != null)
-            lectureObjectives = List.of(lectureObjective.split(","));
-        String lectureContent = lecture.getLectureContent();
-        if (lectureContent != null)
-            lectureContents = List.of(lectureContent.split(","));
-        String lectureMethod = lecture.getLectureMethod();
-        if (lectureMethod != null)
-            lectureMethods = List.of(lectureMethod.split(","));
-        String lectureRequired = lecture.getLectureRequired();
-        if (lectureRequired != null)
-            lectureRequireds = List.of(lectureRequired.split(","));
+        lectureObjectives = getLectureInfos(lecture.getLectureObjective(), lectureObjectives);
+        lectureContents = getLectureInfos(lecture.getLectureContent(), lectureContents);
+        lectureMethods = getLectureInfos(lecture.getLectureMethod(), lectureMethods);
+        lectureRequireds = getLectureInfos(lecture.getLectureRequired(), lectureRequireds);
         return new List[]{lectureObjectives, lectureContents, lectureMethods, lectureRequireds};
+    }
+
+    private static List<String> getLectureInfos(String lecture, List<String> lectureInfos) {
+        String lectureInfo = lecture;
+        if (lectureInfo != null)
+            lectureInfos = List.of(lectureInfo.split(","));
+        return lectureInfos;
     }
 }
