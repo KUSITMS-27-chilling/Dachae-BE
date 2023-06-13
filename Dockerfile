@@ -1,4 +1,9 @@
+FROM openjdk:11-jdk as builder
+WORKDIR /app
+COPY . .
+RUN ./gradlew build
+
 FROM openjdk:11-jdk
-ARG JAR_FILE=./build/libs/encore-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} app.jar
+COPY --from=builder /app/build/libs/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
+
