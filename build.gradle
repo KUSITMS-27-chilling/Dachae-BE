@@ -62,6 +62,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.slack.api/slack-api-client
 	// 슬랙 api 추가
 	implementation group: 'com.slack.api', name: 'slack-api-client', version: '1.29.2'
+
+	//해외 ip 차단을 위한 geolite db 읽기
+	implementation group: 'com.maxmind.geoip2', name: 'geoip2', version: '2.15.0'
+
 }
 
 tasks.named('test') {
