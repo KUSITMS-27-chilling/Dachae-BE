@@ -20,6 +20,7 @@ public class IpAuthenticationFilter implements Filter {
         String ipAddress = HttpRequestUtils.getClientIpAddressIfServletRequestExist();
         InetAddress inetAddress = InetAddress.getByName(ipAddress);
         String country = null;
+        log.info("attempt ip : {}", ipAddress);
         try {
             country = databaseReader.country(inetAddress).getCountry().getName();
         } catch (GeoIp2Exception e) {
