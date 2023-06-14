@@ -1,5 +1,6 @@
 package chilling.encore.global.config.security;
 
+import chilling.encore.global.config.geoIp.IpAuthenticationFilter;
 import chilling.encore.global.config.security.filter.CustomAccessDeniedHandler;
 import chilling.encore.global.config.security.filter.CustomAuthenticationEntryPoint;
 import chilling.encore.global.config.security.filter.JwtExceptionFilter;
@@ -28,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final JwtExceptionFilter exceptionFilter;
+    private final IpAuthenticationFilter ipAuthenticationFilter;
     @Bean
     public BCryptPasswordEncoder encodePassword() {
         return new BCryptPasswordEncoder();
@@ -73,6 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
                 .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(ipAuthenticationFilter, JwtFilter.class) //해외 ip 검사
                 .addFilterBefore(exceptionFilter, JwtFilter.class);
     }
 
