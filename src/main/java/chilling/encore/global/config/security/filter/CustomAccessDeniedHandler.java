@@ -1,6 +1,7 @@
 package chilling.encore.global.config.security.filter;
 
 import chilling.encore.global.config.security.exception.SecurityException.AuthorityException;
+import chilling.encore.global.config.slack.SlackMessage;
 import chilling.encore.global.dto.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import static chilling.encore.global.config.security.jwt.JwtConstants.JwtExcpeti
 @RequiredArgsConstructor
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     private final ObjectMapper objectMapper;
+    private final SlackMessage slackMessage;
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
@@ -32,10 +34,10 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                 JwtExcpetionMessage.NON_AUTHORITY.getMessage(),
                 JwtExcpetionCode.NON_AUTHORITY.getCode(),
                 HttpStatus.FORBIDDEN);
+        slackMessage.sendSlackAlertErrorLog(e, JwtExcpetionCode.NON_AUTHORITY.getCode(), request);
         response.setStatus(e.getHttpStatus().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
-
         String errorResponseJson = objectMapper.writeValueAsString(new ErrorResponse(e.getErrorCode(), e.getMessage()));
         response.getOutputStream().write(errorResponseJson.getBytes("UTF-8"));
     }
