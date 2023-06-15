@@ -4,6 +4,7 @@ import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -13,6 +14,7 @@ import java.net.InetAddress;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Profile("prod")
 public class IpAuthenticationFilter implements Filter {
     private final DatabaseReader databaseReader;
     @Override

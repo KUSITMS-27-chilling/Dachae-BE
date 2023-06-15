@@ -21,6 +21,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Optional;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final JwtExceptionFilter exceptionFilter;
-    private final IpAuthenticationFilter ipAuthenticationFilter;
+    private final Optional<IpAuthenticationFilter> ipAuthenticationFilter;
     @Bean
     public BCryptPasswordEncoder encodePassword() {
         return new BCryptPasswordEncoder();
@@ -46,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/alarm").authenticated()
+                .antMatchers("/alarm/**").authenticated()
                 .antMatchers("/listen/mine").authenticated()
                 .antMatchers("/listen/participant").authenticated()
                 .antMatchers("/review/mine").authenticated()
@@ -75,8 +77,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
                 .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(ipAuthenticationFilter, JwtFilter.class) //해외 ip 검사
                 .addFilterBefore(exceptionFilter, JwtFilter.class);
+                if (ipAuthenticationFilter.isPresent())
+                    http.addFilterBefore(ipAuthenticationFilter.get(), JwtFilter.class); //해외 ip 검사
     }
 
     @Override
