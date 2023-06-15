@@ -1,13 +1,17 @@
-package chilling.encore.global.config.geoIp;
+package chilling.encore.global.config.security.geoIp;
 
+import chilling.encore.global.config.slack.SlackMessage;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpStatus;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetAddress;
 
@@ -28,11 +32,20 @@ public class IpAuthenticationFilter implements Filter {
         } catch (GeoIp2Exception e) {
             e.printStackTrace();
         }
-        if (country == null || !country.equals("South Korea")) {
-            log.warn("Access Reject : {}, {}", ipAddress, country);
+        if (checkIp((HttpServletRequest) request, (HttpServletResponse) response, ipAddress, country))
             return;
-        }
         chain.doFilter(request, response);
+    }
+
+    private static boolean checkIp(HttpServletRequest request, HttpServletResponse response, String ipAddress, String country) {
+        if (country == null || !country.equals("South Korea")) {
+            HttpServletResponse httpServletResponse = response;
+            httpServletResponse.setStatus(HttpStatus.SC_BAD_GATEWAY);
+            HttpServletRequest httpServletRequest = request;
+            log.warn("Access Reject : {}, {}, {}", ipAddress, country, httpServletRequest.getRequestURI());
+            return true;
+        }
+        return false;
     }
 
     @Override
