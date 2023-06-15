@@ -1,4 +1,4 @@
-package chilling.encore.global.config.security.filter;
+package chilling.encore.global.config.security.jwt.filter;
 
 import chilling.encore.global.config.security.exception.SecurityException;
 import chilling.encore.global.config.security.exception.SecurityException.*;

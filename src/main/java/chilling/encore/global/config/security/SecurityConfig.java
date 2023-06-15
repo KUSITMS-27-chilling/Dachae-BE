@@ -1,10 +1,10 @@
 package chilling.encore.global.config.security;
 
-import chilling.encore.global.config.geoIp.IpAuthenticationFilter;
-import chilling.encore.global.config.security.filter.CustomAccessDeniedHandler;
-import chilling.encore.global.config.security.filter.CustomAuthenticationEntryPoint;
-import chilling.encore.global.config.security.filter.JwtExceptionFilter;
-import chilling.encore.global.config.security.filter.JwtFilter;
+import chilling.encore.global.config.security.geoIp.IpAuthenticationFilter;
+import chilling.encore.global.config.security.jwt.filter.CustomAccessDeniedHandler;
+import chilling.encore.global.config.security.jwt.filter.CustomAuthenticationEntryPoint;
+import chilling.encore.global.config.security.jwt.filter.JwtExceptionFilter;
+import chilling.encore.global.config.security.jwt.filter.JwtFilter;
 import chilling.encore.global.config.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
