@@ -30,7 +30,6 @@ public class IpAuthenticationFilter implements Filter {
         try {
             country = databaseReader.country(inetAddress).getCountry().getName();
         } catch (GeoIp2Exception e) {
-            e.printStackTrace();
         }
         if (checkIp((HttpServletRequest) request, (HttpServletResponse) response, ipAddress, country))
             return;
