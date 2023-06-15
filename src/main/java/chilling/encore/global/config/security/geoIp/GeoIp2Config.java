@@ -1,4 +1,4 @@
-package chilling.encore.global.config.geoIp;
+package chilling.encore.global.config.security.geoIp;
 
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;

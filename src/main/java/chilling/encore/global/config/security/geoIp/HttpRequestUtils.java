@@ -1,4 +1,4 @@
-package chilling.encore.global.config.geoIp;
+package chilling.encore.global.config.security.geoIp;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
