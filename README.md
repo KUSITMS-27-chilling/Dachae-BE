@@ -168,7 +168,7 @@ https://dachae.vercel.app/
  
  ## ⚙ 소프트웨어 아키텍쳐
 
-![image](https://github.com/KUSITMS-27-chilling/Dachae-FE/assets/75175148/384ca6c5-a796-4ff6-bef3-569f3bba370a)
+![image](https://github.com/KUSITMS-27-chilling/Dachae-BE/assets/97458548/a1b7f878-0a2b-4171-8041-a4be86147c5c)
 
 <br/>
  
