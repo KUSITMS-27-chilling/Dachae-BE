@@ -1,6 +1,5 @@
 package chilling.encore.global.config.security.geoIp;
 
-import chilling.encore.global.config.slack.SlackMessage;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.AddressNotFoundException;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
@@ -27,11 +26,9 @@ public class IpAuthenticationFilter implements Filter {
         String ipAddress = HttpRequestUtils.getClientIpAddressIfServletRequestExist();
         InetAddress inetAddress = InetAddress.getByName(ipAddress);
         String country = null;
-        log.info("attempt ip : {}", ipAddress);
         try {
             country = databaseReader.country(inetAddress).getCountry().getName();
         } catch (AddressNotFoundException e) {
-            log.warn("Could not find country for IP");
         } catch (GeoIp2Exception e) {
             log.warn("Unexpected error while looking up country for IP");
         }
