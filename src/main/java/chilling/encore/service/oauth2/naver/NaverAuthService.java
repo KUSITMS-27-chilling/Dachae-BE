@@ -1,4 +1,4 @@
-package chilling.encore.service.kakao;
+package chilling.encore.service.oauth2.naver;
 
 import chilling.encore.service.oauth2.Oauth2AuthService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,39 +14,39 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @Slf4j
 @Getter
-public class KakaoAuthService implements Oauth2AuthService {
-    @Value("${oauth2.kakao.client-id}")
+public class NaverAuthService implements Oauth2AuthService {
+    @Value("${oauth2.naver.client-id}")
     private String clientId;
-    @Value("${oauth2.kakao.client-secret}")
+    @Value("${oauth2.naver.client-secret}")
     private String clientSecret;
-    @Value("${oauth2.kakao.redirect-uri}")
+    @Value("${oauth2.naver.redirect-uri}")
     private String redirectUri;
-    @Value("${oauth2.kakao.authorization-grant-type}")
+    @Value("${oauth2.naver.authorization-grant-type}")
     private String authorizationGrantType;
 
-    public String getAccessToken(String code) {
+    public String getAccessToken(String code, String state) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        MultiValueMap<String, String> requestBody = getRequestBody(code);
+        MultiValueMap<String, String> requestBody = getRequestBody(code, state);
 
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(requestBody, headers);
 
-        ResponseEntity<JsonNode> response = restTemplate.exchange("https://kauth.kakao.com/oauth/token", HttpMethod.POST, entity, JsonNode.class);
+        ResponseEntity<JsonNode> response = restTemplate.exchange("https://nid.naver.com/oauth2.0/token", HttpMethod.POST, entity, JsonNode.class);
 
         String accessToken = response.getBody().get("access_token").asText();
         return accessToken;
     }
 
-    private MultiValueMap<String, String> getRequestBody(String code) {
+    private MultiValueMap<String, String> getRequestBody(String code, String state) {
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("grant_type", authorizationGrantType);
         requestBody.add("client_id", clientId);
         requestBody.add("client_secret", clientSecret);
-        requestBody.add("redirect_uri", redirectUri);
         requestBody.add("code", code);
+        requestBody.add("state", state);
         return requestBody;
     }
 }

@@ -1,4 +1,4 @@
-package chilling.encore.service.kakao;
+package chilling.encore.service.oauth2.kakao;
 
 import chilling.encore.domain.User;
 import chilling.encore.dto.UserDto.UserLoginResponse;
