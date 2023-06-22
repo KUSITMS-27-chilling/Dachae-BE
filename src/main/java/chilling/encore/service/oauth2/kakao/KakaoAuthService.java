@@ -1,4 +1,4 @@
-package chilling.encore.service.kakao;
+package chilling.encore.service.oauth2.kakao;
 
 import chilling.encore.service.oauth2.Oauth2AuthService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -24,7 +24,7 @@ public class KakaoAuthService implements Oauth2AuthService {
     @Value("${oauth2.kakao.authorization-grant-type}")
     private String authorizationGrantType;
 
-    public String getAccessToken(String code) {
+    public String getAccessToken(String code, String state) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
