@@ -1,33 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <springProperty name="infoLogPath" source="logging.file.path.info"/>
-    <springProperty name="wasInfoLogPath" source="logging.file.path.wasInfo"/>
-    <springProperty name="warnLogPath" source="logging.file.path.warn"/>
-    <springProperty name="wasWarnLogPath" source="logging.file.path.wasWarn"/>
-    <springProperty name="errorLogPath" source="logging.file.path.error"/>
-    <springProperty name="wasErrorLogPath" source="logging.file.path.wasError"/>
-    <springProperty name="consolePattern" source="logging.pattern.console"/>
-    <springProperty name="filePattern" source="logging.pattern.file"/>
-
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>${consolePattern}</Pattern>
+            <Pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %clr(%-5level) %cyan(%logger{35}) - %msg%n</Pattern>
         </layout>
     </appender>
     <appender name="INFO_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${infoLogPath}</file>
+        <file>./logs/info.log</file> <!-- 파일을 저장할 경로를 정한다 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch> <!-- 해당 레벨만 기록한다. -->
             <onMismatch>DENY</onMismatch> <!-- 다른 수준의 레벨은 기록하지 않는다.(상위 레벨도 기록 안함), 상위 수준의 레벨에 대한 기록을 원하면 ACCEPT 로 하면 기록된다. -->
         </filter> <!-- 레벨별 필터링이 필요없을 경우 filter class 관련된 부분을 삭제하면 됨-->
         <encoder>
-            <pattern>${filePattern}</pattern> <!-- 해당 패턴 네이밍으로 현재 로그가 기록됨 -->
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %clr(%-5level) %cyan(%logger{35}) - %msg%n</pattern> <!-- 해당 패턴 네이밍으로 현재 로그가 기록됨 -->
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${wasInfoLogPath}</fileNamePattern> <!-- 해당 패턴 네이밍으로 이전 파일이 기록됨 -->
+            <fileNamePattern>./was-logs/info.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern> <!-- 해당 패턴 네이밍으로 이전 파일이 기록됨 -->
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize> <!-- 한 파일의 최대 용량 -->
             </timeBasedFileNamingAndTriggeringPolicy>
@@ -35,17 +26,17 @@
         </rollingPolicy>
     </appender>
     <appender name="WARN_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${warnLogPath}</file>
+        <file>./logs/warn.log</file> <!-- 파일을 저장할 경로를 정한다 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>WARN</level>
             <onMatch>ACCEPT</onMatch> <!-- 해당 레벨만 기록한다. -->
             <onMismatch>DENY</onMismatch> <!-- 다른 수준의 레벨은 기록하지 않는다.(상위 레벨도 기록 안함), 상위 수준의 레벨에 대한 기록을 원하면 ACCEPT 로 하면 기록된다. -->
         </filter> <!-- 레벨별 필터링이 필요없을 경우 filter class 관련된 부분을 삭제하면 됨-->
         <encoder>
-            <pattern>${filePattern}</pattern> <!-- 해당 패턴 네이밍으로 현재 로그가 기록됨 -->
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %clr(%-5level) %cyan(%logger{35}) - %msg%n</pattern> <!-- 해당 패턴 네이밍으로 현재 로그가 기록됨 -->
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${wasWarnLogPath}</fileNamePattern> <!-- 해당 패턴 네이밍으로 이전 파일이 기록됨 -->
+            <fileNamePattern>./was-logs/warn.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern> <!-- 해당 패턴 네이밍으로 이전 파일이 기록됨 -->
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize> <!-- 한 파일의 최대 용량 -->
             </timeBasedFileNamingAndTriggeringPolicy>
@@ -53,17 +44,17 @@
         </rollingPolicy>
     </appender>
     <appender name="ERROR_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${errorLogPath}</file>
+        <file>./logs/error.log</file> <!-- 파일을 저장할 경로를 정한다 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch> <!-- 해당 레벨만 기록한다. -->
             <onMismatch>DENY</onMismatch> <!-- 다른 수준의 레벨은 기록하지 않는다.(상위 레벨도 기록 안함), 상위 수준의 레벨에 대한 기록을 원하면 ACCEPT 로 하면 기록된다. -->
         </filter> <!-- 레벨별 필터링이 필요없을 경우 filter class 관련된 부분을 삭제하면 됨-->
         <encoder>
-            <pattern>${filePattern}</pattern> <!-- 해당 패턴 네이밍으로 현재 로그가 기록됨 -->
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %clr(%-5level) %cyan(%logger{35}) - %msg%n</pattern> <!-- 해당 패턴 네이밍으로 현재 로그가 기록됨 -->
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${wasErrorLogPath}</fileNamePattern> <!-- 해당 패턴 네이밍으로 이전 파일이 기록됨 -->
+            <fileNamePattern>./was-logs/error.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern> <!-- 해당 패턴 네이밍으로 이전 파일이 기록됨 -->
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize> <!-- 한 파일의 최대 용량 -->
             </timeBasedFileNamingAndTriggeringPolicy>
@@ -75,7 +66,7 @@
         <appender-ref ref="STDOUT"/>
     </root>
 
-    <logger name="chilling.encore.global.exception.GlobalExceptionHandler" additivity="false">
+    <logger name="chilling.encore.global.exception.GlobalException" additivity="false">
         <level value = "INFO" />
         <appender-ref ref="INFO_LOG" />
         <appender-ref ref="WARN_LOG" />
