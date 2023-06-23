@@ -38,25 +38,25 @@ public class JwtFilter extends OncePerRequestFilter {
                 if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt) && tokenProvider.checkBlackList(jwt)) {
                     //jwt를 가지고 있는가, 올바른가, 블랙리스트에 등록되어있는건 아닌가
                     if (requestURI.contains("/user/re-issue")) {
-                        log.info("Token 재발급 진행시 유효성 검사");
+                        log.debug("Token 재발급 진행시 유효성 검사");
                         checkRefreshTokenAndReIssueAccessToken(jwt);
                     }
 
                     Authentication authentication = tokenProvider.getAuthentication(jwt);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+                    log.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
                 }
             } catch (SecurityException | MalformedJwtException e) {
-                log.info("exception", e.getMessage());
+                log.error("exception", e.getMessage());
                 throw new SecurityException.InvalidJwtFormatException(JwtExcpetionMessage.INVALID_FORMAT.getMessage(), JwtExcpetionCode.INVALID_FORMAT.getCode(), HttpStatus.FORBIDDEN);
             } catch (ExpiredJwtException e) {
-                log.info("exception", e.getMessage());
+                log.error("exception", e.getMessage());
                 throw new SecurityException.ExpiredJwtException(JwtExcpetionMessage.JWT_EXPIRED.getMessage(), JWT_EXPIRED.getCode(), HttpStatus.FORBIDDEN);
             } catch (UnsupportedJwtException e) {
-                log.info("exception", e.getMessage());
+                log.error("exception", e.getMessage());
                 throw new SecurityException.NonSupportedJwtException(JwtExcpetionMessage.JWT_NOT_SUPPORTED.getMessage(), JWT_NOT_SUPPORTED.getCode(), HttpStatus.FORBIDDEN);
             } catch (IllegalArgumentException e) {
-                log.info("exception", e.getMessage());
+                log.error("exception", e.getMessage());
                 throw new SecurityException.WrongTokenException(JwtExcpetionMessage.WRONG_TOKEN.getMessage(), WRONG_TOKEN.getCode(), HttpStatus.FORBIDDEN);
             } catch (Exception e) {
                 throw new SecurityException.UnKnownException(JwtExcpetionMessage.UNKHOWN_EXCEPTION.getMessage(), UNKHOWN_EXCEPTION.getCode(), HttpStatus.FORBIDDEN);
