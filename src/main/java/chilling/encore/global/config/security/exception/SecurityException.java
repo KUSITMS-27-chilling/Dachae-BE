@@ -8,6 +8,12 @@ public abstract class SecurityException extends ApplicationException {
         super(message, errorCode, httpStatus);
     }
 
+    public static class RemovedAccessTokenException extends SecurityException {
+        public RemovedAccessTokenException(String message, String errorCode, HttpStatus httpStatus) {
+            super(message, errorCode, httpStatus);
+        }
+    }
+
     public static class InvalidJwtFormatException extends SecurityException {
         public InvalidJwtFormatException(String message, String errorCode, HttpStatus httpStatus) {
             super(message, errorCode, httpStatus);
