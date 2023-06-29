@@ -2,10 +2,7 @@ package chilling.encore.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor
@@ -16,9 +13,13 @@ public class Center {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long regionIdx;
+    @Column(nullable = false)
     private String url;
+    @Column(nullable = false)
     private String region;
+    @Column(nullable = false)
     private int favCount;
+    @Column(nullable = false)
     private String tell;
 
     public void plusFavCount() {

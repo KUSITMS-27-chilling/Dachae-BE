@@ -20,17 +20,19 @@ public class FreeBoardComments {
     private Long freeBoardCommentIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userIdx")
+    @JoinColumn(name = "userIdx", nullable = false)
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "freeBoardIdx")
+    @JoinColumn(name = "freeBoardIdx", nullable = false)
     private FreeBoard freeBoard;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+    @Column(nullable = false)
     private boolean isDelete;
 
     @CreationTimestamp
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @JsonBackReference

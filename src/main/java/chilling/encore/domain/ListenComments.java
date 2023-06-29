@@ -20,17 +20,19 @@ public class ListenComments {
     private Long listenCommentIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userIdx")
+    @JoinColumn(name = "userIdx", nullable = false)
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "listenIdx")
+    @JoinColumn(name = "listenIdx", nullable = false)
     private ListenTogether listenTogether;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+    @Column(nullable = false)
     private boolean isDelete;
 
     @CreationTimestamp
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @JsonBackReference

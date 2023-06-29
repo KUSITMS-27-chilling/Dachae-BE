@@ -47,18 +47,19 @@ public class JwtFilter extends OncePerRequestFilter {
                     log.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
                 }
             } catch (SecurityException | MalformedJwtException e) {
-                log.error("exception", e.getMessage());
+                log.error("exception : {}", e.getMessage());
                 throw new SecurityException.InvalidJwtFormatException(JwtExcpetionMessage.INVALID_FORMAT.getMessage(), JwtExcpetionCode.INVALID_FORMAT.getCode(), HttpStatus.FORBIDDEN);
             } catch (ExpiredJwtException e) {
-                log.error("exception", e.getMessage());
+                log.error("exception : {}", e.getMessage());
                 throw new SecurityException.ExpiredJwtException(JwtExcpetionMessage.JWT_EXPIRED.getMessage(), JWT_EXPIRED.getCode(), HttpStatus.FORBIDDEN);
             } catch (UnsupportedJwtException e) {
-                log.error("exception", e.getMessage());
+                log.error("exception : {}", e.getMessage());
                 throw new SecurityException.NonSupportedJwtException(JwtExcpetionMessage.JWT_NOT_SUPPORTED.getMessage(), JWT_NOT_SUPPORTED.getCode(), HttpStatus.FORBIDDEN);
             } catch (IllegalArgumentException e) {
-                log.error("exception", e.getMessage());
+                log.error("exception : {}", e.getMessage());
                 throw new SecurityException.WrongTokenException(JwtExcpetionMessage.WRONG_TOKEN.getMessage(), WRONG_TOKEN.getCode(), HttpStatus.FORBIDDEN);
             } catch (Exception e) {
+                log.error("exception : {}", e.getMessage());
                 throw new SecurityException.UnKnownException(JwtExcpetionMessage.UNKHOWN_EXCEPTION.getMessage(), UNKHOWN_EXCEPTION.getCode(), HttpStatus.FORBIDDEN);
             }
         }

@@ -18,27 +18,39 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;
-
+    @Column(nullable = false)
     private String userId;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String gender;
+    @Column(nullable = false)
     private int age;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
     private String nickName;
+    @Column(nullable = false)
     private String phoneNumber;
+    @Column(nullable = false)
     private String profile;
+    @Column(nullable = false)
     private int status;
     // 회원 정상 / 휴면 / 탈퇴 상태
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private UserConstants.Role role;
     private String provider;
     //google, facebook등등
     @CreationTimestamp
     private LocalDate createdAt;
     private LocalDate loginAt;
+    @Column(nullable = false)
     private String region;
     private String favRegion;
+    @Column(nullable = false)
     private int grade;
     private String favField;
 
