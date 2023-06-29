@@ -220,7 +220,9 @@ public class JwtTokenProvider implements InitializingBean {
         Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
         String userIdx = claims.getBody().get(USER_IDX).toString();
         log.info("checkMultiple Login");
-        if (!redisRepository.getValues(ACCESS + userIdx).equals(token))
+        if (!redisRepository.getValues(ACCESS + userIdx)
+                .orElseThrow()
+                .equals(token))
             throw new RemovedAccessTokenException(REMOVED_ACCESS_TOKEN.getMessage(), REMOVE_ACCESS_TOKEN.getCode(), HttpStatus.FORBIDDEN);
     }
 
