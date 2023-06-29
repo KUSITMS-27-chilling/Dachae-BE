@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,9 +24,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-
-import static chilling.encore.global.config.security.jwt.JwtConstants.JwtExcpetionCode.REMOVE_ACCESS_TOKEN;
-import static chilling.encore.global.config.security.jwt.JwtConstants.JwtExcpetionMessage.REMOVED_ACCESS_TOKEN;
 
 @Slf4j
 @Component
@@ -167,7 +163,7 @@ public class JwtTokenProvider implements InitializingBean {
 
     public boolean validateToken(String token) {
         try {
-            checkMultiLogin(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             throw e;
@@ -179,8 +175,6 @@ public class JwtTokenProvider implements InitializingBean {
             throw e;
         }
     }
-
-
 
     public boolean validateRefreshToken(String token) {
         if (!getSubject(token).equals(REFRESH))
@@ -216,19 +210,18 @@ public class JwtTokenProvider implements InitializingBean {
         return true;
     }
 
-    private void checkMultiLogin(String token) {
-        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-        String userIdx = claims.getBody().get(USER_IDX).toString();
+    public void checkMultiLogin(String token) {
+        Claims claims = parseClaims(token);
+        String userIdx = claims.get(USER_IDX).toString();
         log.info("checkMultiple Login");
-        log.info("{} ? {}", redisRepository.getValues(ACCESS + userIdx)
-                .orElseThrow(), token);
+
         if (!redisRepository.getValues(ACCESS + userIdx)
                 .orElseThrow()
                 .equals(token))
-            throw new RemovedAccessTokenException(REMOVED_ACCESS_TOKEN.getMessage(), REMOVE_ACCESS_TOKEN.getCode(), HttpStatus.FORBIDDEN);
+            throw new RemovedAccessTokenException();
     }
 
-    public String getSubject(String token) {
+    private String getSubject(String token) {
         Claims claims = parseClaims(token);
         return claims.getSubject();
     }

@@ -29,10 +29,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         log.error("인증에 실패했습니다.");
-        AuthorityException authorityException = new AuthorityException(
-                JwtExcpetionMessage.NON_AUTHORITY.getMessage(),
-                JwtExcpetionCode.NON_AUTHORITY.getCode(),
-                HttpStatus.FORBIDDEN);
+        AuthorityException authorityException = new AuthorityException();
         slackMessage.sendSlackAlertErrorLog(authorityException, JwtExcpetionCode.NON_AUTHORITY.getCode(), request);
         response.setStatus(authorityException.getHttpStatus().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
