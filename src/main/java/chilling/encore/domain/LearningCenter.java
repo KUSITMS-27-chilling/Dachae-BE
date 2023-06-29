@@ -2,10 +2,7 @@ package chilling.encore.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor
@@ -16,8 +13,12 @@ public class LearningCenter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long learningCenterIdx;
+    @Column(nullable = false)
     private String region;
+    @Column(nullable = false)
     private String learningName;
+    @Column(nullable = false)
     private double x;
+    @Column(nullable = false)
     private double y;
 }

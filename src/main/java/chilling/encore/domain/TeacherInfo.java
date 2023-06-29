@@ -16,7 +16,7 @@ public class TeacherInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long teacherInfoIdx;
     @OneToOne
-    @JoinColumn(name = "userIdx")
+    @JoinColumn(name = "userIdx", nullable = false)
     private User user;
     private String introduce; //한줄 소개
     @Column(columnDefinition = "TEXT")

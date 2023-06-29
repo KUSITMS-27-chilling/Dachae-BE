@@ -18,14 +18,18 @@ public class FreeBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long freeBoardIdx;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userIdx")
+    @JoinColumn(name = "userIdx", nullable = false)
     private User user;
+    @Column(nullable = false)
     private String title;
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+    @Column(nullable = false)
     private String region;
+    @Column(nullable = false)
     private int hit;
     @CreationTimestamp
+    @Column(nullable = false)
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;

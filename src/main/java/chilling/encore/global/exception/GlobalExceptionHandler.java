@@ -31,6 +31,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> LoginException(AuthenticationException ex, HttpServletRequest request) {
         String errorCode = UserFailCode.NOT_FOUND_USER.getCode();
         log.error(LOG_FORMAT, ex.getClass(), errorCode, ex.getMessage());
+        slackMessage.sendSlackAlertErrorLog(ex, errorCode, request);
         return ResponseEntity.ok(new ErrorResponse(errorCode, UserFailMessage.NOT_FOUND_USER.getMessage()));
     }
 
@@ -77,5 +78,4 @@ public class GlobalExceptionHandler {
         slackMessage.sendSlackAlertErrorLog(ex, errorCode, request);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
-
 }

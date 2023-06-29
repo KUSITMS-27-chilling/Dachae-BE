@@ -14,9 +14,9 @@ public class Participants {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long participantsIdx;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userIdx")
+    @JoinColumn(name = "userIdx", nullable = false)
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "listenIdx")
+    @JoinColumn(name = "listenIdx", nullable = false)
     private ListenTogether listenTogether;
 }
