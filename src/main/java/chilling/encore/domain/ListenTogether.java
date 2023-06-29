@@ -21,28 +21,27 @@ public class ListenTogether {
     private Long listenIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userIdx")
+    @JoinColumn(name = "userIdx", nullable = false)
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "programIdx")
     private Program program;
-
+    @Column(nullable = false)
     private String title;
-
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
-
+    @Column(nullable = false)
     private int hit;
-
+    @Column(nullable = false)
     private int goalNum;
-
     @CreationTimestamp
+    @Column(nullable = false)
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "listenTogether")
-    List<ListenComments> listenComments = new ArrayList<>();
+    List<ListenComments> listexnComments = new ArrayList<>();
     @OneToMany(mappedBy = "listenTogether")
     List<Participants> participants = new ArrayList<>();
 

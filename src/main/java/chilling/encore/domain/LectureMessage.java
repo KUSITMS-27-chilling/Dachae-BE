@@ -17,18 +17,22 @@ public class LectureMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lectureMessageIdx;
-    @ManyToOne
-    @JoinColumn(name = "lectureIdx")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lectureIdx", nullable = false)
     private Lecture lecture;
-    @ManyToOne
-    @JoinColumn(name = "userIdx")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userIdx", nullable = false)
     private User user;
-    @Column(columnDefinition = "text")
+    @Column(columnDefinition = "text", nullable = false)
     private String content;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String tel;
     @ColumnDefault("false")
+    @Column(nullable = false)
     private boolean isRead;
     @CreationTimestamp
+    @Column(nullable = false)
     private LocalDate createdAt;
 }
