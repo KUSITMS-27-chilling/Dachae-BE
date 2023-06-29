@@ -220,6 +220,8 @@ public class JwtTokenProvider implements InitializingBean {
         Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
         String userIdx = claims.getBody().get(USER_IDX).toString();
         log.info("checkMultiple Login");
+        log.info("{} ? {}", redisRepository.getValues(ACCESS + userIdx)
+                .orElseThrow(), token);
         if (!redisRepository.getValues(ACCESS + userIdx)
                 .orElseThrow()
                 .equals(token))
