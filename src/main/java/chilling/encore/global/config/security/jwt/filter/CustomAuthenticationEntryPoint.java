@@ -25,10 +25,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        SecurityException.WrongTokenException wrongTokenException = new SecurityException.WrongTokenException(
-                JwtExcpetionMessage.WRONG_TOKEN.getMessage(),
-                JwtExcpetionCode.WRONG_TOKEN.getCode(),
-                HttpStatus.FORBIDDEN);
+        SecurityException.WrongTokenException wrongTokenException = new SecurityException.WrongTokenException();
         slackMessage.sendSlackAlertErrorLog(wrongTokenException, JwtExcpetionCode.WRONG_TOKEN.getCode(), request);
         response.setStatus(wrongTokenException.getHttpStatus().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
