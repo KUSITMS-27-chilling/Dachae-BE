@@ -1,7 +1,7 @@
 # 💙 _Dachae, 다채_ 💙
 
 ![리드미 대표 이미지](https://github.com/KUSITMS-27-chilling/Dachae-FE/assets/50830078/e2d49e94-eb1f-4294-a1a4-dac4c83cfa42)
- ![리드미 마지막 이미지](https://github.com/KUSITMS-27-chilling/Dachae-FE/assets/50830078/dcb7c4ba-eac8-48ce-a2ff-ca0b2010e33a)
+![리드미 마지막 이미지](https://github.com/KUSITMS-27-chilling/Dachae-FE/assets/50830078/dcb7c4ba-eac8-48ce-a2ff-ca0b2010e33a)
 
 
 
