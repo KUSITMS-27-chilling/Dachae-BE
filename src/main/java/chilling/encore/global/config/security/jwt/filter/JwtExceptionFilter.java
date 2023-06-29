@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Component
 @RequiredArgsConstructor
@@ -29,23 +30,26 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
             String errorResponseJson = getErrorResponseJson(request, response, e);
-            response.getOutputStream().write(errorResponseJson.getBytes("UTF-8"));
+            response.getOutputStream().write(errorResponseJson.getBytes(StandardCharsets.UTF_8));
 
         } catch (InvalidJwtFormatException e) {
             String errorResponseJson = getErrorResponseJson(request, response, e);
-            response.getOutputStream().write(errorResponseJson.getBytes("UTF-8"));
+            response.getOutputStream().write(errorResponseJson.getBytes(StandardCharsets.UTF_8));
 
         } catch (NonSupportedJwtException e) {
             String errorResponseJson = getErrorResponseJson(request, response, e);
-            response.getOutputStream().write(errorResponseJson.getBytes("UTF-8"));
+            response.getOutputStream().write(errorResponseJson.getBytes(StandardCharsets.UTF_8));
 
         } catch (WrongTokenException e) {
             String errorResponseJson = getErrorResponseJson(request, response, e);
-            response.getOutputStream().write(errorResponseJson.getBytes("UTF-8"));
+            response.getOutputStream().write(errorResponseJson.getBytes(StandardCharsets.UTF_8));
 
         } catch (UnKnownException e) {
             String errorResponseJson = getErrorResponseJson(request, response, e);
-            response.getOutputStream().write(errorResponseJson.getBytes("UTF-8"));
+            response.getOutputStream().write(errorResponseJson.getBytes(StandardCharsets.UTF_8));
+        } catch (RemovedAccessTokenException e) {
+            String errorResponseJson = getErrorResponseJson(request, response, e);
+            response.getOutputStream().write(errorResponseJson.getBytes(StandardCharsets.UTF_8));
         }
     }
 

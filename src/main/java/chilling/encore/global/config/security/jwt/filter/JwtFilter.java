@@ -46,6 +46,9 @@ public class JwtFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     log.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
                 }
+            } catch (SecurityException.RemovedAccessTokenException e) {
+                log.error("exception : {}", e.getMessage());
+                throw e;
             } catch (SecurityException | MalformedJwtException e) {
                 log.error("exception : {}", e.getMessage());
                 throw new SecurityException.InvalidJwtFormatException(JwtExcpetionMessage.INVALID_FORMAT.getMessage(), JwtExcpetionCode.INVALID_FORMAT.getCode(), HttpStatus.FORBIDDEN);

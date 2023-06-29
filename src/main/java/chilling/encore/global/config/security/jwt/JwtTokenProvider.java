@@ -2,6 +2,7 @@ package chilling.encore.global.config.security.jwt;
 
 import chilling.encore.domain.User;
 import chilling.encore.global.config.redis.RedisRepository;
+import chilling.encore.global.config.security.exception.SecurityException.RemovedAccessTokenException;
 import chilling.encore.repository.springDataJpa.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +26,9 @@ import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import static chilling.encore.global.config.security.jwt.JwtConstants.JwtExcpetionCode.REMOVE_ACCESS_TOKEN;
+import static chilling.encore.global.config.security.jwt.JwtConstants.JwtExcpetionMessage.REMOVED_ACCESS_TOKEN;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -31,6 +36,9 @@ public class JwtTokenProvider implements InitializingBean {
     private final RedisRepository redisRepository;
     private static final String AUTHORITIES_KEY = "auth";
     private static final String USER_IDX = "userIdx";
+    private static final String ACCESS = "Access";
+    private static final String REFRESH = "Refresh";
+    private static final String GRANT = "Bearer";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -66,7 +74,7 @@ public class JwtTokenProvider implements InitializingBean {
 
         updateRefreshToken(userIdx, refreshToken);
 
-        return TokenInfoResponse.from("Bearer", accessToken, refreshToken, accessTokenValidityTime);
+        return TokenInfoResponse.from(GRANT, accessToken, refreshToken, accessTokenValidityTime);
     }
 
     public TokenInfoResponse oauth2CreateToken(Authentication authentication) {
@@ -84,14 +92,14 @@ public class JwtTokenProvider implements InitializingBean {
 
         updateRefreshToken(userIdx, refreshToken);
 
-        return TokenInfoResponse.from("Bearer", accessToken, refreshToken, accessTokenValidityTime);
+        return TokenInfoResponse.from(GRANT, accessToken, refreshToken, accessTokenValidityTime);
     }
 
     private String createRefreshToken(String authorities, Date current, Long userIdx) {
         Date refreshTokenValidity = new Date(current.getTime() + this.refreshTokenValidityTime);
 
         String refreshToken = Jwts.builder()
-                .setSubject("Refresh")
+                .setSubject(REFRESH)
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim(USER_IDX, userIdx)
                 .setIssuedAt(current)
@@ -105,7 +113,7 @@ public class JwtTokenProvider implements InitializingBean {
         Date accessTokenValidity = new Date(current.getTime() + this.accessTokenValidityTime);
 
         String accessToken = Jwts.builder()
-                .setSubject("Access")
+                .setSubject(ACCESS)
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim(USER_IDX, userIdx)
                 .setIssuedAt(current)
@@ -113,6 +121,8 @@ public class JwtTokenProvider implements InitializingBean {
                 .setExpiration(accessTokenValidity)
                 .compact();
 
+        log.info("accessToken 저장");
+        redisRepository.setValues(ACCESS + userIdx.toString(), accessToken, Duration.ofSeconds(accessTokenValidityTime));
         return accessToken;
     }
 
@@ -157,25 +167,23 @@ public class JwtTokenProvider implements InitializingBean {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            checkMultiLogin(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
             throw e;
         } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
             throw e;
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.");
             throw e;
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
             throw e;
         }
     }
 
+
+
     public boolean validateRefreshToken(String token) {
-        if (!getSubject(token).equals("Refresh"))
+        if (!getSubject(token).equals(REFRESH))
             throw new IllegalArgumentException("Refresh Token이 아닙니다.");
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -206,6 +214,14 @@ public class JwtTokenProvider implements InitializingBean {
         if (redisRepository.checkBlackList(token).isPresent())
             throw new IllegalArgumentException("로그아웃된 유저입니다.");
         return true;
+    }
+
+    private void checkMultiLogin(String token) {
+        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+        String userIdx = claims.getBody().get(USER_IDX).toString();
+        log.info("checkMultiple Login");
+        if (redisRepository.getValues(ACCESS + userIdx).isEmpty())
+            throw new RemovedAccessTokenException(REMOVED_ACCESS_TOKEN.getMessage(), REMOVE_ACCESS_TOKEN.getCode(), HttpStatus.FORBIDDEN);
     }
 
     public String getSubject(String token) {
