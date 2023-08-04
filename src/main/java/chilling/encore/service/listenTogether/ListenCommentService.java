@@ -32,11 +32,13 @@ public class ListenCommentService {
     private final ListenTogetherRepository listenTogetherRepository;
     private final RedisRepository redisRepository;
     private final UserRepository userRepository;
+    private SecurityUtils securityUtils = new SecurityUtils();
+
     private final String LISTEN = "listen";
     private int cnt;
 
     public void listenCommentSave(Long listenIdx, CreateCommentsRequest createCommentsRequest) {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         if (isMention(listenIdx, createCommentsRequest, user))
             return;
         // 멘션이 없는 경우

@@ -32,6 +32,7 @@ public class UserAuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisRepository redisRepository;
     private final JwtTokenProvider tokenProvider;
+    private SecurityUtils securityUtils = new SecurityUtils();
 
     public UserDto.UserLoginResponse login(UserDto.UserLoginRequest userLoginRequest) {
         try {
@@ -72,7 +73,7 @@ public class UserAuthService {
     }
 
     public UserDto.UserLoginResponse reIssueToken() {
-        Long userIdx = SecurityUtils.getLoggedInUser()
+        Long userIdx = securityUtils.getLoggedInUser()
                 .orElseThrow(() -> new UserException.NoSuchIdxException()).getUserIdx();
         String refreshToken = redisRepository.getValues(userIdx.toString()).orElseThrow(() -> new RedisException.NoSuchRefreshToken());
         Authentication authentication = tokenProvider.getAuthentication(refreshToken);

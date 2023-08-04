@@ -35,12 +35,13 @@ public class FreeBoardCommentService {
     private final FreeBoardCommentRepository freeBoardCommentRepository;
     private final RedisRepository redisRepository;
     private final UserRepository userRepository;
+    private SecurityUtils securityUtils = new SecurityUtils();
 
     private final String FREE = "free";
     private int cnt;
 
     public void freeCommentSave(Long freeIdx, CreateCommentsRequest createCommentsRequest) {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         if (isMention(freeIdx, createCommentsRequest, user))
             return;
         // 멘션이 없는 경우
