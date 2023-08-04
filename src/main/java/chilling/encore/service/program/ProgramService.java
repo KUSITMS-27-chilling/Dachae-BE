@@ -30,6 +30,7 @@ import java.util.*;
 public class ProgramService {
     private final ProgramRepository programRepository;
     private final CenterRepository centerRepository;
+    private SecurityUtils securityUtils = new SecurityUtils();
 
     private final int PROGRAM_PAGE_SIZE = 6;
     private final LocalDate now = LocalDate.now();
@@ -73,7 +74,7 @@ public class ProgramService {
 
     public AllProgramMainResponses getCenterPrograms() {
         try {
-            User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+            User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
             return AllProgramMainResponses.from(loginUser(user));
         } catch (ClassCastException e) {
             log.info("로그인 하지 않은 사용자 메인 페이지 조회");
@@ -133,7 +134,7 @@ public class ProgramService {
 
     public NewProgramsResponse getNewPrograms(String region) {
         if(region == null) {
-            User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+            User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
             region = user.getRegion();
             return getNewProgramsResponse(region);
         }

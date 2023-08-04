@@ -29,9 +29,10 @@ public class LectureService {
     private final LectureRepository lectureRepository;
     private final UserRepository  userRepository;
     private final CenterRepository centerRepository;
+    private SecurityUtils securityUtils = new SecurityUtils();
 
     public List<LectureInfo> getParticipateLecture() {
-        User user = userRepository.findById(SecurityUtils.getLoggedInUser()
+        User user = userRepository.findById(securityUtils.getLoggedInUser()
                 .orElseThrow(() -> new ClassCastException("Not Login"))
                 .getUserIdx()).get();
         List<LectureMessage> lectureMessages = user.getLectureMessages();
@@ -75,7 +76,7 @@ public class LectureService {
 
     @NotNull
     private String[] loginRegions() {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("Not Login"));
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("Not Login"));
         String region = user.getRegion();
         if (user.getFavRegion() != null)
             region = region + "," + user.getFavRegion();

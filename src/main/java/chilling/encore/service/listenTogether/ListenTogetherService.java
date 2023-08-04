@@ -31,6 +31,7 @@ public class ListenTogetherService {
     private final ProgramRepository programRepository;
     private final CenterRepository centerRepository;
     private final UserRepository userRepository;
+    private SecurityUtils securityUtils = new SecurityUtils();
 
     private final int LISTEN_TOGETHER_PAGE_SIZE = 8;
 
@@ -49,7 +50,7 @@ public class ListenTogetherService {
     }
 
     public AllMyListenTogether getMyListenTogether() {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         Long userIdx = user.getUserIdx();
         List<ListenTogether> listenTogethers = listenTogetherRepository.findTop3ByUser_UserIdxOrderByHitDesc(userIdx);
         List<MyListenTogether> myListenTogethers = new ArrayList<>();
@@ -70,7 +71,7 @@ public class ListenTogetherService {
     }
 
     private AllPopularListenTogether login(List<String> regions) {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         regions.add(user.getRegion());
         if (user.getFavRegion() != null) {
             String[] favRegions = user.getFavRegion().split(",");
@@ -99,7 +100,7 @@ public class ListenTogetherService {
     }
 
     public void save(CreateListenTogetherRequest createListenTogetherReq) {
-        User user = userRepository.findById(SecurityUtils.getLoggedInUser()
+        User user = userRepository.findById(securityUtils.getLoggedInUser()
                 .orElseThrow(() -> new ClassCastException("NotLogin"))
                 .getUserIdx()).get();
         Program program = programRepository.findById(createListenTogetherReq.getProgramIdx()).orElseThrow(() -> new ProgramException.NoSuchIdxException());

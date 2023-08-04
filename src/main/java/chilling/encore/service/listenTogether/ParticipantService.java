@@ -33,11 +33,12 @@ public class ParticipantService {
     private final UserRepository userRepository;
     private final ListenTogetherRepository listenTogetherRepository;
     private final RedisRepository redisRepository;
+    private SecurityUtils securityUtils = new SecurityUtils();
     private final String USER_PLUS = "LearningInfo";
 
     public void upParticipants(ParticipantDto.ParticipantRequest participantRequest) {
         User user = userRepository.findById(
-                SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"))
+                securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"))
                         .getUserIdx()).orElseThrow();
         log.info("listenTogetherIdx = {}", participantRequest.getListenTogetherIdx());
         ListenTogether listenTogether = listenTogetherRepository.findById(participantRequest.getListenTogetherIdx()).orElseThrow(() -> new NoSuchIdxException());
