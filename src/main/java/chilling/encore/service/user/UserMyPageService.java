@@ -15,33 +15,34 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserMyPageService {
     private final UserRepository userRepository;
+    private SecurityUtils securityUtils = new SecurityUtils();
 
     public void editFavRegion(UserDto.EditFavRegion favRegion) {
-        User securityUser = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User securityUser = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         User user = userRepository.findById(securityUser.getUserIdx()).get();
         user.updateFavRegion(favRegion.getFavRegion());
     }
 
     public void editNickName(UserDto.EditNickName editNickName) {
-        User securityUser = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User securityUser = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         User user = userRepository.findById(securityUser.getUserIdx()).get();
         user.updateNickName(editNickName.getNickName());
     }
 
     public void editFavField(UserDto.EditFavField editFavField) {
-        User securityUser = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User securityUser = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         User user = userRepository.findById(securityUser.getUserIdx()).get();
         user.updateFavField(editFavField.getFavField());
     }
 
     public UserDto.UserInfo getUserInfo() {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         return UserDto.UserInfo.from(user);
     }
 
     public UserDto.GetTotalParticipants getUserParticipant() {
         User user = userRepository.findById(
-                SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"))
+                securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"))
                         .getUserIdx()).orElseThrow();
         int participantsTotal = user.getParticipants().size();
         int applyLectureTotal = user.getLectureMessages().size();
@@ -51,7 +52,7 @@ public class UserMyPageService {
 
     public UserDto.GetTotalWrite getTotalWrite() {
         User user = userRepository.findById(
-                SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"))
+                securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"))
                         .getUserIdx()).orElseThrow();
         int listenTotal = user.getListenTogethers().size();
         int reviewTotal = user.getReviews().size();

@@ -37,6 +37,7 @@ public class ReviewService {
     private final CenterRepository centerRepository;
     private final ProgramRepository programRepository;
     private final UserRepository userRepository;
+    private SecurityUtils securityUtils = new SecurityUtils();
 
     private final int REVIEW_PAGE_SIZE = 8;
 
@@ -65,7 +66,7 @@ public class ReviewService {
     }
 
     public List<ReviewDto.SelectMyReview> getMyReview() {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         List<Review> myReviews = reviewRepository.findTop2ByUser_UserIdxOrderByUpdatedAtDesc(user.getUserIdx());
         List<ReviewDto.SelectMyReview> myReviewSelect = new ArrayList<>();
         for (Review myReview : myReviews) {
@@ -106,7 +107,7 @@ public class ReviewService {
     }
 
     private List<Review> login(List<String> regions) {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         regions.add(user.getRegion());
         if (user.getFavRegion() != null) {
             String[] favRegions = user.getFavRegion().split(",");
@@ -127,7 +128,7 @@ public class ReviewService {
     }
 
     public void save(ReviewDto.CreateReviewRequest createReviewRequest) {
-        User user = userRepository.findById(SecurityUtils.getLoggedInUser()
+        User user = userRepository.findById(securityUtils.getLoggedInUser()
                 .orElseThrow(() -> new ClassCastException("NotLogin"))
                 .getUserIdx()).get();
         Program program = programRepository.findById(createReviewRequest.getProgramIdx()).orElseThrow(() -> new ProgramException.NoSuchIdxException());

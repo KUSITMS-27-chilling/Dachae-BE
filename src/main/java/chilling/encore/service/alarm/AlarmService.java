@@ -21,9 +21,10 @@ import java.util.Set;
 @Transactional
 public class AlarmService {
     private final RedisRepository redisRepository;
+    private SecurityUtils securityUtils = new SecurityUtils();
 
     public AlarmResponse getAlarm() {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         Set<String> notificationIds = redisRepository.getNotificationIds(String.valueOf(user.getUserIdx()), 0, -1);
         List<String> notifications = redisRepository.getNotifications(String.valueOf(user.getUserIdx()), notificationIds);
         Iterator<String> notificationIdIterator = notificationIds.iterator();

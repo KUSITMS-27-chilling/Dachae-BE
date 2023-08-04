@@ -23,9 +23,9 @@ public class LectureMessageService {
     private final UserRepository userRepository;
     private final LectureMessageRepository lectureMessageRepository;
     private final LectureRepository lectureRepository;
-
+    private SecurityUtils securityUtils = new SecurityUtils();
     public void save(CreatedLectureMessage createdLectureMessage, Long lectureIdx) {
-        User user = userRepository.findById(SecurityUtils.getLoggedInUser()
+        User user = userRepository.findById(securityUtils.getLoggedInUser()
                 .orElseThrow(() -> new ClassCastException("NotLogin"))
                 .getUserIdx()).get();
         Lecture lecture = lectureRepository.findById(lectureIdx).orElseThrow(() -> new NoSuchIdxException());

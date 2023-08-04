@@ -31,6 +31,7 @@ public class FreeBoardService {
     private final FreeBoardRepository freeBoardRepository;
     private final CenterRepository centerRepository;
     private final UserRepository userRepository;
+    private SecurityUtils securityUtils = new SecurityUtils();
     private final int FREE_BOARD_PAGE_SIZE = 8;
 
     public AllFreeBoards getFreeBoardPage(Integer page, String region, String orderBy) {
@@ -67,7 +68,7 @@ public class FreeBoardService {
     }
 
     private void loginPopular(List<String> regions) {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
 
         String[] favRegions = user.getFavRegion().split(",");
         for (int i = 0; i < favRegions.length; i++) {
@@ -76,7 +77,7 @@ public class FreeBoardService {
     }
 
     public void save(CreateFreeBoardRequest createFreeBoardRequest) {
-        User user = userRepository.findById(SecurityUtils.getLoggedInUser()
+        User user = userRepository.findById(securityUtils.getLoggedInUser()
                 .orElseThrow(() -> new ClassCastException("NotLogin"))
                 .getUserIdx()).get();
         user.updateGrade();

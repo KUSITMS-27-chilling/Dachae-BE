@@ -28,6 +28,7 @@ public class ReviewCommentService {
     private final ReviewRepository reviewRepository;
     private final RedisRepository redisRepository;
     private final UserRepository userRepository;
+    private SecurityUtils securityUtils = new SecurityUtils();
 
     private int cnt;
     private final String REVIEW = "review";
@@ -51,7 +52,7 @@ public class ReviewCommentService {
      *  태그 된 사람 == createCommentsRequest.getMention 을 통해 찾은 사람
      */
     public void reviewCommentSave(Long reviewIdx, CreateCommentsRequest createCommentsRequest) {
-        User user = SecurityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         if (isMention(reviewIdx, createCommentsRequest, user))
             return;
         // 멘션이 없는 경우
