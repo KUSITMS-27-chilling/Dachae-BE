@@ -50,7 +50,7 @@ public class UserMainService {
     }
 
     public UserRegion getRegion() {
-        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new NoSuchIdxException());
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         String region = user.getRegion();
         return UserRegion.builder()
                 .region(region).build();
