@@ -32,8 +32,7 @@ public class ListenCommentService {
     private final ListenTogetherRepository listenTogetherRepository;
     private final RedisRepository redisRepository;
     private final UserRepository userRepository;
-    private SecurityUtils securityUtils = new SecurityUtils();
-
+    private final SecurityUtils securityUtils;
     private final String LISTEN = "listen";
     private int cnt;
 

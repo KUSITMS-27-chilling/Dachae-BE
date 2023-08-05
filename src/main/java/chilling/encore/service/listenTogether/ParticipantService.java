@@ -33,7 +33,7 @@ public class ParticipantService {
     private final UserRepository userRepository;
     private final ListenTogetherRepository listenTogetherRepository;
     private final RedisRepository redisRepository;
-    private SecurityUtils securityUtils = new SecurityUtils();
+    private final SecurityUtils securityUtils;
     private final String USER_PLUS = "LearningInfo";
 
     public void upParticipants(ParticipantDto.ParticipantRequest participantRequest) {

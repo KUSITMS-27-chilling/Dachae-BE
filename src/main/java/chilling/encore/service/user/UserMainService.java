@@ -26,8 +26,7 @@ public class UserMainService {
     private final UserRepository userRepository;
     private final CenterRepository centerRepository;
     private final RedisRepository redisRepository;
-    private SecurityUtils securityUtils = new SecurityUtils();
-
+    private final SecurityUtils securityUtils;
     private final String USER_PLUS = "LearningInfo";
 
     public User validateUserId(String id) {

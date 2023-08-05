@@ -31,7 +31,7 @@ public class FreeBoardService {
     private final FreeBoardRepository freeBoardRepository;
     private final CenterRepository centerRepository;
     private final UserRepository userRepository;
-    private SecurityUtils securityUtils = new SecurityUtils();
+    private final SecurityUtils securityUtils;
     private final int FREE_BOARD_PAGE_SIZE = 8;
 
     public AllFreeBoards getFreeBoardPage(Integer page, String region, String orderBy) {

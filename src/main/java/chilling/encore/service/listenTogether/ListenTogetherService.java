@@ -31,8 +31,7 @@ public class ListenTogetherService {
     private final ProgramRepository programRepository;
     private final CenterRepository centerRepository;
     private final UserRepository userRepository;
-    private SecurityUtils securityUtils = new SecurityUtils();
-
+    private final SecurityUtils securityUtils;
     private final int LISTEN_TOGETHER_PAGE_SIZE = 8;
 
     public ListenTogetherDetail getListenTogetherDetail(Long listenIdx) {

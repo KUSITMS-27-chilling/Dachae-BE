@@ -37,7 +37,7 @@ public class ReviewService {
     private final CenterRepository centerRepository;
     private final ProgramRepository programRepository;
     private final UserRepository userRepository;
-    private SecurityUtils securityUtils = new SecurityUtils();
+    private final SecurityUtils securityUtils;
 
     private final int REVIEW_PAGE_SIZE = 8;
 

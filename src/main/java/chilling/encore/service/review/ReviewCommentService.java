@@ -28,8 +28,7 @@ public class ReviewCommentService {
     private final ReviewRepository reviewRepository;
     private final RedisRepository redisRepository;
     private final UserRepository userRepository;
-    private SecurityUtils securityUtils = new SecurityUtils();
-
+    private final SecurityUtils securityUtils;
     private int cnt;
     private final String REVIEW = "review";
     /**
