@@ -2,11 +2,9 @@ package chilling.encore.user;
 
 import chilling.encore.domain.User;
 import chilling.encore.dto.UserDto;
-import chilling.encore.exception.RedisException.NoSuchRefreshToken;
-import chilling.encore.exception.UserException.NoSuchIdxException;
+import chilling.encore.dto.UserDto.UserLoginRequest;
 import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.jwt.JwtTokenProvider;
-import chilling.encore.global.config.security.jwt.PrincipalDetails;
 import chilling.encore.global.config.security.jwt.TokenInfoResponse;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.UserRepository;
@@ -23,21 +21,19 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.Duration;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
-public class UserAuthTest {
-
+public class UserAuthServiceSuccessTest {
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -48,27 +44,21 @@ public class UserAuthTest {
     private JwtTokenProvider jwtTokenProvider;
     @Mock
     private RedisRepository redisRepository;
+    @Mock
+    private SecurityUtils securityUtils;
     @InjectMocks
     private UserAuthService userAuthService;
 
-    private UserDto.UserLoginRequest userLoginRequest;
-    private SecurityUtils securityUtils;
+    private UserLoginRequest userLoginRequest;
     private User user = new MockUser().getUser();
 
     @BeforeEach
-    public void setUp() {
-        userLoginRequest = new UserDto.UserLoginRequest(user.getUserId(), user.getPassword());
-        securityUtils = new SecurityUtils();
-
-        // Mock 사용자 정보를 SecurityContextHolder에 설정 (securityContextHolder에서 꺼내서 검증)
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        PrincipalDetails principalDetails = new PrincipalDetails(user);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
-        securityContext.setAuthentication(authentication);
+    void setUp() {
+        userLoginRequest = new UserLoginRequest(user.getUserId(), user.getPassword());
     }
 
     @Test
-    public void loginTest() {
+    void loginTest() {
         given(userRepository.findByUserId(user.getUserId())).willReturn(Optional.of(user));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUserId(), user.getPassword());
@@ -86,15 +76,7 @@ public class UserAuthTest {
     }
 
     @Test
-    public void loginFailTest() {
-        given(authenticationManagerBuilder.getObject()).willReturn(authenticationManager);
-        given(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).willThrow(new AuthenticationException("Failed to authenticate") {});
-
-        assertThatThrownBy(() -> userAuthService.login(userLoginRequest)).isInstanceOf(AuthenticationException.class);
-    }
-
-    @Test
-    public void logoutTest() {
+    void logoutTest() {
         String authorization = "Bearer access_token";
         String token = "access_token";
         String userIdx = "userIdx";
@@ -108,7 +90,9 @@ public class UserAuthTest {
     }
 
     @Test
-    public void reIssueTokenTest() {
+    void reIssueTokenTest() {
+        given(securityUtils.getLoggedInUser()).willReturn(Optional.of(user));
+
         String refreshToken = "refresh_token";
         given(redisRepository.getValues(user.getUserIdx().toString())).willReturn(Optional.of(refreshToken));
 
@@ -125,13 +109,5 @@ public class UserAuthTest {
                 .isEqualTo(tokenInfoResponse.getAccessToken());
         assertThat(reIssueResponse.getRefreshToken())
                 .isEqualTo(tokenInfoResponse.getRefreshToken());
-    }
-
-    @Test
-    public void reIssueFailTest() {
-        given(redisRepository.getValues(user.getUserIdx().toString())).willReturn(Optional.empty());
-
-        assertThatThrownBy(() -> userAuthService.reIssueToken())
-                .isInstanceOf(NoSuchRefreshToken.class);
     }
 }
