@@ -21,7 +21,9 @@ public class MockUser {
             .role(ROLE_USER)
             .status(0)
             .region("강서구")
-            .profile("강남구")
+            .favRegion("강남구,동작구")
+            .favField("축구,컴퓨터")
+            .profile("default")
             .build();
     public User getUser() {
         return mockUser;
