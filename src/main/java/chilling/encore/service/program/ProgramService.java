@@ -30,8 +30,7 @@ import java.util.*;
 public class ProgramService {
     private final ProgramRepository programRepository;
     private final CenterRepository centerRepository;
-    private SecurityUtils securityUtils = new SecurityUtils();
-
+    private final SecurityUtils securityUtils;
     private final int PROGRAM_PAGE_SIZE = 6;
     private final LocalDate now = LocalDate.now();
 

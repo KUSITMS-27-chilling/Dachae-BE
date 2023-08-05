@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserMyPageService {
     private final UserRepository userRepository;
-    private SecurityUtils securityUtils = new SecurityUtils();
-
+    private final SecurityUtils securityUtils;
     public void editFavRegion(UserDto.EditFavRegion favRegion) {
         User securityUser = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         User user = userRepository.findById(securityUser.getUserIdx()).get();

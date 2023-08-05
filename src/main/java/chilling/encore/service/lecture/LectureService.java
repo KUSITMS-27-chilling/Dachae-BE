@@ -29,8 +29,7 @@ public class LectureService {
     private final LectureRepository lectureRepository;
     private final UserRepository  userRepository;
     private final CenterRepository centerRepository;
-    private SecurityUtils securityUtils = new SecurityUtils();
-
+    private final SecurityUtils securityUtils;
     public List<LectureInfo> getParticipateLecture() {
         User user = userRepository.findById(securityUtils.getLoggedInUser()
                 .orElseThrow(() -> new ClassCastException("Not Login"))

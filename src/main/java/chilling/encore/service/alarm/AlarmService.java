@@ -21,7 +21,7 @@ import java.util.Set;
 @Transactional
 public class AlarmService {
     private final RedisRepository redisRepository;
-    private SecurityUtils securityUtils = new SecurityUtils();
+    private final SecurityUtils securityUtils;
 
     public AlarmResponse getAlarm() {
         User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
