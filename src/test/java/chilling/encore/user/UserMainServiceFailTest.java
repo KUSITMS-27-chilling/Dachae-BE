@@ -6,8 +6,8 @@ import chilling.encore.exception.UserException.NoSuchIdxException;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.UserRepository;
 import chilling.encore.service.user.UserMainService;
-import chilling.encore.utils.MockCenter;
-import chilling.encore.utils.MockUser;
+import chilling.encore.utils.domain.MockCenter;
+import chilling.encore.utils.domain.MockUser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ public class UserMainServiceFailTest {
     private SecurityUtils securityUtils;
     @InjectMocks
     private UserMainService userMainService;
-    private User user = new MockUser().getUser();
+    private User user = new MockUser();
     private List<Center> fourCenters = new MockCenter().fourCenters;
 
     @Test

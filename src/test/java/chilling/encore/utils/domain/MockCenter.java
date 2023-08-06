@@ -1,4 +1,4 @@
-package chilling.encore.utils;
+package chilling.encore.utils.domain;
 
 import chilling.encore.domain.Center;
 
