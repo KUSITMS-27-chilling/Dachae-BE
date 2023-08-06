@@ -26,8 +26,7 @@ public class UserMainService {
     private final UserRepository userRepository;
     private final CenterRepository centerRepository;
     private final RedisRepository redisRepository;
-    private SecurityUtils securityUtils = new SecurityUtils();
-
+    private final SecurityUtils securityUtils;
     private final String USER_PLUS = "LearningInfo";
 
     public User validateUserId(String id) {
@@ -51,7 +50,7 @@ public class UserMainService {
     }
 
     public UserRegion getRegion() {
-        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new NoSuchIdxException());
+        User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         String region = user.getRegion();
         return UserRegion.builder()
                 .region(region).build();

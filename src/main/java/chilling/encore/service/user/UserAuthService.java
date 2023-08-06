@@ -32,7 +32,7 @@ public class UserAuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisRepository redisRepository;
     private final JwtTokenProvider tokenProvider;
-    private SecurityUtils securityUtils = new SecurityUtils();
+    private final SecurityUtils securityUtils;
 
     public UserDto.UserLoginResponse login(UserDto.UserLoginRequest userLoginRequest) {
         try {
