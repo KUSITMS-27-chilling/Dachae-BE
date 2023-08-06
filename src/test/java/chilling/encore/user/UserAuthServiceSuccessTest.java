@@ -9,7 +9,7 @@ import chilling.encore.global.config.security.jwt.TokenInfoResponse;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.UserRepository;
 import chilling.encore.service.user.UserAuthService;
-import chilling.encore.utils.MockUser;
+import chilling.encore.utils.domain.MockUser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ public class UserAuthServiceSuccessTest {
     private UserAuthService userAuthService;
 
     private UserLoginRequest userLoginRequest;
-    private User user = new MockUser().getUser();
+    private User user = new MockUser();
 
     @BeforeEach
     void setUp() {

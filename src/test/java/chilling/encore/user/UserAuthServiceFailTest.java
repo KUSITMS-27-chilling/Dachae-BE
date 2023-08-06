@@ -7,7 +7,7 @@ import chilling.encore.exception.UserException;
 import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.service.user.UserAuthService;
-import chilling.encore.utils.MockUser;
+import chilling.encore.utils.domain.MockUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +39,7 @@ public class UserAuthServiceFailTest {
     private UserAuthService userAuthService;
 
     private UserDto.UserLoginRequest userLoginRequest;
-    private User user = new MockUser().getUser();
+    private User user = new MockUser();
 
     @BeforeEach
     void setUp() {

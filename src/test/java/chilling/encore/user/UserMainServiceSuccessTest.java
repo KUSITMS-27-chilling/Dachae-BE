@@ -10,9 +10,9 @@ import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.service.user.UserMainService;
-import chilling.encore.utils.MockCenter;
+import chilling.encore.utils.domain.MockCenter;
 import chilling.encore.utils.MockLearningInfo;
-import chilling.encore.utils.MockUser;
+import chilling.encore.utils.domain.MockUser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,20 +37,20 @@ public class UserMainServiceSuccessTest {
     private SecurityUtils securityUtils;
     @InjectMocks
     private UserMainService userMainService;
-    private User user = new MockUser().getUser();
+    private User user = new MockUser();
     private List<Center> fourCenters = new MockCenter().fourCenters;
 
     @Test
     void getGradeTest() {
-        given(securityUtils.getLoggedInUser()).willReturn(Optional.ofNullable(user));
+        given(securityUtils.getLoggedInUser()).willReturn(Optional.of(user));
 
         UserGrade grade = userMainService.getGrade();
         List<String> favField = grade.getFavField();
         String[] favFields = user.getFavField().split(",");
 
-        assertThat(grade.getGrade()).isEqualTo(0);
-        assertThat(grade.getProfile()).isEqualTo("default");
-        assertThat(grade.getNickName()).isEqualTo("forTest");
+        assertThat(grade.getGrade()).isEqualTo(user.getGrade());
+        assertThat(grade.getProfile()).isEqualTo(user.getProfile());
+        assertThat(grade.getNickName()).isEqualTo(user.getNickName());
 
         for (int i = 0; i < favField.size(); i++) {
             assertThat(favField.get(i)).isEqualTo(favFields[i]);
@@ -63,7 +63,7 @@ public class UserMainServiceSuccessTest {
 
         UserRegion region = userMainService.getRegion();
 
-        assertThat(region.getRegion()).isEqualTo("강서구");
+        assertThat(region.getRegion()).isEqualTo(user.getRegion());
     }
 
     @Test
