@@ -31,18 +31,16 @@ public class UserMyPageServiceSuccessTest {
     private SecurityUtils securityUtils;
     @InjectMocks
     private UserMyPageService userMyPageService;
-    private User user;
-    private MockUser beforeUser;
+    private MockUser user;
     private MockList mockList;
     @BeforeEach
     void setUp() {
-        beforeUser = new MockUser();
-        mockList = new MockList(beforeUser);
-        beforeUser.setParticipants(mockList.getParticipants());
-        beforeUser.setListenTogethers(mockList.getListenTogethers());
-        beforeUser.setLectureMessages(mockList.getLectureMessages());
-        beforeUser.setReviews(mockList.getReviews());
-        user = beforeUser;
+        user = new MockUser();
+        mockList = new MockList(user);
+        user.setParticipants(mockList.getParticipants());
+        user.setListenTogethers(mockList.getListenTogethers());
+        user.setLectureMessages(mockList.getLectureMessages());
+        user.setReviews(mockList.getReviews());
         given(securityUtils.getLoggedInUser()).willReturn(Optional.of(user));
     }
 

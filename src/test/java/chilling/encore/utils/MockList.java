@@ -3,42 +3,77 @@ package chilling.encore.utils;
 import chilling.encore.domain.*;
 import chilling.encore.utils.domain.*;
 import lombok.Getter;
-
 import java.util.List;
 
 @Getter
 public class MockList {
-    private User user;
-
     public MockList(User user) {
         this.user = user;
-    }
+        teacherInfo = new MockTeacherInfo(1L, user);
+        lecture1 = new MockLecture(1L, teacherInfo, "강남구");
+        lecture2 = new MockLecture(2L, teacherInfo, "강서구");
+        lecture3 = new MockLecture(3L, teacherInfo, "동작구");
+        lectures = List.of(lecture1, lecture2, lecture3);
+        lectureMessage1 = new MockLectureMessage().getMockLectureMessage(1L, lecture1, user);
+        lectureMessage2 = new MockLectureMessage().getMockLectureMessage(1L, lecture2, user);
+        lectureMessage3 = new MockLectureMessage().getMockLectureMessage(1L, lecture3, user);
+        learningCenter1 = new MockLearningCenter().getMockLearningCenter(1L, "강남구", "test");
+        learningCenter2 = new MockLearningCenter().getMockLearningCenter(2L, "강남구", "test");
+        learningCenter3 = new MockLearningCenter().getMockLearningCenter(3L, "동작구", "test");
+        program1 = new MockProgram().getMockProgram(1L, learningCenter1, "test");
+        program2 = new MockProgram().getMockProgram(2L, learningCenter2, "test");
+        program3 = new MockProgram().getMockProgram(3L, learningCenter3, "test");
+        listenTogether1 = new MockListenTogether(1L, user, program1);
+        listenTogether2 = new MockListenTogether(2L, user, program2);
+        listenTogether3 = new MockListenTogether(3L, user, program3);
+        participants1 = new MockParticipants().getMockParticipants(1L, listenTogether1, user);
+        participants2 = new MockParticipants().getMockParticipants(1L, listenTogether2, user);
+        participants3 = new MockParticipants().getMockParticipants(1L, listenTogether3, user);
+        review1 = new MockReview(1L, user, program1);
+        review2 = new MockReview(2L, user, program2);
+        review3 = new MockReview(3L, user, program3);
+        center1 = new MockCenter(1L, "a", "강남구", 10, "test");
+        center2 = new MockCenter(1L, "a", "동작구", 10, "test");
+        center3 = new MockCenter(1L, "a", "송파구", 10, "test");
+        center4 = new MockCenter(1L, "a", "강서구", 10, "test");
+        centers = List.of(center1, center2, center3, center4);
+        listenTogethers = List.of(listenTogether1, listenTogether2, listenTogether3);
+        reviews = List.of(review1, review2, review3);
+        participants = List.of(participants1, participants2, participants3);
+        lectureMessages = List.of(lectureMessage1, lectureMessage2, lectureMessage3);
 
-    private TeacherInfo teacherInfo = new MockTeacherInfo().getTeacherInfo(user);
-    private Lecture lecture1 = new MockLecture().getLecture(1L, "강남구", teacherInfo, user);
-    private Lecture lecture2 = new MockLecture().getLecture(2L, "강남구", teacherInfo, user);
-    private Lecture lecture3 = new MockLecture().getLecture(3L, "동작구", teacherInfo, user);
-    private List<Lecture> lectures = List.of(lecture1, lecture2, lecture3);
-    private LectureMessage lectureMessage1 = new MockLectureMessage().getMockLectureMessage(1L, lecture1, user);
-    private LectureMessage lectureMessage2 = new MockLectureMessage().getMockLectureMessage(1L, lecture2, user);
-    private LectureMessage lectureMessage3 = new MockLectureMessage().getMockLectureMessage(1L, lecture3, user);
-    private List<LectureMessage> lectureMessages = List.of(lectureMessage1, lectureMessage2, lectureMessage3);
-    private LearningCenter learningCenter1 = new MockLearningCenter().getMockLearningCenter(1L, "강남구", "test");
-    private LearningCenter learningCenter2 = new MockLearningCenter().getMockLearningCenter(2L, "강남구", "test");
-    private LearningCenter learningCenter3 = new MockLearningCenter().getMockLearningCenter(3L, "동작구", "test");
-    private Program program1 = new MockProgram().getMockProgram(1L, learningCenter1, "test");
-    private Program program2 = new MockProgram().getMockProgram(2L, learningCenter2, "test");
-    private Program program3 = new MockProgram().getMockProgram(3L, learningCenter3, "test");
-    private ListenTogether listenTogether1 = new MockListenTogether().getMockListenTogether(1L, user, program1);
-    private ListenTogether listenTogether2 = new MockListenTogether().getMockListenTogether(2L, user, program2);
-    private ListenTogether listenTogether3 = new MockListenTogether().getMockListenTogether(3L, user, program3);
-    private Participants participants1 = new MockParticipants().getMockParticipants(1L, listenTogether1, user);
-    private Participants participants2 = new MockParticipants().getMockParticipants(1L, listenTogether2, user);
-    private Participants participants3 = new MockParticipants().getMockParticipants(1L, listenTogether3, user);
-    private List<ListenTogether> listenTogethers = List.of(listenTogether1, listenTogether2, listenTogether3);
-    private List<Participants> participants = List.of(participants1, participants2, participants3);
-    private Review review1 = new MockReview().getMockReview(1L, user, program1);
-    private Review review2 = new MockReview().getMockReview(2L, user, program2);
-    private Review review3 = new MockReview().getMockReview(3L, user, program3);
-    private List<Review> reviews = List.of(review1, review2, review3);
+    }
+    private User user;
+    private MockTeacherInfo teacherInfo;
+    private MockLecture lecture1;
+    private MockLecture lecture2;
+    private MockLecture lecture3;
+    private List<Lecture> lectures;
+    private LectureMessage lectureMessage1;
+    private LectureMessage lectureMessage2;
+    private LectureMessage lectureMessage3;
+    private LearningCenter learningCenter1;
+    private LearningCenter learningCenter2;
+    private LearningCenter learningCenter3;
+    private Program program1;
+    private Program program2;
+    private Program program3;
+    private MockListenTogether listenTogether1;
+    private MockListenTogether listenTogether2;
+    private MockListenTogether listenTogether3;
+    private Participants participants1;
+    private Participants participants2;
+    private Participants participants3;
+    private MockReview review1;
+    private MockReview review2;
+    private MockReview review3;
+    private MockCenter center1;
+    private MockCenter center2;
+    private MockCenter center3;
+    private MockCenter center4;
+    private List<Center> centers;
+    private List<ListenTogether> listenTogethers;
+    private List<Review> reviews;
+    private List<Participants> participants;
+    private List<LectureMessage> lectureMessages;
 }

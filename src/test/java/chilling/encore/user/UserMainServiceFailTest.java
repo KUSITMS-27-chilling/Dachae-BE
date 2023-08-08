@@ -30,8 +30,6 @@ public class UserMainServiceFailTest {
     private SecurityUtils securityUtils;
     @InjectMocks
     private UserMainService userMainService;
-    private User user = new MockUser();
-    private List<Center> fourCenters = new MockCenter().fourCenters;
 
     @Test
     void invalidUserIdTest() {
