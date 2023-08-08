@@ -10,6 +10,7 @@ import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.util.SecurityUtils;
 import chilling.encore.repository.springDataJpa.CenterRepository;
 import chilling.encore.service.user.UserMainService;
+import chilling.encore.utils.MockList;
 import chilling.encore.utils.domain.MockCenter;
 import chilling.encore.utils.MockLearningInfo;
 import chilling.encore.utils.domain.MockUser;
@@ -37,9 +38,9 @@ public class UserMainServiceSuccessTest {
     private SecurityUtils securityUtils;
     @InjectMocks
     private UserMainService userMainService;
-    private User user = new MockUser();
-    private List<Center> fourCenters = new MockCenter().fourCenters;
-
+    private MockUser user = new MockUser();
+    private MockList mockList = new MockList(user);
+    private List<Center> fourCenters = mockList.getCenters();
     @Test
     void getGradeTest() {
         given(securityUtils.getLoggedInUser()).willReturn(Optional.of(user));
