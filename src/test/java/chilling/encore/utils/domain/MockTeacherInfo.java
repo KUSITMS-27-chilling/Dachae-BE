@@ -3,17 +3,23 @@ package chilling.encore.utils.domain;
 import chilling.encore.domain.Lecture;
 import chilling.encore.domain.TeacherInfo;
 import chilling.encore.domain.User;
+import lombok.Data;
 
-public class MockTeacherInfo {
-    public TeacherInfo getTeacherInfo(User user) {
-        return TeacherInfo.builder()
-                .teacherInfoIdx(1L)
-                .user(user)
-                .introduce("test")
-                .career("test1,test2,test3")
-                .certificate("test1,test2,test3")
-                .profile("test")
-                .years(1)
-                .build();
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
+public class MockTeacherInfo extends TeacherInfo{
+    public MockTeacherInfo(Long idx, User user) {
+        this.teacherInfoIdx = idx;
+        this.user = user;
     }
+    private Long teacherInfoIdx;
+    private User user;
+    private String introduce = "test"; //한줄 소개
+    private String career = "test1,test2,test3"; //경력
+    private String certificate = "test1,test2,test3"; //자격증
+    private String profile = "test";
+    private int years = 1;
+    private List<Lecture> lectures = new ArrayList<>();
 }

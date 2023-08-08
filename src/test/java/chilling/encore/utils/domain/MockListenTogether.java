@@ -1,23 +1,31 @@
 package chilling.encore.utils.domain;
 
-import chilling.encore.domain.ListenTogether;
-import chilling.encore.domain.Program;
-import chilling.encore.domain.User;
+import chilling.encore.domain.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MockListenTogether {
-    public ListenTogether getMockListenTogether(Long idx, User user, Program mockProgram) {
-
-        return ListenTogether.builder()
-                .listenIdx(idx)
-                .user(user)
-                .program(mockProgram)
-                .content("test")
-                .hit(1)
-                .goalNum(1)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
+@Data
+public class MockListenTogether extends ListenTogether {
+    public MockListenTogether(Long listenIdx, User user, Program program) {
+        this.listenIdx = listenIdx;
+        this.user = user;
+        this.program = program;
     }
+    private Long listenIdx;
+    private User user;
+    private Program program;
+    private String title = "test";
+    private String content = "test";
+    private int hit = 10;
+    private int goalNum = 10;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime updatedAt = LocalDateTime.now();
+    List<ListenComments> listexnComments = new ArrayList<>();
+    List<Participants> participants = new ArrayList<>();
 }

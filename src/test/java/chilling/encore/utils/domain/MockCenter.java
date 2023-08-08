@@ -1,14 +1,24 @@
 package chilling.encore.utils.domain;
 
 import chilling.encore.domain.Center;
+import lombok.Data;
 
-import java.util.List;
+@Data
+public class MockCenter extends Center{
+    public MockCenter(Long regionIdx, String url, String region, int favCount, String tell) {
+        this.regionIdx = regionIdx;
+        this.url = url;
+        this.region = region;
+        this.favCount = favCount;
+        this.tell = tell;
+    }
+    private Long regionIdx;
+    private String url;
+    private String region;
+    private int favCount;
+    private String tell;
 
-public class MockCenter {
-    Center first = new Center(1L, "a", "강서구", 10, "1");
-    Center second = new Center(2L, "b", "강남구", 10, "2");
-    Center third = new Center(3L, "c", "동작구", 10, "3");
-    Center fourth = new Center(4L, "d", "노원구", 10, "4");
-
-    public List<Center> fourCenters = List.of(first, second, third, fourth);
+    public void plusFavCount() {
+        favCount++;
+    }
 }
