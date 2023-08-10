@@ -73,9 +73,8 @@ public class ListenTogetherService {
         User user = securityUtils.getLoggedInUser().orElseThrow(() -> new ClassCastException("NotLogin"));
         regions.add(user.getRegion());
         if (user.getFavRegion() != null) {
-            String[] favRegions = user.getFavRegion().split(",");
-            for (int i = 0; i < favRegions.length; i++) {
-                regions.add(favRegions[i]);
+            for (String favRegion : user.getFavRegion().split(",")) {
+                regions.add(favRegion);
             }
         }
         return getPopularTitles(regions);
@@ -83,8 +82,8 @@ public class ListenTogetherService {
 
     private AllPopularListenTogether notLogin(List<String> regions) {
         List<Center> centers = centerRepository.findTop4ByOrderByFavCountDesc();
-        for (int i = 0; i < centers.size(); i++) {
-            regions.add(centers.get(i).getRegion());
+        for (Center center : centers) {
+            regions.add(center.getRegion());
         }
         return getPopularTitles(regions);
     }
@@ -113,7 +112,6 @@ public class ListenTogetherService {
                 .build();
         listenTogetherRepository.save(listenTogether);
         user.updateGrade();
-        return;
     }
 
     public ListenTogetherPage getListenTogetherPage(String region, Integer page) {
