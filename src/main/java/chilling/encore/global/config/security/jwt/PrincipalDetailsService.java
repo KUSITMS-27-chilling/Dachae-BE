@@ -1,6 +1,6 @@
 package chilling.encore.global.config.security.jwt;
 
-import chilling.encore.service.user.UserMainService;
+import chilling.encore.domain.user.service.UserMainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

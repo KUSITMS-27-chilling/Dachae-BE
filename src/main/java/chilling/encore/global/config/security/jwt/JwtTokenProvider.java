@@ -1,9 +1,9 @@
 package chilling.encore.global.config.security.jwt;
 
-import chilling.encore.domain.User;
+import chilling.encore.domain.user.entity.User;
 import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.exception.SecurityException.RemovedAccessTokenException;
-import chilling.encore.repository.springDataJpa.UserRepository;
+import chilling.encore.domain.user.repository.jpa.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

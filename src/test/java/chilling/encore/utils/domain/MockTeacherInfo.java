@@ -1,8 +1,8 @@
 package chilling.encore.utils.domain;
 
-import chilling.encore.domain.Lecture;
-import chilling.encore.domain.TeacherInfo;
-import chilling.encore.domain.User;
+import chilling.encore.domain.lecture.entity.Lecture;
+import chilling.encore.domain.teacherInfo.entity.TeacherInfo;
+import chilling.encore.domain.user.entity.User;
 import lombok.Data;
 
 import java.util.ArrayList;

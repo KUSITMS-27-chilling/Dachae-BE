@@ -1,6 +1,6 @@
 package chilling.encore.utils.domain;
 
-import chilling.encore.domain.Center;
+import chilling.encore.domain.center.entity.Center;
 import lombok.Data;
 
 @Data

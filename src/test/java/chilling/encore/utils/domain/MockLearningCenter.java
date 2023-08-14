@@ -1,6 +1,6 @@
 package chilling.encore.utils.domain;
 
-import chilling.encore.domain.LearningCenter;
+import chilling.encore.domain.LearningCenter.entity.LearningCenter;
 
 public class MockLearningCenter {
     public LearningCenter getMockLearningCenter(Long idx, String region, String name) {
