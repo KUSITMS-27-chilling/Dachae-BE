@@ -10,11 +10,141 @@ import chilling.encore.domain.program.entity.Program;
 import chilling.encore.domain.review.entity.Review;
 import chilling.encore.domain.user.entity.User;
 import chilling.encore.utils.domain.*;
-import lombok.Getter;
 import java.util.List;
 
-@Getter
 public class MockList {
+    public User getUser() {
+        return user;
+    }
+
+    public MockTeacherInfo getTeacherInfo() {
+        return teacherInfo;
+    }
+
+    public MockLecture getLecture1() {
+        return lecture1;
+    }
+
+    public MockLecture getLecture2() {
+        return lecture2;
+    }
+
+    public MockLecture getLecture3() {
+        return lecture3;
+    }
+
+    public List<Lecture> getLectures() {
+        return lectures;
+    }
+
+    public LectureMessage getLectureMessage1() {
+        return lectureMessage1;
+    }
+
+    public LectureMessage getLectureMessage2() {
+        return lectureMessage2;
+    }
+
+    public LectureMessage getLectureMessage3() {
+        return lectureMessage3;
+    }
+
+    public LearningCenter getLearningCenter1() {
+        return learningCenter1;
+    }
+
+    public LearningCenter getLearningCenter2() {
+        return learningCenter2;
+    }
+
+    public LearningCenter getLearningCenter3() {
+        return learningCenter3;
+    }
+
+    public Program getProgram1() {
+        return program1;
+    }
+
+    public Program getProgram2() {
+        return program2;
+    }
+
+    public Program getProgram3() {
+        return program3;
+    }
+
+    public MockListenTogether getListenTogether1() {
+        return listenTogether1;
+    }
+
+    public MockListenTogether getListenTogether2() {
+        return listenTogether2;
+    }
+
+    public MockListenTogether getListenTogether3() {
+        return listenTogether3;
+    }
+
+    public Participants getParticipants1() {
+        return participants1;
+    }
+
+    public Participants getParticipants2() {
+        return participants2;
+    }
+
+    public Participants getParticipants3() {
+        return participants3;
+    }
+
+    public MockReview getReview1() {
+        return review1;
+    }
+
+    public MockReview getReview2() {
+        return review2;
+    }
+
+    public MockReview getReview3() {
+        return review3;
+    }
+
+    public MockCenter getCenter1() {
+        return center1;
+    }
+
+    public MockCenter getCenter2() {
+        return center2;
+    }
+
+    public MockCenter getCenter3() {
+        return center3;
+    }
+
+    public MockCenter getCenter4() {
+        return center4;
+    }
+
+    public List<Center> getCenters() {
+        return centers;
+    }
+
+    public List<ListenTogether> getListenTogethers() {
+        return listenTogethers;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public List<Participants> getParticipants() {
+        return participants;
+    }
+
+    public List<LectureMessage> getLectureMessages() {
+        return lectureMessages;
+    }
+
     public MockList(User user) {
         this.user = user;
         teacherInfo = new MockTeacherInfo(1L, user);
