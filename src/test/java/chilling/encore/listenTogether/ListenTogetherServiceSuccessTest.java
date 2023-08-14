@@ -1,17 +1,15 @@
 package chilling.encore.listenTogether;
 
-import chilling.encore.domain.Center;
-import chilling.encore.domain.ListenTogether;
-import chilling.encore.domain.Participants;
-import chilling.encore.domain.Program;
-import chilling.encore.dto.ListenTogetherDto;
-import chilling.encore.dto.ListenTogetherDto.*;
+import chilling.encore.domain.center.entity.Center;
+import chilling.encore.domain.listenTogether.entity.ListenTogether;
+import chilling.encore.domain.listenTogether.entity.Participants;
+import chilling.encore.domain.listenTogether.dto.ListenTogetherDto.*;
 import chilling.encore.global.config.security.util.SecurityUtils;
-import chilling.encore.repository.springDataJpa.CenterRepository;
-import chilling.encore.repository.springDataJpa.ListenTogetherRepository;
-import chilling.encore.repository.springDataJpa.ProgramRepository;
-import chilling.encore.repository.springDataJpa.UserRepository;
-import chilling.encore.service.listenTogether.ListenTogetherService;
+import chilling.encore.domain.center.repository.jpa.CenterRepository;
+import chilling.encore.domain.listenTogether.repository.jpa.ListenTogetherRepository;
+import chilling.encore.domain.program.repository.jpa.ProgramRepository;
+import chilling.encore.domain.user.repository.jpa.UserRepository;
+import chilling.encore.domain.listenTogether.service.ListenTogetherService;
 import chilling.encore.utils.MockList;
 import chilling.encore.utils.domain.MockListenTogether;
 import chilling.encore.utils.domain.MockUser;

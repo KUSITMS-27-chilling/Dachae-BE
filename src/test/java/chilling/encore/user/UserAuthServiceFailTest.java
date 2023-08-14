@@ -1,12 +1,12 @@
 package chilling.encore.user;
 
-import chilling.encore.domain.User;
-import chilling.encore.dto.UserDto;
-import chilling.encore.exception.RedisException;
-import chilling.encore.exception.UserException;
+import chilling.encore.domain.user.entity.User;
+import chilling.encore.domain.user.dto.UserDto;
+import chilling.encore.global.config.redis.RedisException;
+import chilling.encore.domain.user.exception.UserException;
 import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.util.SecurityUtils;
-import chilling.encore.service.user.UserAuthService;
+import chilling.encore.domain.user.service.UserAuthService;
 import chilling.encore.utils.domain.MockUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

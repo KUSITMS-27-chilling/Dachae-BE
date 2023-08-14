@@ -1,13 +1,9 @@
 package chilling.encore.user;
 
-import chilling.encore.domain.Center;
-import chilling.encore.domain.User;
-import chilling.encore.exception.UserException.NoSuchIdxException;
+import chilling.encore.domain.user.exception.UserException.NoSuchIdxException;
 import chilling.encore.global.config.security.util.SecurityUtils;
-import chilling.encore.repository.springDataJpa.UserRepository;
-import chilling.encore.service.user.UserMainService;
-import chilling.encore.utils.domain.MockCenter;
-import chilling.encore.utils.domain.MockUser;
+import chilling.encore.domain.user.repository.jpa.UserRepository;
+import chilling.encore.domain.user.service.UserMainService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

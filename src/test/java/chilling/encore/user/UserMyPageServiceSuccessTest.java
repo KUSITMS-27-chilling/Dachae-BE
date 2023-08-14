@@ -1,10 +1,9 @@
 package chilling.encore.user;
 
-import chilling.encore.domain.User;
-import chilling.encore.dto.UserDto.*;
+import chilling.encore.domain.user.dto.UserDto.*;
 import chilling.encore.global.config.security.util.SecurityUtils;
-import chilling.encore.repository.springDataJpa.UserRepository;
-import chilling.encore.service.user.UserMyPageService;
+import chilling.encore.domain.user.repository.jpa.UserRepository;
+import chilling.encore.domain.user.service.UserMyPageService;
 import chilling.encore.utils.MockList;
 import chilling.encore.utils.domain.MockUser;
 import lombok.extern.slf4j.Slf4j;

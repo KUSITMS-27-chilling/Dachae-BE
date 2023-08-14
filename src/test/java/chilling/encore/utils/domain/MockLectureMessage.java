@@ -1,8 +1,8 @@
 package chilling.encore.utils.domain;
 
-import chilling.encore.domain.Lecture;
-import chilling.encore.domain.LectureMessage;
-import chilling.encore.domain.User;
+import chilling.encore.domain.lecture.entity.Lecture;
+import chilling.encore.domain.lecture.entity.LectureMessage;
+import chilling.encore.domain.user.entity.User;
 
 import java.time.LocalDate;
 

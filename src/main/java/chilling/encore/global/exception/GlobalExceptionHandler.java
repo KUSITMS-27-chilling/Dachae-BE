@@ -1,7 +1,7 @@
 package chilling.encore.global.exception;
 
-import chilling.encore.dto.responseMessage.UserConstants.UserFailCode;
-import chilling.encore.dto.responseMessage.UserConstants.UserFailMessage;
+import chilling.encore.domain.user.constant.UserConstants.UserFailCode;
+import chilling.encore.domain.user.constant.UserConstants.UserFailMessage;
 import chilling.encore.global.config.security.jwt.JwtConstants.JwtExcpetionCode;
 import chilling.encore.global.config.security.jwt.JwtConstants.JwtExcpetionMessage;
 import chilling.encore.global.config.slack.SlackMessage;

@@ -1,12 +1,11 @@
 package chilling.encore.utils.domain;
 
-import chilling.encore.domain.Program;
-import chilling.encore.domain.Review;
-import chilling.encore.domain.ReviewComments;
-import chilling.encore.domain.User;
-import lombok.AllArgsConstructor;
+import chilling.encore.domain.program.entity.Program;
+import chilling.encore.domain.review.entity.Review;
+import chilling.encore.domain.comments.review.entity.ReviewComments;
+import chilling.encore.domain.user.entity.User;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

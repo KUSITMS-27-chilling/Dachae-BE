@@ -1,9 +1,5 @@
 package chilling.encore.utils;
 
-import chilling.encore.domain.User;
-import chilling.encore.dto.UserDto;
-import chilling.encore.dto.UserDto.LearningInfo;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
