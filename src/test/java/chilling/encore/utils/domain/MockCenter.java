@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class MockCenter extends Center{
+
     public MockCenter(Long regionIdx, String url, String region, int favCount, String tell) {
         this.regionIdx = regionIdx;
         this.url = url;

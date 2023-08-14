@@ -30,5 +30,4 @@ public class MockLecture extends Lecture{
     private String region;
     private LocalDate createdAt = LocalDate.now();
     private List<LectureMessage> lectureMessages = new ArrayList<>();
-
 }
