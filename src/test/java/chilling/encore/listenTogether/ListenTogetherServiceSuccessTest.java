@@ -34,13 +34,9 @@ public class ListenTogetherServiceSuccessTest {
     @Mock
     ListenTogetherRepository listenTogetherRepository;
     @Mock
-    ProgramRepository programRepository;
-    @Mock
     CenterRepository centerRepository;
     @Mock
     SecurityUtils securityUtils;
-    @Mock
-    UserRepository userRepository;
     @InjectMocks
     ListenTogetherService listenTogetherService;
 
