@@ -1,7 +1,13 @@
 package chilling.encore.utils.domain;
 
-import chilling.encore.domain.*;
-import chilling.encore.dto.responseMessage.UserConstants;
+import chilling.encore.domain.freeBoard.entity.FreeBoard;
+import chilling.encore.domain.lecture.entity.LectureMessage;
+import chilling.encore.domain.listenTogether.entity.ListenTogether;
+import chilling.encore.domain.listenTogether.entity.Participants;
+import chilling.encore.domain.review.entity.Review;
+import chilling.encore.domain.teacherInfo.entity.TeacherInfo;
+import chilling.encore.domain.user.entity.User;
+import chilling.encore.domain.user.constant.UserConstants;
 import lombok.Data;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -9,10 +15,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static chilling.encore.dto.responseMessage.UserConstants.Role.ROLE_USER;
+import static chilling.encore.domain.user.constant.UserConstants.Role.ROLE_USER;
 
 @Data
-public class MockUser extends User{
+public class MockUser extends User {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     private Long userIdx = 10000L;

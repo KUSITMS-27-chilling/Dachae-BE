@@ -1,17 +1,15 @@
 package chilling.encore.user;
 
-import chilling.encore.domain.Center;
-import chilling.encore.domain.User;
-import chilling.encore.dto.UserDto.LearningInfo;
-import chilling.encore.dto.UserDto.UserFavRegion;
-import chilling.encore.dto.UserDto.UserGrade;
-import chilling.encore.dto.UserDto.UserRegion;
+import chilling.encore.domain.center.entity.Center;
+import chilling.encore.domain.user.dto.UserDto.LearningInfo;
+import chilling.encore.domain.user.dto.UserDto.UserFavRegion;
+import chilling.encore.domain.user.dto.UserDto.UserGrade;
+import chilling.encore.domain.user.dto.UserDto.UserRegion;
 import chilling.encore.global.config.redis.RedisRepository;
 import chilling.encore.global.config.security.util.SecurityUtils;
-import chilling.encore.repository.springDataJpa.CenterRepository;
-import chilling.encore.service.user.UserMainService;
+import chilling.encore.domain.center.repository.jpa.CenterRepository;
+import chilling.encore.domain.user.service.UserMainService;
 import chilling.encore.utils.MockList;
-import chilling.encore.utils.domain.MockCenter;
 import chilling.encore.utils.MockLearningInfo;
 import chilling.encore.utils.domain.MockUser;
 import lombok.extern.slf4j.Slf4j;

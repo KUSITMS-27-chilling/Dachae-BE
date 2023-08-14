@@ -1,12 +1,9 @@
 package chilling.encore.utils.domain;
 
-import chilling.encore.domain.Lecture;
-import chilling.encore.domain.LectureMessage;
-import chilling.encore.domain.TeacherInfo;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import chilling.encore.domain.lecture.entity.Lecture;
+import chilling.encore.domain.lecture.entity.LectureMessage;
+import chilling.encore.domain.teacherInfo.entity.TeacherInfo;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

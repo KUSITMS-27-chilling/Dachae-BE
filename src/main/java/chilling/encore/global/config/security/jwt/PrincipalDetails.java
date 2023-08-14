@@ -1,6 +1,6 @@
 package chilling.encore.global.config.security.jwt;
 
-import chilling.encore.domain.User;
+import chilling.encore.domain.user.entity.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,7 +1,7 @@
 package chilling.encore.utils.domain;
 
-import chilling.encore.domain.LearningCenter;
-import chilling.encore.domain.Program;
+import chilling.encore.domain.LearningCenter.entity.LearningCenter;
+import chilling.encore.domain.program.entity.Program;
 
 import java.time.LocalDate;
 
