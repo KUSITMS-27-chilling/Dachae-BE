@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
-import static chilling.encore.temp.QLecture.lecture;
+import static chilling.encore.domain.lecture.entity.QLecture.lecture;
 
 @Repository
 @Slf4j

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static chilling.encore.temp.QFreeBoard.freeBoard;
+import static chilling.encore.domain.freeBoard.entity.QFreeBoard.freeBoard;
 
 @RequiredArgsConstructor
 @Repository
