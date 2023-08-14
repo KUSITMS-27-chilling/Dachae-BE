@@ -13,9 +13,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static chilling.encore.temp.QListenTogether.listenTogether;
-import static chilling.encore.temp.QProgram.program;
-import static chilling.encore.temp.QUser.user;
+import static chilling.encore.domain.listenTogether.entity.QListenTogether.listenTogether;
+import static chilling.encore.domain.program.entity.QProgram.program;
+import static chilling.encore.domain.user.entity.QUser.user;
 
 @Repository
 @Slf4j
